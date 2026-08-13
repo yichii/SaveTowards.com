@@ -16,6 +16,7 @@ function todayIso() {
 export function GoalForm({ initialGoal, onSave, onCancel }) {
   const [name, setName] = useState(initialGoal?.name ?? '')
   const [targetAmount, setTargetAmount] = useState(initialGoal ? String(initialGoal.targetAmount) : '')
+  const [amountSaved, setAmountSaved] = useState(initialGoal ? String(initialGoal.amountSaved) : '0')
   const [targetDate, setTargetDate] = useState(initialGoal?.targetDate ?? '')
   const [category, setCategory] = useState(initialGoal?.category ?? '')
   const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
@@ -27,6 +28,13 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
 
     if (!targetAmount || Number.isNaN(amount) || amount <= 0) {
       nextErrors.targetAmount = 'Enter an amount greater than $0'
+    }
+
+    if (initialGoal) {
+      const saved = Number(amountSaved)
+      if (amountSaved === '' || Number.isNaN(saved) || saved < 0) {
+        nextErrors.amountSaved = 'Enter an amount of $0 or more'
+      }
     }
 
     const keepingOriginalDate = initialGoal && targetDate === initialGoal.targetDate
@@ -49,7 +57,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       id: initialGoal?.id ?? crypto.randomUUID(),
       name: name.trim(),
       targetAmount: Number(targetAmount),
-      amountSaved: initialGoal?.amountSaved ?? 0,
+      amountSaved: initialGoal ? Number(amountSaved) : 0,
       targetDate,
       category,
       payFrequency,
@@ -98,6 +106,31 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         </div>
         {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
       </div>
+
+      {initialGoal && (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="amountSaved" className="text-sm font-medium text-gray-700">
+            Amount saved so far
+          </label>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+            <input
+              id="amountSaved"
+              type="number"
+              inputMode="decimal"
+              min="0"
+              step="0.01"
+              value={amountSaved}
+              onChange={(e) => setAmountSaved(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 py-2 pl-7 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            />
+          </div>
+          <p className="text-xs text-gray-400">
+            Use this to correct the total directly. To log a deposit day-to-day, use “Add to savings” on the goal card.
+          </p>
+          {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
+        </div>
+      )}
 
       <div className="flex flex-col gap-1">
         <label htmlFor="targetDate" className="text-sm font-medium text-gray-700">

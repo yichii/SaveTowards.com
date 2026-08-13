@@ -1,4 +1,4 @@
-export function ProgressBar({ percent }) {
+export function ProgressBar({ percent, showLabel = true }) {
   const clamped = Math.min(Math.max(percent, 0), 100)
 
   return (
@@ -9,7 +9,7 @@ export function ProgressBar({ percent }) {
           style={{ width: `${clamped}%` }}
         />
       </div>
-      <p className="mt-1 text-xs text-gray-500">{clamped.toFixed(0)}% saved</p>
+      {showLabel && <p className="mt-1 text-xs text-gray-500">{clamped.toFixed(0)}% saved</p>}
     </div>
   )
 }

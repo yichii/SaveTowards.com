@@ -24,6 +24,10 @@ function App() {
     setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, amountSaved } : g)))
   }
 
+  function handleChangeVisualization(id, visualizationStyle) {
+    setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, visualizationStyle } : g)))
+  }
+
   function handleDelete(id) {
     setGoals((prev) => prev.filter((g) => g.id !== id))
   }
@@ -68,6 +72,7 @@ function App() {
                   onUpdateSaved={handleUpdateSaved}
                   onEdit={setEditingId}
                   onDelete={handleDelete}
+                  onChangeVisualization={handleChangeVisualization}
                 />
               )
             )}

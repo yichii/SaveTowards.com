@@ -53,6 +53,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       targetDate,
       category,
       payFrequency,
+      visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
       createdAt: initialGoal?.createdAt ?? new Date().toISOString(),
     })
   }

@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react'
 import { calculateSavingsPlan } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
+import { ProgressBar } from './ProgressBar'
+import { RingProgress } from './RingProgress'
+import { VisualizationPicker } from './VisualizationPicker'
 import { CATEGORIES } from './CategoryPicker'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
@@ -28,7 +31,7 @@ function headline(plan, goal) {
   return `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
 }
 
-export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete }) {
+export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisualization }) {
   const [showMore, setShowMore] = useState(false)
   const [savedInput, setSavedInput] = useState('')
 
@@ -91,8 +94,20 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete }) {
       </p>
 
       <div className="flex flex-col items-center gap-1 py-1">
-        <FillIcon icon={Icon} percent={plan.percentSaved} />
-        <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
+        {goal.visualizationStyle === 'bar' && <ProgressBar percent={plan.percentSaved} />}
+        {goal.visualizationStyle === 'ring' && <RingProgress percent={plan.percentSaved} />}
+        {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
+          <>
+            <FillIcon icon={Icon} percent={plan.percentSaved} />
+            <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
+          </>
+        )}
+        {onChangeVisualization && (
+          <VisualizationPicker
+            value={goal.visualizationStyle}
+            onChange={(style) => onChangeVisualization(goal.id, style)}
+          />
+        )}
       </div>
 
       <p className="text-sm text-gray-500">

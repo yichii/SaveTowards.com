@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { GoalForm } from './components/GoalForm'
 import { GoalCard } from './components/GoalCard'
+import { EmptyState } from './components/EmptyState'
 
 function App() {
   const [goals, setGoals] = useLocalStorage('savetowards-goals', [])
@@ -30,9 +31,21 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-md">
-        <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">SaveTowards</h1>
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">SaveTowards</h1>
+          {goals.length > 0 && !isCreating && !editingGoal && (
+            <button
+              type="button"
+              onClick={() => setEditingId('new')}
+              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+            >
+              <Plus size={16} />
+              New Goal
+            </button>
+          )}
+        </div>
 
-        {goals.length === 0 && !isCreating && <GoalForm onSave={handleSave} />}
+        {goals.length === 0 && !isCreating && <EmptyState onCreate={() => setEditingId('new')} />}
 
         {isCreating && (
           <GoalForm onSave={handleSave} onCancel={() => setEditingId(null)} />

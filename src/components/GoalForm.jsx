@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { CategoryPicker } from './CategoryPicker'
 
+const PAY_FREQUENCIES = [
+  { key: 'weekly', label: 'Weekly' },
+  { key: 'biweekly', label: 'Biweekly' },
+  { key: 'monthly', label: 'Monthly' },
+]
+
 function todayIso() {
   const now = new Date()
   const offset = now.getTimezoneOffset()
@@ -12,6 +18,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   const [targetAmount, setTargetAmount] = useState(initialGoal ? String(initialGoal.targetAmount) : '')
   const [targetDate, setTargetDate] = useState(initialGoal?.targetDate ?? '')
   const [category, setCategory] = useState(initialGoal?.category ?? '')
+  const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
   const [errors, setErrors] = useState({})
 
   function validate() {
@@ -45,7 +52,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       amountSaved: initialGoal?.amountSaved ?? 0,
       targetDate,
       category,
-      payFrequency: initialGoal?.payFrequency ?? 'biweekly',
+      payFrequency,
       createdAt: initialGoal?.createdAt ?? new Date().toISOString(),
     })
   }
@@ -104,6 +111,30 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
         />
         {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <span className="text-sm font-medium text-gray-700">How often are you paid?</span>
+        <div className="flex gap-2">
+          {PAY_FREQUENCIES.map(({ key, label }) => {
+            const selected = payFrequency === key
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setPayFrequency(key)}
+                aria-pressed={selected}
+                className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                  selected
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                    : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <div className="flex flex-col gap-1">

@@ -1,0 +1,120 @@
+import { useState } from 'react'
+import { CategoryPicker } from './CategoryPicker'
+
+function todayIso() {
+  const now = new Date()
+  const offset = now.getTimezoneOffset()
+  return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10)
+}
+
+export function GoalForm({ onCreate }) {
+  const [name, setName] = useState('')
+  const [targetAmount, setTargetAmount] = useState('')
+  const [targetDate, setTargetDate] = useState('')
+  const [category, setCategory] = useState('')
+  const [errors, setErrors] = useState({})
+
+  function validate() {
+    const nextErrors = {}
+    const amount = Number(targetAmount)
+
+    if (!targetAmount || Number.isNaN(amount) || amount <= 0) {
+      nextErrors.targetAmount = 'Enter an amount greater than $0'
+    }
+
+    if (!targetDate) {
+      nextErrors.targetDate = 'Pick a target date'
+    } else if (targetDate < todayIso()) {
+      nextErrors.targetDate = 'Target date can’t be in the past'
+    }
+
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (!validate()) return
+
+    onCreate({
+      id: crypto.randomUUID(),
+      name: name.trim(),
+      targetAmount: Number(targetAmount),
+      amountSaved: 0,
+      targetDate,
+      category,
+      payFrequency: 'biweekly',
+      createdAt: new Date().toISOString(),
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h1 className="text-xl font-semibold text-gray-900">Create a savings goal</h1>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="name" className="text-sm font-medium text-gray-700">
+          Name <span className="text-gray-400">(optional)</span>
+        </label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g. Trip to Japan"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+        />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="targetAmount" className="text-sm font-medium text-gray-700">
+          Target amount
+        </label>
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+          <input
+            id="targetAmount"
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={targetAmount}
+            onChange={(e) => setTargetAmount(e.target.value)}
+            placeholder="2000"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-7 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          />
+        </div>
+        {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="targetDate" className="text-sm font-medium text-gray-700">
+          Target date
+        </label>
+        <input
+          id="targetDate"
+          type="date"
+          min={todayIso()}
+          value={targetDate}
+          onChange={(e) => setTargetDate(e.target.value)}
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+        />
+        {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <span className="text-sm font-medium text-gray-700">
+          Category <span className="text-gray-400">(optional)</span>
+        </span>
+        <CategoryPicker value={category} onChange={setCategory} />
+      </div>
+
+      <button
+        type="submit"
+        className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+      >
+        Create goal
+      </button>
+    </form>
+  )
+}

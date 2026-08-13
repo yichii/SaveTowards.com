@@ -1,9 +1,10 @@
-import { BarChart2, Droplet, CircleDot } from 'lucide-react'
+import { BarChart2, Droplet, CircleDot, Route } from 'lucide-react'
 
 export const VISUALIZATIONS = [
   { key: 'bar', label: 'Bar', icon: BarChart2 },
   { key: 'fill', label: 'Fill', icon: Droplet },
   { key: 'ring', label: 'Ring', icon: CircleDot },
+  { key: 'journey', label: 'Journey', icon: Route },
 ]
 
 export function VisualizationPicker({ value, onChange }) {

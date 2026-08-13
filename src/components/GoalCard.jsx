@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react'
 import { calculateSavingsPlan } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
+import { JourneyProgress } from './JourneyProgress'
 import { ProgressBar } from './ProgressBar'
 import { RingProgress } from './RingProgress'
 import { VisualizationPicker } from './VisualizationPicker'
@@ -96,6 +97,12 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
       <div className="flex flex-col items-center gap-1 py-1">
         {goal.visualizationStyle === 'bar' && <ProgressBar percent={plan.percentSaved} />}
         {goal.visualizationStyle === 'ring' && <RingProgress percent={plan.percentSaved} />}
+        {goal.visualizationStyle === 'journey' && (
+          <>
+            <JourneyProgress icon={Icon} percent={plan.percentSaved} />
+            <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
+          </>
+        )}
         {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
           <>
             <FillIcon icon={Icon} percent={plan.percentSaved} />

@@ -5,8 +5,23 @@ import { GoalForm } from './components/GoalForm'
 import { GoalCard } from './components/GoalCard'
 import { EmptyState } from './components/EmptyState'
 
+// Older saved goals predate these fields — fill in defaults so they render
+// and edit correctly instead of showing "undefined" or crashing.
+const GOAL_DEFAULTS = {
+  name: '',
+  amountSaved: 0,
+  category: '',
+  payFrequency: 'biweekly',
+  visualizationStyle: 'fill',
+}
+
+function normalizeGoal(goal) {
+  return { ...GOAL_DEFAULTS, ...goal }
+}
+
 function App() {
-  const [goals, setGoals] = useLocalStorage('savetowards-goals', [])
+  const [storedGoals, setGoals] = useLocalStorage('savetowards-goals', [])
+  const goals = storedGoals.map(normalizeGoal)
   const [editingId, setEditingId] = useState(null)
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null

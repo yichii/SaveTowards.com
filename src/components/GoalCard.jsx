@@ -18,6 +18,10 @@ const CARD_STYLES = {
 }
 
 function headline(plan, goal) {
+  if (plan.status === 'met') return 'Goal reached!'
+  if (plan.status === 'due-today') return `Save ${currency.format(plan.amountRemaining)} today to reach this goal`
+  if (plan.status === 'overdue') return 'This date has passed — update your target date or add funds'
+
   // Parse as local date components — new Date(goal.targetDate) treats a
   // "YYYY-MM-DD" string as UTC midnight, which can display a day early.
   const [year, month, day] = goal.targetDate.split('-').map(Number)
@@ -25,10 +29,6 @@ function headline(plan, goal) {
     month: 'short',
     day: 'numeric',
   })
-
-  if (plan.status === 'met') return 'Goal reached!'
-  if (plan.status === 'due-today') return `Save ${currency.format(plan.amountRemaining)} today to reach this goal`
-  if (plan.status === 'overdue') return 'This date has passed — update your target date or add funds'
   return `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
 }
 
@@ -61,11 +61,11 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
       }`}
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          {Icon && <Icon size={16} />}
-          <span>{goal.name || 'Savings goal'}</span>
+        <div className="flex min-w-0 items-center gap-2 text-sm text-gray-500">
+          {Icon && <Icon size={16} className="shrink-0" />}
+          <span className="truncate">{goal.name || 'Savings goal'}</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1">
           <button
             type="button"
             onClick={() => onEdit(goal.id)}

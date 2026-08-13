@@ -5,6 +5,9 @@ const PAY_FREQUENCY_DAYS = {
 }
 
 function daysUntil(targetDate, fromDate = new Date()) {
+  // Guard against missing/corrupted data — treat as due today rather than crash.
+  if (!targetDate) return 0
+
   // Parse the "YYYY-MM-DD" string as local date components — new Date(targetDate)
   // treats it as UTC midnight, which shifts a day earlier in timezones behind UTC.
   const [year, month, day] = targetDate.split('-').map(Number)

@@ -1,0 +1,16 @@
+# SaveTowards
+
+> SaveTowards is a free web app that turns a savings goal and target date into a simple, actionable savings rate — how much to set aside per day, week, month, or paycheck to get there on time.
+
+SaveTowards is for anyone with a savings goal (a trip, a gift, an emergency fund, a big purchase) who wants a clear number to act on, not a budgeting or investment tool. There is no interest or inflation modeling — just straightforward division of the amount remaining by the time remaining.
+
+Key facts:
+- Free to use, no account or sign-up required.
+- All data is stored locally in the user's browser (localStorage). Nothing is sent to a server or shared with third parties.
+- No backend, no database, no authentication.
+- Users can track multiple goals at once, each with its own target amount, target date, and progress visualization.
+- The core output is a single headline number (e.g. "$47/week") with an optional breakdown by day, week, month, and pay period.
+
+## Pages
+
+- [SaveTowards](https://savetowards.com/): The app itself. Single page — create a goal, see your required savings rate, and track progress toward it.

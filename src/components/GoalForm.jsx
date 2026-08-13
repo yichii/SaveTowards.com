@@ -7,11 +7,11 @@ function todayIso() {
   return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10)
 }
 
-export function GoalForm({ onCreate }) {
-  const [name, setName] = useState('')
-  const [targetAmount, setTargetAmount] = useState('')
-  const [targetDate, setTargetDate] = useState('')
-  const [category, setCategory] = useState('')
+export function GoalForm({ initialGoal, onSave, onCancel }) {
+  const [name, setName] = useState(initialGoal?.name ?? '')
+  const [targetAmount, setTargetAmount] = useState(initialGoal ? String(initialGoal.targetAmount) : '')
+  const [targetDate, setTargetDate] = useState(initialGoal?.targetDate ?? '')
+  const [category, setCategory] = useState(initialGoal?.category ?? '')
   const [errors, setErrors] = useState({})
 
   function validate() {
@@ -22,9 +22,11 @@ export function GoalForm({ onCreate }) {
       nextErrors.targetAmount = 'Enter an amount greater than $0'
     }
 
+    const keepingOriginalDate = initialGoal && targetDate === initialGoal.targetDate
+
     if (!targetDate) {
       nextErrors.targetDate = 'Pick a target date'
-    } else if (targetDate < todayIso()) {
+    } else if (targetDate < todayIso() && !keepingOriginalDate) {
       nextErrors.targetDate = 'Target date can’t be in the past'
     }
 
@@ -36,21 +38,23 @@ export function GoalForm({ onCreate }) {
     e.preventDefault()
     if (!validate()) return
 
-    onCreate({
-      id: crypto.randomUUID(),
+    onSave({
+      id: initialGoal?.id ?? crypto.randomUUID(),
       name: name.trim(),
       targetAmount: Number(targetAmount),
-      amountSaved: 0,
+      amountSaved: initialGoal?.amountSaved ?? 0,
       targetDate,
       category,
-      payFrequency: 'biweekly',
-      createdAt: new Date().toISOString(),
+      payFrequency: initialGoal?.payFrequency ?? 'biweekly',
+      createdAt: initialGoal?.createdAt ?? new Date().toISOString(),
     })
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h1 className="text-xl font-semibold text-gray-900">Create a savings goal</h1>
+      <h1 className="text-xl font-semibold text-gray-900">
+        {initialGoal ? 'Edit savings goal' : 'Create a savings goal'}
+      </h1>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-medium text-gray-700">
@@ -109,12 +113,23 @@ export function GoalForm({ onCreate }) {
         <CategoryPicker value={category} onChange={setCategory} />
       </div>
 
-      <button
-        type="submit"
-        className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
-      >
-        Create goal
-      </button>
+      <div className="mt-2 flex gap-2">
+        <button
+          type="submit"
+          className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+        >
+          {initialGoal ? 'Save changes' : 'Create goal'}
+        </button>
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   )
 }

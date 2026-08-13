@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react'
 import { calculateSavingsPlan } from '../utils/calculations'
 import { ProgressBar } from './ProgressBar'
 import { CATEGORIES } from './CategoryPicker'
@@ -7,7 +7,10 @@ import { CATEGORIES } from './CategoryPicker'
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
 function headline(plan, goal) {
-  const dateLabel = new Date(goal.targetDate).toLocaleDateString('en-US', {
+  // Parse as local date components — new Date(goal.targetDate) treats a
+  // "YYYY-MM-DD" string as UTC midnight, which can display a day early.
+  const [year, month, day] = goal.targetDate.split('-').map(Number)
+  const dateLabel = new Date(year, month - 1, day).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
   })
@@ -18,7 +21,7 @@ function headline(plan, goal) {
   return `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
 }
 
-export function GoalCard({ goal, onUpdateSaved }) {
+export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete }) {
   const [showMore, setShowMore] = useState(false)
   const [savedInput, setSavedInput] = useState('')
 
@@ -33,11 +36,37 @@ export function GoalCard({ goal, onUpdateSaved }) {
     setSavedInput('')
   }
 
+  function handleDelete() {
+    if (window.confirm('Delete this savings goal? This can’t be undone.')) {
+      onDelete(goal.id)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        {Icon && <Icon size={16} />}
-        <span>{goal.name || 'Savings goal'}</span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          {Icon && <Icon size={16} />}
+          <span>{goal.name || 'Savings goal'}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onEdit(goal.id)}
+            aria-label="Edit goal"
+            className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          >
+            <Pencil size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            aria-label="Delete goal"
+            className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
 
       <p className="text-2xl font-semibold text-gray-900">{headline(plan, goal)}</p>

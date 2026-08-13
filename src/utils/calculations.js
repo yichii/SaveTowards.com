@@ -5,8 +5,10 @@ const PAY_FREQUENCY_DAYS = {
 }
 
 function daysUntil(targetDate, fromDate = new Date()) {
-  const target = new Date(targetDate)
-  const t = new Date(target.getFullYear(), target.getMonth(), target.getDate())
+  // Parse the "YYYY-MM-DD" string as local date components — new Date(targetDate)
+  // treats it as UTC midnight, which shifts a day earlier in timezones behind UTC.
+  const [year, month, day] = targetDate.split('-').map(Number)
+  const t = new Date(year, month - 1, day)
   const f = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate())
   return Math.round((t - f) / 86400000)
 }

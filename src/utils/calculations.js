@@ -64,14 +64,17 @@ export function calculateSavingsPlan(goal) {
 
   const perDay = amountRemaining / daysRemaining
 
+  // Cap week/month figures at the remaining balance so a near deadline
+  // (fewer days left than the timeframe spans) can't extrapolate past
+  // what's actually left to save.
   return {
     status: 'on-track',
     amountRemaining,
     daysRemaining,
     percentSaved,
     perDay,
-    perWeek: perDay * 7,
-    perMonth: perDay * AVG_DAYS_PER_MONTH,
+    perWeek: Math.min(perDay * 7, amountRemaining),
+    perMonth: Math.min(perDay * AVG_DAYS_PER_MONTH, amountRemaining),
     perPaycheck: perDay * paycheckDays,
   }
 }

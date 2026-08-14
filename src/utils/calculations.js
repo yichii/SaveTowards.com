@@ -4,6 +4,10 @@ const PAY_FREQUENCY_DAYS = {
   monthly: 30,
 }
 
+// Long-run average days per month (365.25 / 12), used so "per month" isn't
+// skewed by flat 30-day assumption across 28-31 day months.
+const AVG_DAYS_PER_MONTH = 30.44
+
 function daysUntil(targetDate, fromDate = new Date()) {
   // Guard against missing/corrupted data — treat as due today rather than crash.
   if (!targetDate) return 0
@@ -67,7 +71,7 @@ export function calculateSavingsPlan(goal) {
     percentSaved,
     perDay,
     perWeek: perDay * 7,
-    perMonth: perDay * 30,
+    perMonth: perDay * AVG_DAYS_PER_MONTH,
     perPaycheck: perDay * paycheckDays,
   }
 }

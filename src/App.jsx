@@ -48,7 +48,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10">
+    <div className="min-h-screen bg-gray-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-md">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">SaveTowards</h1>

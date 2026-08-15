@@ -23,16 +23,19 @@ function App() {
   const [storedGoals, setGoals] = useLocalStorage('savetowards-goals', [])
   const goals = storedGoals.map(normalizeGoal)
   const [editingId, setEditingId] = useState(null)
+  const [justCreatedId, setJustCreatedId] = useState(null)
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null
   const isCreating = editingId === 'new'
 
   function handleSave(goal) {
+    const isNewGoal = isCreating
     setGoals((prev) => {
       const exists = prev.some((g) => g.id === goal.id)
       return exists ? prev.map((g) => (g.id === goal.id ? goal : g)) : [...prev, goal]
     })
     setEditingId(null)
+    if (isNewGoal) setJustCreatedId(goal.id)
   }
 
   function handleUpdateSaved(id, amountSaved) {
@@ -88,6 +91,8 @@ function App() {
                   onEdit={setEditingId}
                   onDelete={handleDelete}
                   onChangeVisualization={handleChangeVisualization}
+                  justCreated={goal.id === justCreatedId}
+                  onIntroComplete={() => setJustCreatedId(null)}
                 />
               )
             )}

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Sparkles, Trash2 } from 'lucide-react'
 import { calculateSavingsPlan } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
 import { JourneyProgress } from './JourneyProgress'
@@ -18,9 +18,19 @@ const CARD_STYLES = {
 }
 
 function headline(plan, goal) {
-  if (plan.status === 'met') return 'Goal reached!'
-  if (plan.status === 'due-today') return `Save ${currency.format(plan.amountRemaining)} today to reach this goal`
-  if (plan.status === 'overdue') return 'This date has passed — update your target date or add funds'
+  const label = goal.name?.trim() || null
+
+  if (plan.status === 'met') return label ? `${label} — goal reached!` : 'Goal reached!'
+  if (plan.status === 'due-today') {
+    return label
+      ? `Save ${currency.format(plan.amountRemaining)} today for ${label}`
+      : `Save ${currency.format(plan.amountRemaining)} today to reach this goal`
+  }
+  if (plan.status === 'overdue') {
+    return label
+      ? `${label}: this date has passed — update your target date or add funds`
+      : 'This date has passed — update your target date or add funds'
+  }
 
   // Parse as local date components — new Date(goal.targetDate) treats a
   // "YYYY-MM-DD" string as UTC midnight, which can display a day early.
@@ -29,15 +39,75 @@ function headline(plan, goal) {
     month: 'short',
     day: 'numeric',
   })
-  return `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
+  return label
+    ? `${currency.format(plan.perWeek)}/week toward ${label} by ${dateLabel}`
+    : `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
 }
 
-export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisualization }) {
+const MILESTONES = [25, 50, 75, 100]
+
+const MILESTONE_MESSAGES = {
+  25: "Nice — that's a quarter of the way there.",
+  50: 'Halfway there!',
+  75: 'Almost there — just one more push.',
+  100: "You did it! Goal reached.",
+}
+
+function savingsInputLabel(payFrequency) {
+  if (payFrequency === 'weekly') return 'Add what you saved this week'
+  if (payFrequency === 'monthly') return 'Add what you saved this month'
+  return 'Add what you saved since your last paycheck'
+}
+
+export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisualization, justCreated, onIntroComplete }) {
   const [showMore, setShowMore] = useState(false)
   const [savedInput, setSavedInput] = useState('')
+  const [celebration, setCelebration] = useState(null)
+  const [celebrationLeaving, setCelebrationLeaving] = useState(false)
+  const [introVisible, setIntroVisible] = useState(justCreated)
 
   const plan = calculateSavingsPlan(goal)
   const Icon = CATEGORIES.find((c) => c.key === goal.category)?.icon
+
+  const prevPercentRef = useRef(null)
+  const celebrationHideTimeoutRef = useRef(null)
+  const celebrationRemoveTimeoutRef = useRef(null)
+
+  // Skip the celebration on first mount (prevPercentRef starts null) so
+  // loading an already-progressed goal doesn't fire a stale milestone.
+  useEffect(() => {
+    const prevPercent = prevPercentRef.current
+    if (prevPercent !== null) {
+      const newlyCrossed = MILESTONES.filter((m) => prevPercent < m && plan.percentSaved >= m)
+      if (newlyCrossed.length > 0) {
+        const threshold = newlyCrossed[newlyCrossed.length - 1]
+        if (celebrationHideTimeoutRef.current) clearTimeout(celebrationHideTimeoutRef.current)
+        if (celebrationRemoveTimeoutRef.current) clearTimeout(celebrationRemoveTimeoutRef.current)
+        setCelebration({ threshold, key: Date.now() })
+        setCelebrationLeaving(false)
+        celebrationHideTimeoutRef.current = setTimeout(() => setCelebrationLeaving(true), 2300)
+        celebrationRemoveTimeoutRef.current = setTimeout(() => setCelebration(null), 2600)
+      }
+    }
+    prevPercentRef.current = plan.percentSaved
+  }, [plan.percentSaved])
+
+  useEffect(() => () => {
+    if (celebrationHideTimeoutRef.current) clearTimeout(celebrationHideTimeoutRef.current)
+    if (celebrationRemoveTimeoutRef.current) clearTimeout(celebrationRemoveTimeoutRef.current)
+  }, [])
+
+  const onIntroCompleteRef = useRef(onIntroComplete)
+  onIntroCompleteRef.current = onIntroComplete
+
+  useEffect(() => {
+    if (!justCreated) return
+    const t = setTimeout(() => {
+      setIntroVisible(false)
+      onIntroCompleteRef.current?.()
+    }, 1500)
+    return () => clearTimeout(t)
+  }, [justCreated])
 
   function handleUpdateSaved(e) {
     e.preventDefault()
@@ -85,27 +155,44 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
         </div>
       </div>
 
-      <p
-        className={`flex items-center gap-2 text-2xl font-semibold ${
-          plan.status === 'met' ? 'text-emerald-700' : 'text-gray-900'
-        }`}
-      >
-        {plan.status === 'met' && <CheckCircle2 size={24} className="shrink-0 text-emerald-600" />}
-        {headline(plan, goal)}
-      </p>
+      <div className="relative">
+        <p
+          className={`flex items-center gap-2 text-2xl font-semibold transition-opacity duration-500 ${
+            plan.status === 'met' ? 'text-emerald-700' : 'text-gray-900'
+          } ${introVisible ? 'opacity-0' : 'opacity-100'}`}
+        >
+          {plan.status === 'met' && <CheckCircle2 size={24} className="shrink-0 text-emerald-600" />}
+          {headline(plan, goal)}
+        </p>
+        {introVisible && (
+          <p className="absolute inset-0 animate-fade-in-up text-2xl font-semibold text-emerald-600">
+            Here's your plan
+          </p>
+        )}
+      </div>
 
-      <div className="flex flex-col items-center gap-1 py-1">
+      <div className="relative flex flex-col items-center gap-1 py-1">
+        {celebration && (
+          <div
+            className={`absolute left-1/2 top-1/2 z-10 flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 shadow-sm ring-1 ring-emerald-100 transition-opacity duration-300 ease-in ${
+              celebrationLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
+            }`}
+          >
+            <Sparkles size={14} className="shrink-0" />
+            {MILESTONE_MESSAGES[celebration.threshold]}
+          </div>
+        )}
         {goal.visualizationStyle === 'bar' && <ProgressBar percent={plan.percentSaved} />}
         {goal.visualizationStyle === 'ring' && <RingProgress percent={plan.percentSaved} />}
         {goal.visualizationStyle === 'journey' && (
           <>
-            <JourneyProgress icon={Icon} percent={plan.percentSaved} />
+            <JourneyProgress icon={Icon} percent={plan.percentSaved} celebrating={!!celebration} />
             <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
           </>
         )}
         {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
           <>
-            <FillIcon icon={Icon} percent={plan.percentSaved} />
+            <FillIcon icon={Icon} percent={plan.percentSaved} celebrating={!!celebration} />
             <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
           </>
         )}
@@ -157,7 +244,7 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
         <form onSubmit={handleUpdateSaved} className="flex items-end gap-2 border-t border-gray-100 pt-4">
           <div className="flex flex-1 flex-col gap-1">
             <label htmlFor="savedAmount" className="text-sm font-medium text-gray-700">
-              Add to savings
+              {savingsInputLabel(goal.payFrequency)}
             </label>
             <div className="relative">
               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>

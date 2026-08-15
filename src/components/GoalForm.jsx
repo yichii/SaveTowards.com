@@ -78,14 +78,14 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h1 className="text-xl font-semibold text-gray-900">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
+      <h1 className="font-heading text-xl font-semibold text-stone-900">
         {initialGoal ? 'Edit savings goal' : 'Create a savings goal'}
       </h1>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium text-gray-700">
-          Name <span className="text-gray-400">(optional)</span>
+        <label htmlFor="name" className="text-sm font-medium text-stone-700">
+          Name <span className="text-stone-400">(optional)</span>
         </label>
         <input
           id="name"
@@ -93,16 +93,16 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Trip to Japan"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="targetAmount" className="text-sm font-medium text-gray-700">
+        <label htmlFor="targetAmount" className="text-sm font-medium text-stone-700">
           Target amount
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
           <input
             id="targetAmount"
             type="number"
@@ -112,7 +112,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
             value={targetAmount}
             onChange={(e) => setTargetAmount(e.target.value)}
             placeholder="2000"
-            className="w-full rounded-lg border border-gray-300 py-2 pl-7 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           />
         </div>
         {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
@@ -120,11 +120,11 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
 
       {initialGoal && (
         <div className="flex flex-col gap-1">
-          <label htmlFor="amountSaved" className="text-sm font-medium text-gray-700">
+          <label htmlFor="amountSaved" className="text-sm font-medium text-stone-700">
             Amount saved so far
           </label>
           <div className="relative">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
             <input
               id="amountSaved"
               type="number"
@@ -133,10 +133,10 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
               step="0.01"
               value={amountSaved}
               onChange={(e) => setAmountSaved(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 py-2 pl-7 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-stone-400">
             Use this to correct the total directly. To log a deposit day-to-day, use “Add to savings” on the goal card.
           </p>
           {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
@@ -144,7 +144,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       )}
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="targetDate" className="text-sm font-medium text-gray-700">
+        <label htmlFor="targetDate" className="text-sm font-medium text-stone-700">
           Target date
         </label>
         <input
@@ -153,13 +153,13 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           min={todayIso()}
           value={targetDate}
           onChange={(e) => setTargetDate(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
         />
         {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium text-gray-700">How often are you paid?</span>
+        <span className="text-sm font-medium text-stone-700">How often are you paid?</span>
         <div className="flex gap-2">
           {PAY_FREQUENCIES.map(({ key, label }) => {
             const selected = payFrequency === key
@@ -171,8 +171,8 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
                 aria-pressed={selected}
                 className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
                   selected
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                    : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
                 }`}
               >
                 {label}
@@ -183,15 +183,15 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium text-gray-700">
-          Category <span className="text-gray-400">(optional)</span>
+        <span className="text-sm font-medium text-stone-700">
+          Category <span className="text-stone-400">(optional)</span>
         </span>
         <CategoryPicker value={category} onChange={handleCategoryChange} />
       </div>
 
       {category && (
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-gray-700">Icon</span>
+          <span className="text-sm font-medium text-stone-700">Icon</span>
           <EmojiPicker
             options={CATEGORIES.find((c) => c.key === category)?.emojiOptions}
             value={emoji}
@@ -203,7 +203,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       <div className="mt-2 flex gap-2">
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+          className="flex-1 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
         >
           {initialGoal ? 'Save changes' : 'Create goal'}
         </button>
@@ -211,7 +211,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-50"
           >
             Cancel
           </button>

@@ -21,8 +21,8 @@ export function CategoryPicker({ value, onChange }) {
             aria-pressed={selected}
             className={`flex flex-1 flex-col items-center gap-1 rounded-lg border px-2 py-3 text-xs transition-colors ${
               selected
-                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                : 'border-stone-200 text-stone-500 hover:border-stone-300'
             }`}
           >
             <Icon size={20} />

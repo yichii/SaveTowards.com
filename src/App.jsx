@@ -68,15 +68,15 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
+    <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-md">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">SaveTowards</h1>
+          <h1 className="font-heading text-2xl font-bold text-stone-900">SaveTowards</h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <button
               type="button"
               onClick={() => setEditingId('new')}
-              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
             >
               <Plus size={16} />
               New Goal
@@ -118,7 +118,7 @@ function App() {
               <button
                 type="button"
                 onClick={() => setEditingId('new')}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-gray-300 py-3 text-sm font-medium text-gray-500 transition-colors hover:border-emerald-400 hover:text-emerald-700"
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-stone-300 py-3 text-sm font-medium text-stone-500 transition-colors hover:border-cyan-400 hover:text-cyan-700"
               >
                 <Plus size={16} />
                 Add another goal

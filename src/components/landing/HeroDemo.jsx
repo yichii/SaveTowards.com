@@ -27,9 +27,9 @@ export function HeroDemo({
   onVisualizationChange,
 }) {
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-950/5 backdrop-blur">
+    <div className="w-full max-w-sm rounded-2xl border border-cyan-100 bg-white/90 p-6 shadow-xl shadow-cyan-950/5 backdrop-blur">
       <div className="mb-4 flex items-center justify-between gap-2">
-        <p className="min-w-0 truncate text-sm font-medium text-gray-500">{goal.label}</p>
+        <p className="min-w-0 truncate text-sm font-medium text-stone-500">{goal.label}</p>
         <VisualizationPicker value={visualization} onChange={onVisualizationChange} exclude={['bar']} />
       </div>
 
@@ -38,20 +38,20 @@ export function HeroDemo({
         {visualization === 'journey' && (
           <>
             <JourneyProgress icon={goal.icon} percent={percent} />
-            <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
+            <p className="text-xs font-medium text-stone-500">{percent}% saved</p>
           </>
         )}
         {(!visualization || visualization === 'fill') && (
           <>
             <FillIcon emoji={goal.emoji} label={goal.label} percent={percent} size={84} />
-            <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
+            <p className="text-xs font-medium text-stone-500">{percent}% saved</p>
           </>
         )}
       </div>
 
       <div className="mb-1 flex h-5 items-center justify-center">
         {isAutoplay && (
-          <div className="flex items-center gap-1 animate-pulse-soft text-xs font-medium text-emerald-700 motion-reduce:hidden">
+          <div className="flex items-center gap-1 animate-pulse-soft text-xs font-medium text-cyan-700 motion-reduce:hidden">
             <MousePointerClick size={14} />
             drag me
           </div>
@@ -72,14 +72,14 @@ export function HeroDemo({
         onPointerUp={onSliderRelease}
         onTouchEnd={onSliderRelease}
         onBlur={onSliderRelease}
-        className="w-full accent-emerald-600"
+        className="w-full accent-cyan-600"
       />
 
-      <div className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-center">
-        <p className="text-2xl font-bold text-emerald-700">
+      <div className="mt-4 rounded-xl bg-cyan-50 px-4 py-3 text-center">
+        <p className="font-heading text-2xl font-bold text-cyan-700">
           {plan.status === 'met' ? 'Goal reached!' : `${currency.format(plan.perWeek)}/week`}
         </p>
-        <p className="text-xs text-emerald-700/70">
+        <p className="text-xs text-cyan-700/70">
           {plan.status === 'met' ? "That's the whole thing, paid for." : `to get there in ${monthsRemaining} months`}
         </p>
       </div>

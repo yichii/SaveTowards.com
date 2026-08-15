@@ -8,7 +8,7 @@ export function RingProgress({ percent, size = 64 }) {
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={radius} strokeWidth={strokeWidth} fill="none" className="stroke-gray-200" />
+        <circle cx={size / 2} cy={size / 2} r={radius} strokeWidth={strokeWidth} fill="none" className="stroke-stone-200" />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -18,10 +18,10 @@ export function RingProgress({ percent, size = 64 }) {
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="stroke-emerald-500 transition-all duration-500 ease-out"
+          className="stroke-cyan-500 transition-all duration-500 ease-out"
         />
       </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-700">
+      <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-stone-700">
         {clamped.toFixed(0)}%
       </span>
     </div>

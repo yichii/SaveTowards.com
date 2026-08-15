@@ -23,10 +23,10 @@ export function JourneyProgress({ icon, percent, size = 64, celebrating = false 
         className={`w-full ${celebrating ? 'animate-celebrate motion-reduce:animate-none' : ''}`}
         style={{ height: size }}
       >
-        <line x1={START_X} y1={PATH_Y} x2={END_X} y2={PATH_Y} strokeWidth={2} className="stroke-gray-200" />
-        <circle cx={START_X} cy={PATH_Y} r={4} className="fill-gray-300" />
+        <line x1={START_X} y1={PATH_Y} x2={END_X} y2={PATH_Y} strokeWidth={2} className="stroke-stone-200" />
+        <circle cx={START_X} cy={PATH_Y} r={4} className="fill-stone-300" />
 
-        <g transform={`translate(${END_X - 12}, ${PATH_Y - 12})`} className="text-gray-300">
+        <g transform={`translate(${END_X - 12}, ${PATH_Y - 12})`} className="text-stone-300">
           <Icon size={24} strokeWidth={1.5} />
         </g>
 
@@ -40,7 +40,7 @@ export function JourneyProgress({ icon, percent, size = 64, celebrating = false 
             fill="currentColor"
             x={-10}
             y={-20}
-            className="text-emerald-500"
+            className="text-cyan-500"
           />
         </g>
       </svg>

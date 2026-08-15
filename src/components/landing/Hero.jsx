@@ -45,6 +45,11 @@ export function Hero({ onStart }) {
             Start a goal
             <ArrowRight size={18} />
           </button>
+          {!ultraCompact && (
+            <p className="mt-2 text-xs text-stone-400 lg:text-sm">
+              No accounts, no bank link, no risk — your data stays yours.
+            </p>
+          )}
         </div>
         <div className="flex w-full justify-center lg:w-[26rem] lg:shrink-0 xl:w-[30rem] 2xl:w-[34rem]">
           <HeroDemo

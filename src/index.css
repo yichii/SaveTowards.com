@@ -69,19 +69,6 @@
   animation: cursor-blink 1s steps(1) infinite;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(var(--marquee-end, -50%));
-  }
-}
-
-.animate-marquee {
-  animation: marquee 24s linear infinite;
-}
-
 @keyframes pulse-soft {
   0%,
   100% {
@@ -94,10 +81,4 @@
 
 .animate-pulse-soft {
   animation: pulse-soft 1.6s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none;
-  }
 }

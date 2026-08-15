@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Plane, Car, Heart } from 'lucide-react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
@@ -13,6 +13,7 @@ const DELETE_MS_PER_CHAR = 30
 const TYPE_MS_PER_CHAR = 55
 const FILL_MS = 900
 const HOLD_MS = 2200
+const RESUME_AFTER_MS = 4000
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -27,8 +28,10 @@ function targetDateWeeksOut(weeks) {
 /**
  * Drives the hero: a shared example-goal array types/deletes the headline
  * phrase, swaps the headline icon, and fills the demo card all on the same
- * cycle, until the user first touches the slider — then autoplay stops
- * permanently (no snap-back) and the slider takes over.
+ * cycle. While the user is touching the slider — held still or dragging —
+ * autoplay pauses; the RESUME_AFTER_MS inactivity countdown only starts
+ * once they release it, then autoplay resumes (restarting the cycle from
+ * the first goal).
  */
 export function useHeroDemo() {
   const reducedMotion = usePrefersReducedMotion()
@@ -38,6 +41,7 @@ export function useHeroDemo() {
   const [percent, setPercent] = useState(() => (reducedMotion ? EXAMPLE_GOALS[0].pct : 0))
   const [manual, setManual] = useState(false)
   const [visualization, setVisualization] = useState('fill')
+  const resumeTimeoutRef = useRef(null)
 
   useEffect(() => {
     if (manual || reducedMotion) return
@@ -99,13 +103,39 @@ export function useHeroDemo() {
     }
   }, [manual, reducedMotion])
 
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+    }
+  }, [])
+
+  function clearResumeTimer() {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current)
+      resumeTimeoutRef.current = null
+    }
+  }
+
+  // Only counts as "inactive" once the slider is released — holding it
+  // still, with no change events firing, shouldn't trigger a resume.
+  function scheduleResume() {
+    clearResumeTimer()
+    resumeTimeoutRef.current = setTimeout(() => setManual(false), RESUME_AFTER_MS)
+  }
+
   function stopAutoplay() {
     setManual(true)
+    clearResumeTimer()
   }
 
   function handleSliderChange(value) {
     setManual(true)
     setPercent(value)
+    clearResumeTimer()
+  }
+
+  function handleSliderRelease() {
+    scheduleResume()
   }
 
   const goal = EXAMPLE_GOALS[goalIndex]
@@ -128,6 +158,7 @@ export function useHeroDemo() {
     isAutoplay: !manual && !reducedMotion,
     onSliderPointerDown: stopAutoplay,
     onSliderChange: handleSliderChange,
+    onSliderRelease: handleSliderRelease,
     visualization,
     onVisualizationChange: setVisualization,
   }

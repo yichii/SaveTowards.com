@@ -22,6 +22,7 @@ export function HeroDemo({
   isAutoplay,
   onSliderPointerDown,
   onSliderChange,
+  onSliderRelease,
   visualization,
   onVisualizationChange,
 }) {
@@ -68,6 +69,9 @@ export function HeroDemo({
         onPointerDown={onSliderPointerDown}
         onTouchStart={onSliderPointerDown}
         onChange={(e) => onSliderChange(Number(e.target.value))}
+        onPointerUp={onSliderRelease}
+        onTouchEnd={onSliderRelease}
+        onBlur={onSliderRelease}
         className="w-full accent-emerald-600"
       />
 

@@ -50,6 +50,7 @@ export function Hero({ onStart }) {
             isAutoplay={demo.isAutoplay}
             onSliderPointerDown={demo.onSliderPointerDown}
             onSliderChange={demo.onSliderChange}
+            onSliderRelease={demo.onSliderRelease}
             visualization={demo.visualization}
             onVisualizationChange={demo.onVisualizationChange}
           />

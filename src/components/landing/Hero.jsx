@@ -24,7 +24,7 @@ export function Hero({ onStart }) {
               />
               SaveTowards
             </div>
-            <p className="mt-1 flex items-baseline justify-center font-heading text-4xl font-bold tracking-tight text-stone-900 sm:justify-start sm:text-5xl">
+            <p className="mt-1 font-heading text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">
               <span className="underline decoration-cyan-400 decoration-4 underline-offset-4">{demo.typed}</span>
               <span className="ml-1 inline-block h-[0.85em] w-[3px] translate-y-[0.1em] bg-stone-900 animate-cursor-blink motion-reduce:animate-none" />
             </p>

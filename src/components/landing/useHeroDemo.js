@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { Plane, Car, Heart } from 'lucide-react'
+import { Plane, Car, Heart, Laptop, Home } from 'lucide-react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 export const EXAMPLE_GOALS = [
   { phrase: 'Your Toyota Camry', label: 'Your Toyota Camry · $6,000', icon: Car, emoji: '🚗', amount: 6000, weeks: 20, pct: 76 },
-  { phrase: 'Your Moonlit Wedding', label: 'Your Moonlit Wedding · $15,000', icon: Heart, emoji: '💍', amount: 15000, weeks: 40, pct: 62 },
+  { phrase: 'Your Wedding Day', label: 'Your Wedding Day · $15,000', icon: Heart, emoji: '💍', amount: 15000, weeks: 40, pct: 62 },
   { phrase: 'Your Trip to Vegas', label: 'Your Trip to Vegas · $2,400', icon: Plane, emoji: '✈️', amount: 2400, weeks: 12, pct: 35 },
+  { phrase: 'Your New Laptop', label: 'Your New Laptop · $1,800', icon: Laptop, emoji: '💻', amount: 1800, weeks: 10, pct: 50 },
+  { phrase: 'Your Dream Home', label: 'Your Dream Home · $20,000', icon: Home, emoji: '🏠', amount: 20000, weeks: 52, pct: 45 },
 ]
 
 const DELETE_MS_PER_CHAR = 30

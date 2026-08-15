@@ -20,7 +20,7 @@ export function HeroDemo({ goal, percent, plan, monthsRemaining, isAutoplay, onS
       </div>
 
       <div className="flex min-h-[6.5rem] flex-col items-center justify-center gap-3 py-2">
-        <FillIcon icon={goal.icon} percent={percent} size={84} />
+        <FillIcon emoji={goal.emoji} label={goal.label} percent={percent} size={84} />
         <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
       </div>
 

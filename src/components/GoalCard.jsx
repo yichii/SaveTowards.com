@@ -67,7 +67,8 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
   const [introVisible, setIntroVisible] = useState(justCreated)
 
   const plan = calculateSavingsPlan(goal)
-  const Icon = CATEGORIES.find((c) => c.key === goal.category)?.icon
+  const category = CATEGORIES.find((c) => c.key === goal.category)
+  const Icon = category?.icon
 
   const prevPercentRef = useRef(null)
   const celebrationHideTimeoutRef = useRef(null)
@@ -192,7 +193,12 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
         )}
         {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
           <>
-            <FillIcon icon={Icon} percent={plan.percentSaved} celebrating={!!celebration} />
+            <FillIcon
+              emoji={goal.emoji || category?.emojiOptions?.[0]}
+              label={category?.label}
+              percent={plan.percentSaved}
+              celebrating={!!celebration}
+            />
             <p className="text-xs text-gray-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
           </>
         )}

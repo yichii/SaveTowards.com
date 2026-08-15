@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { CategoryPicker } from './CategoryPicker'
+import { CATEGORIES, CategoryPicker } from './CategoryPicker'
+import { EmojiPicker } from './EmojiPicker'
 
 const PAY_FREQUENCIES = [
   { key: 'weekly', label: 'Weekly' },
@@ -19,8 +20,17 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   const [amountSaved, setAmountSaved] = useState(initialGoal ? String(initialGoal.amountSaved) : '0')
   const [targetDate, setTargetDate] = useState(initialGoal?.targetDate ?? '')
   const [category, setCategory] = useState(initialGoal?.category ?? '')
+  const [emoji, setEmoji] = useState(() => {
+    if (initialGoal?.emoji) return initialGoal.emoji
+    return CATEGORIES.find((c) => c.key === initialGoal?.category)?.emojiOptions?.[0] ?? ''
+  })
   const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
   const [errors, setErrors] = useState({})
+
+  function handleCategoryChange(nextCategory) {
+    setCategory(nextCategory)
+    setEmoji(CATEGORIES.find((c) => c.key === nextCategory)?.emojiOptions?.[0] ?? '')
+  }
 
   function validate() {
     const nextErrors = {}
@@ -60,6 +70,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       amountSaved: initialGoal ? Number(amountSaved) : 0,
       targetDate,
       category,
+      emoji,
       payFrequency,
       visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
       createdAt: initialGoal?.createdAt ?? new Date().toISOString(),
@@ -175,8 +186,19 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         <span className="text-sm font-medium text-gray-700">
           Category <span className="text-gray-400">(optional)</span>
         </span>
-        <CategoryPicker value={category} onChange={setCategory} />
+        <CategoryPicker value={category} onChange={handleCategoryChange} />
       </div>
+
+      {category && (
+        <div className="flex flex-col gap-1">
+          <span className="text-sm font-medium text-gray-700">Icon</span>
+          <EmojiPicker
+            options={CATEGORIES.find((c) => c.key === category)?.emojiOptions}
+            value={emoji}
+            onChange={setEmoji}
+          />
+        </div>
+      )}
 
       <div className="mt-2 flex gap-2">
         <button

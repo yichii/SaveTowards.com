@@ -33,6 +33,7 @@ Each goal is stored as:
   "amountSaved": "number, default 0",
   "targetDate": "ISO date string",
   "category": "string (icon key, optional)",
+  "emoji": "string (single emoji, optional — user-picked from the category's curated set, used by the Fill visualization; falls back to the category's default emoji when absent)",
   "payFrequency": "weekly | biweekly | monthly, default biweekly",
   "createdAt": "ISO date string"
 }
@@ -45,7 +46,7 @@ Each goal is stored as:
 - Always handle: target date in the past, goal already met, target date is today — these need graceful states, not errors
 
 ## Product Rules — Read Before Building Any Feature
-- The dashboard's goal cards support four visualization styles, user-selectable per goal via `VisualizationPicker`: Bar (MVP default), Ring, **Fill** (a category icon fills up like a container), and **Journey** (a marker moves along a path toward the goal icon). All four are live — don't treat Fill/Journey as future-phase or landing-page-only anymore.
+- The dashboard's goal cards support four visualization styles, user-selectable per goal via `VisualizationPicker`: Bar (MVP default), Ring, **Fill** (the goal's emoji is desaturated/faded as a base layer, with a full-color copy clipped from the bottom up in the same proportion as the saved percentage), and **Journey** (a marker moves along a path toward the goal's lucide category icon). All four are live — don't treat Fill/Journey as future-phase or landing-page-only anymore. Fill's emoji is user-picked in `GoalForm` via `EmojiPicker`, from a small curated set per category defined in `CategoryPicker.jsx` (`emojiOptions`); it's stored per-goal (`emoji` field) and falls back to the category's default (first option) when unset. Journey still uses the lucide icon set, untouched by this — the two visualizations intentionally use different icon sources.
 - Headline stat (one clear number, e.g. "$47/week") is always the most prominent element on a goal card. Full breakdown (day/week/month/paycheck) is hidden behind a "Show More" toggle — don't show all four by default.
 - No user accounts, no login, no cloud database. This is intentional, not a placeholder to fill in without being asked.
 - Category selection is from a small preset icon set — never build a custom photo upload feature unless explicitly requested.

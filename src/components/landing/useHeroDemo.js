@@ -4,9 +4,9 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 export const EXAMPLE_GOALS = [
-  { phrase: 'Toyota Camry', label: 'New car · $6,000', icon: Car, amount: 6000, weeks: 20, pct: 76 },
-  { phrase: 'Moonlit Wedding', label: 'Wedding fund · $15,000', icon: Heart, amount: 15000, weeks: 40, pct: 62 },
-  { phrase: 'Trip to Vegas', label: 'Trip to Vegas · $2,400', icon: Plane, amount: 2400, weeks: 12, pct: 35 },
+  { phrase: 'Toyota Camry', label: 'New car · $6,000', icon: Car, emoji: '🚗', amount: 6000, weeks: 20, pct: 76 },
+  { phrase: 'Moonlit Wedding', label: 'Wedding fund · $15,000', icon: Heart, emoji: '💍', amount: 15000, weeks: 40, pct: 62 },
+  { phrase: 'Trip to Vegas', label: 'Trip to Vegas · $2,400', icon: Plane, emoji: '✈️', amount: 2400, weeks: 12, pct: 35 },
 ]
 
 const DELETE_MS_PER_CHAR = 30

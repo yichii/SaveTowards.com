@@ -1,11 +1,11 @@
 import { Car, Plane, Home, Gift, MoreHorizontal } from 'lucide-react'
 
 export const CATEGORIES = [
-  { key: 'car', label: 'Car', icon: Car },
-  { key: 'travel', label: 'Travel', icon: Plane },
-  { key: 'home', label: 'Home', icon: Home },
-  { key: 'gift', label: 'Gift', icon: Gift },
-  { key: 'other', label: 'Other', icon: MoreHorizontal },
+  { key: 'car', label: 'Car', icon: Car, emojiOptions: ['🚗', '🚙', '🏎️'] },
+  { key: 'travel', label: 'Travel', icon: Plane, emojiOptions: ['✈️', '🧳', '🌴'] },
+  { key: 'home', label: 'Home', icon: Home, emojiOptions: ['🏠', '🏡', '🔑'] },
+  { key: 'gift', label: 'Gift', icon: Gift, emojiOptions: ['🎁', '💍', '🎉'] },
+  { key: 'other', label: 'Other', icon: MoreHorizontal, emojiOptions: ['🎯', '⭐', '💰'] },
 ]
 
 export function CategoryPicker({ value, onChange }) {

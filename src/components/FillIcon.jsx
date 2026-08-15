@@ -11,12 +11,12 @@ export function FillIcon({ icon, percent, size = 64, celebrating = false }) {
 
   return (
     <div
-      className={`relative shrink-0 ${celebrating ? 'animate-celebrate' : ''}`}
+      className={`relative shrink-0 ${celebrating ? 'animate-celebrate motion-reduce:animate-none' : ''}`}
       style={{ width: size, height: size }}
     >
       <Icon size={size} strokeWidth={1.5} className="absolute inset-0 text-gray-200" />
       <div
-        className="absolute inset-x-0 bottom-0 overflow-hidden transition-all duration-500 ease-out"
+        className="absolute inset-x-0 bottom-0 overflow-hidden transition-all duration-500 ease-out motion-reduce:transition-none"
         style={{ height: `${clamped}%` }}
       >
         <Icon

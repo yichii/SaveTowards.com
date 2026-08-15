@@ -4,6 +4,7 @@ import { useLocalStorage } from './hooks/useLocalStorage'
 import { GoalForm } from './components/GoalForm'
 import { GoalCard } from './components/GoalCard'
 import { EmptyState } from './components/EmptyState'
+import { LandingPage } from './components/LandingPage'
 
 // Older saved goals predate these fields — fill in defaults so they render
 // and edit correctly instead of showing "undefined" or crashing.
@@ -24,6 +25,22 @@ function App() {
   const goals = storedGoals.map(normalizeGoal)
   const [editingId, setEditingId] = useState(null)
   const [justCreatedId, setJustCreatedId] = useState(null)
+  // Returning users with goals already saved skip straight to the dashboard —
+  // only first-time visitors (nothing in localStorage yet) see the landing
+  // page. Decided once at mount so deleting all goals mid-session doesn't
+  // bounce someone back to it.
+  const [showLanding, setShowLanding] = useState(() => storedGoals.length === 0)
+
+  if (showLanding) {
+    return (
+      <LandingPage
+        onStart={() => {
+          setShowLanding(false)
+          setEditingId('new')
+        }}
+      />
+    )
+  }
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null
   const isCreating = editingId === 'new'

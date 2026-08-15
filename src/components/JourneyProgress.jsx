@@ -20,7 +20,7 @@ export function JourneyProgress({ icon, percent, size = 64, celebrating = false 
     <div className="w-full" style={{ maxWidth: WIDTH * (size / HEIGHT) }}>
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-        className={`w-full ${celebrating ? 'animate-celebrate' : ''}`}
+        className={`w-full ${celebrating ? 'animate-celebrate motion-reduce:animate-none' : ''}`}
         style={{ height: size }}
       >
         <line x1={START_X} y1={PATH_Y} x2={END_X} y2={PATH_Y} strokeWidth={2} className="stroke-gray-200" />
@@ -30,7 +30,10 @@ export function JourneyProgress({ icon, percent, size = 64, celebrating = false 
           <Icon size={24} strokeWidth={1.5} />
         </g>
 
-        <g transform={`translate(${markerX}, ${PATH_Y})`} className="transition-transform duration-500 ease-out">
+        <g
+          transform={`translate(${markerX}, ${PATH_Y})`}
+          className="transition-transform duration-500 ease-out motion-reduce:transition-none"
+        >
           <MapPin
             size={20}
             strokeWidth={2}

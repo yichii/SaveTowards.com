@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Lock } from 'lucide-react'
 import { CATEGORIES, CategoryPicker } from './CategoryPicker'
 import { EmojiPicker } from './EmojiPicker'
+import { LivePlanPreview } from './LivePlanPreview'
 
 const PAY_FREQUENCIES = [
   { key: 'weekly', label: 'Weekly' },
@@ -182,6 +183,13 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           })}
         </div>
       </div>
+
+      <LivePlanPreview
+        targetAmount={targetAmount}
+        amountSaved={initialGoal ? amountSaved : 0}
+        targetDate={targetDate}
+        payFrequency={payFrequency}
+      />
 
       <div className="flex flex-col gap-1">
         <span className="text-sm font-medium text-stone-700">

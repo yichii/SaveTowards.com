@@ -27,6 +27,13 @@ function targetDateWeeksOut(weeks) {
   return d.toISOString().slice(0, 10)
 }
 
+const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
+
+function formatTargetDate(isoDate) {
+  const [year, month, day] = isoDate.split('-').map(Number)
+  return dateFormatter.format(new Date(year, month - 1, day))
+}
+
 /**
  * Drives the hero: a shared example-goal array types/deletes the headline
  * phrase, swaps the headline icon, and fills the demo card all on the same
@@ -142,13 +149,14 @@ export function useHeroDemo() {
 
   const goal = EXAMPLE_GOALS[goalIndex]
   const amountSaved = Math.round((percent / 100) * goal.amount)
+  const targetDate = targetDateWeeksOut(goal.weeks)
   const plan = calculateSavingsPlan({
     targetAmount: goal.amount,
     amountSaved,
-    targetDate: targetDateWeeksOut(goal.weeks),
+    targetDate,
     payFrequency: 'weekly',
   })
-  const monthsRemaining = Math.max(Math.round(goal.weeks / 4.345), 1)
+  const targetDateLabel = formatTargetDate(targetDate)
 
   return {
     goal,
@@ -156,7 +164,7 @@ export function useHeroDemo() {
     iconKey,
     percent,
     plan,
-    monthsRemaining,
+    targetDateLabel,
     isAutoplay: !manual && !reducedMotion,
     onSliderPointerDown: stopAutoplay,
     onSliderChange: handleSliderChange,

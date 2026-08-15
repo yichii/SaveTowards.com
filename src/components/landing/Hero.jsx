@@ -51,7 +51,7 @@ export function Hero({ onStart }) {
             goal={demo.goal}
             percent={demo.percent}
             plan={demo.plan}
-            monthsRemaining={demo.monthsRemaining}
+            targetDateLabel={demo.targetDateLabel}
             isAutoplay={demo.isAutoplay}
             onSliderPointerDown={demo.onSliderPointerDown}
             onSliderChange={demo.onSliderChange}

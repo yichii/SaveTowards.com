@@ -15,7 +15,7 @@ export function HeroDemo({
   goal,
   percent,
   plan,
-  monthsRemaining,
+  targetDateLabel,
   isAutoplay,
   onSliderPointerDown,
   onSliderChange,
@@ -74,7 +74,7 @@ export function HeroDemo({
           {plan.status === 'met' ? 'Goal reached!' : `${currency.format(plan.perWeek)}/week`}
         </p>
         <p className="text-xs text-cyan-700/70 lg:text-sm xl:text-base">
-          {plan.status === 'met' ? "That's the whole thing, paid for." : `to get there in ${monthsRemaining} months`}
+          {plan.status === 'met' ? "That's the whole thing, paid for." : `to get there by ${targetDateLabel}`}
         </p>
       </div>
     </div>

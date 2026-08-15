@@ -34,20 +34,34 @@
   animation: fade-in-up 300ms ease-out;
 }
 
-@keyframes underline-blink {
-  0% {
-    transform: scaleX(0);
+@keyframes icon-swap {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
   }
-  30% {
-    transform: scaleX(0);
-  }
-  100% {
-    transform: scaleX(1);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.animate-underline-blink {
-  animation: underline-blink 900ms ease-out;
+.animate-icon-swap {
+  animation: icon-swap 220ms ease-out;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s steps(1) infinite;
 }
 
 @keyframes marquee {

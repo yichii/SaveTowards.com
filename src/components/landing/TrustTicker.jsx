@@ -35,7 +35,7 @@ export function TrustTicker() {
 
   if (reducedMotion) {
     return (
-      <div className="border-t border-stone-100 py-4">
+      <div className="shrink-0 border-t border-stone-100 py-[clamp(0.5rem,1.2dvh,1rem)]">
         <p className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 px-4 text-center text-sm text-stone-500">
           {MESSAGES.map((message) => (
             <span key={message}>{message}</span>
@@ -48,7 +48,7 @@ export function TrustTicker() {
   const track = Array.from({ length: repeatCount }, () => MESSAGES).flat()
 
   return (
-    <div className="border-t border-stone-100 py-4">
+    <div className="shrink-0 border-t border-stone-100 py-[clamp(0.5rem,1.2dvh,1rem)]">
       <div ref={containerRef} className="relative overflow-hidden" aria-hidden="true">
         <div
           ref={measureRef}

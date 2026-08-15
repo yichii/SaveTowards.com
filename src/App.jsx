@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
 import { useLocalStorage } from './hooks/useLocalStorage'
+import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { GoalForm } from './components/GoalForm'
 import { GoalCard } from './components/GoalCard'
 import { EmptyState } from './components/EmptyState'
 import { LandingPage } from './components/LandingPage'
+import { TransitionScreen } from './components/TransitionScreen'
+
+const LANDING_TRANSITION_MS = 500
 
 // Older saved goals predate these fields — fill in defaults so they render
 // and edit correctly instead of showing "undefined" or crashing.
@@ -30,16 +34,26 @@ function App() {
   // page. Decided once at mount so deleting all goals mid-session doesn't
   // bounce someone back to it.
   const [showLanding, setShowLanding] = useState(() => storedGoals.length === 0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const prefersReducedMotion = usePrefersReducedMotion()
+
+  useEffect(() => {
+    if (!isTransitioning) return
+    const delay = prefersReducedMotion ? 0 : LANDING_TRANSITION_MS
+    const timer = setTimeout(() => {
+      setShowLanding(false)
+      setEditingId('new')
+      setIsTransitioning(false)
+    }, delay)
+    return () => clearTimeout(timer)
+  }, [isTransitioning, prefersReducedMotion])
+
+  if (isTransitioning) {
+    return <TransitionScreen />
+  }
 
   if (showLanding) {
-    return (
-      <LandingPage
-        onStart={() => {
-          setShowLanding(false)
-          setEditingId('new')
-        }}
-      />
-    )
+    return <LandingPage onStart={() => setIsTransitioning(true)} />
   }
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null

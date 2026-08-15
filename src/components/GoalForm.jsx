@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Lock } from 'lucide-react'
 import { CATEGORIES, CategoryPicker } from './CategoryPicker'
 import { EmojiPicker } from './EmojiPicker'
 
@@ -80,12 +81,12 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
       <h1 className="font-heading text-xl font-semibold text-stone-900">
-        {initialGoal ? 'Edit savings goal' : 'Create a savings goal'}
+        {initialGoal ? 'Update your goal' : "Let's set up your goal"}
       </h1>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-medium text-stone-700">
-          Name <span className="text-stone-400">(optional)</span>
+          What should we call it? <span className="text-stone-400">(optional)</span>
         </label>
         <input
           id="name"
@@ -99,7 +100,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="targetAmount" className="text-sm font-medium text-stone-700">
-          Target amount
+          What are you saving up for?
         </label>
         <div className="relative">
           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
@@ -121,7 +122,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       {initialGoal && (
         <div className="flex flex-col gap-1">
           <label htmlFor="amountSaved" className="text-sm font-medium text-stone-700">
-            Amount saved so far
+            How much have you saved so far?
           </label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
@@ -137,7 +138,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
             />
           </div>
           <p className="text-xs text-stone-400">
-            Use this to correct the total directly. To log a deposit day-to-day, use “Add to savings” on the goal card.
+            Adjust the total here anytime. For day-to-day deposits, use “Add to savings” on the goal card.
           </p>
           {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
         </div>
@@ -145,7 +146,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="targetDate" className="text-sm font-medium text-stone-700">
-          Target date
+          When do you want to get there?
         </label>
         <input
           id="targetDate"
@@ -200,7 +201,11 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         </div>
       )}
 
-      <div className="mt-2 flex gap-2">
+      <p className="mt-2 text-sm text-stone-500">
+        {initialGoal ? 'Nice work keeping this up to date.' : "You've got this — every plan starts somewhere."}
+      </p>
+
+      <div className="flex gap-2">
         <button
           type="submit"
           className="flex-1 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
@@ -217,6 +222,11 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
           </button>
         )}
       </div>
+
+      <p className="flex items-center justify-center gap-1.5 text-xs text-stone-400">
+        <Lock size={12} />
+        Saved privately on this device — no account needed
+      </p>
     </form>
   )
 }

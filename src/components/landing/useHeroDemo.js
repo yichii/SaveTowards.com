@@ -42,7 +42,6 @@ export function useHeroDemo() {
   const [iconKey, setIconKey] = useState(0)
   const [percent, setPercent] = useState(() => (reducedMotion ? EXAMPLE_GOALS[0].pct : 0))
   const [manual, setManual] = useState(false)
-  const [visualization, setVisualization] = useState('fill')
   const resumeTimeoutRef = useRef(null)
 
   useEffect(() => {
@@ -162,7 +161,5 @@ export function useHeroDemo() {
     onSliderPointerDown: stopAutoplay,
     onSliderChange: handleSliderChange,
     onSliderRelease: handleSliderRelease,
-    visualization,
-    onVisualizationChange: setVisualization,
   }
 }

@@ -1,5 +1,8 @@
 import { MousePointerClick } from 'lucide-react'
 import { FillIcon } from '../FillIcon'
+import { RingProgress } from '../RingProgress'
+import { JourneyProgress } from '../JourneyProgress'
+import { VisualizationPicker } from '../VisualizationPicker'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -11,17 +14,38 @@ const currency = new Intl.NumberFormat('en-US', {
  * Presentational demo card — autoplay vs. manual control is decided by the
  * caller (useHeroDemo) and passed in, so this component just renders state.
  */
-export function HeroDemo({ goal, percent, plan, monthsRemaining, isAutoplay, onSliderPointerDown, onSliderChange }) {
+export function HeroDemo({
+  goal,
+  percent,
+  plan,
+  monthsRemaining,
+  isAutoplay,
+  onSliderPointerDown,
+  onSliderChange,
+  visualization,
+  onVisualizationChange,
+}) {
   return (
     <div className="w-full max-w-sm rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-950/5 backdrop-blur">
       <div className="mb-4 flex items-center justify-between gap-2">
-        <p className="text-sm font-medium text-gray-500">{goal.label}</p>
-        <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">Fill</span>
+        <p className="min-w-0 truncate text-sm font-medium text-gray-500">{goal.label}</p>
+        <VisualizationPicker value={visualization} onChange={onVisualizationChange} exclude={['bar']} />
       </div>
 
       <div className="flex min-h-[6.5rem] flex-col items-center justify-center gap-3 py-2">
-        <FillIcon emoji={goal.emoji} label={goal.label} percent={percent} size={84} />
-        <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
+        {visualization === 'ring' && <RingProgress percent={percent} />}
+        {visualization === 'journey' && (
+          <>
+            <JourneyProgress icon={goal.icon} percent={percent} />
+            <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
+          </>
+        )}
+        {(!visualization || visualization === 'fill') && (
+          <>
+            <FillIcon emoji={goal.emoji} label={goal.label} percent={percent} size={84} />
+            <p className="text-xs font-medium text-gray-500">{percent}% saved</p>
+          </>
+        )}
       </div>
 
       <div className="mb-1 flex h-5 items-center justify-center">

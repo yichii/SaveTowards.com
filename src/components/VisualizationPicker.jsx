@@ -7,10 +7,12 @@ export const VISUALIZATIONS = [
   { key: 'journey', label: 'Journey', icon: Route },
 ]
 
-export function VisualizationPicker({ value, onChange }) {
+export function VisualizationPicker({ value, onChange, exclude }) {
+  const options = exclude ? VISUALIZATIONS.filter((v) => !exclude.includes(v.key)) : VISUALIZATIONS
+
   return (
     <div className="flex items-center gap-1">
-      {VISUALIZATIONS.map(({ key, label, icon: Icon }) => {
+      {options.map(({ key, label, icon: Icon }) => {
         const selected = (value ?? 'fill') === key
         return (
           <button

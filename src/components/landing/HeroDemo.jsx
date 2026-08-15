@@ -77,7 +77,13 @@ export function HeroDemo({
         onPointerUp={onSliderRelease}
         onTouchEnd={onSliderRelease}
         onBlur={onSliderRelease}
-        className="w-full accent-cyan-600"
+        className="h-2 w-full cursor-pointer appearance-none rounded-full bg-cyan-100
+          [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-cyan-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:shadow-cyan-900/25 [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-150
+          [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-cyan-600 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:shadow-cyan-900/25 [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:duration-150
+          pointer-coarse:[&::-webkit-slider-thumb]:h-7 pointer-coarse:[&::-webkit-slider-thumb]:w-7
+          pointer-coarse:[&::-moz-range-thumb]:h-7 pointer-coarse:[&::-moz-range-thumb]:w-7
+          hover:[&::-webkit-slider-thumb]:scale-125 hover:[&::-moz-range-thumb]:scale-125
+          active:[&::-webkit-slider-thumb]:scale-125 active:[&::-moz-range-thumb]:scale-125"
       />
 
       <div className={`mt-[clamp(0.5rem,1.4dvh,1rem)] rounded-xl bg-cyan-50 px-4 text-center ${compact ? 'py-2' : 'py-3'}`}>

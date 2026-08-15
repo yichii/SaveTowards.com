@@ -127,6 +127,7 @@ export function useHeroDemo() {
 
   function stopAutoplay() {
     setManual(true)
+    setTyped(EXAMPLE_GOALS[goalIndex].phrase)
     clearResumeTimer()
   }
 

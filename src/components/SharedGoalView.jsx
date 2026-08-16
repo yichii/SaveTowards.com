@@ -1,4 +1,5 @@
 import { SharedGoalCard } from './SharedGoalCard'
+import { Logo } from './Logo'
 
 // Rendered instead of the dashboard when the URL carries a valid #s= share
 // payload. Purely presentational and reads nothing from/writes nothing to
@@ -7,7 +8,10 @@ export function SharedGoalView({ payload, onStartOwn }) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-stone-50 px-4 py-10">
       <div className="mx-auto flex w-full max-w-md flex-col gap-8 lg:max-w-lg">
-        <h1 className="text-center font-heading text-2xl font-bold text-stone-900 lg:text-3xl">SaveTowards</h1>
+        <h1 className="flex items-center justify-center gap-2 font-heading text-2xl font-bold text-stone-900 lg:text-3xl">
+          <Logo size={22} className="text-cyan-600 lg:h-7 lg:w-7" />
+          SaveTowards
+        </h1>
 
         <SharedGoalCard
           name={payload.name}

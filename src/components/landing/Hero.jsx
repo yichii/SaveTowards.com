@@ -3,11 +3,13 @@ import { HeroDemo } from './HeroDemo'
 import { RestoreLink } from './RestoreLink'
 import { useHeroDemo } from './useHeroDemo'
 import { useViewportTier } from '../../hooks/useViewportTier'
+import { Logo } from '../Logo'
 
-export function Hero({ onStart, onRestore }) {
+export function Hero({ onStart, onRestore, onBack }) {
   const demo = useHeroDemo()
   const { compact, ultraCompact, wide } = useViewportTier()
   const iconSize = ultraCompact ? 48 : wide ? 108 : compact ? 64 : 84
+  const logoSize = iconSize < 84 ? 22 : 28
 
   return (
     <section className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden px-4 py-[clamp(0.5rem,3dvh,3rem)]">
@@ -19,15 +21,21 @@ export function Hero({ onStart, onRestore }) {
         <div className="flex flex-col items-center text-center lg:max-w-xl lg:items-start lg:text-left xl:max-w-2xl 2xl:max-w-3xl">
           <h1 className="sr-only">SaveTowards — plan and track any savings goal</h1>
           <div aria-hidden="true">
-            <div className="flex items-center justify-center gap-2 font-heading text-[clamp(1rem,2.8dvh,1.875rem)] font-bold text-stone-900 sm:justify-start lg:text-3xl xl:text-4xl 2xl:text-4xl">
-              <demo.goal.icon
-                key={demo.iconKey}
-                size={iconSize < 84 ? 22 : 28}
-                strokeWidth={2}
-                className="text-cyan-600 animate-icon-swap motion-reduce:animate-none lg:h-8 lg:w-8 xl:h-9 xl:w-9 2xl:h-9 2xl:w-9"
-              />
-              SaveTowards
-            </div>
+            {onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex items-center justify-center gap-2 font-heading text-[clamp(1rem,2.8dvh,1.875rem)] font-bold text-stone-900 transition-opacity hover:opacity-80 sm:justify-start lg:text-3xl xl:text-4xl 2xl:text-4xl"
+              >
+                <Logo size={logoSize} className="text-cyan-600 lg:h-8 lg:w-8 xl:h-9 xl:w-9 2xl:h-9 2xl:w-9" />
+                SaveTowards
+              </button>
+            ) : (
+              <div className="flex items-center justify-center gap-2 font-heading text-[clamp(1rem,2.8dvh,1.875rem)] font-bold text-stone-900 sm:justify-start lg:text-3xl xl:text-4xl 2xl:text-4xl">
+                <Logo size={logoSize} className="text-cyan-600 lg:h-8 lg:w-8 xl:h-9 xl:w-9 2xl:h-9 2xl:w-9" />
+                SaveTowards
+              </div>
+            )}
             <p className="mt-1 whitespace-nowrap font-heading text-[clamp(1.375rem,4.6dvh,3rem)] font-bold tracking-tight text-stone-900 lg:text-5xl xl:text-6xl 2xl:text-7xl">
               <span className="underline decoration-cyan-400 decoration-4 underline-offset-4">{demo.typed}</span>
               <span className="ml-1 inline-block h-[0.85em] w-[3px] translate-y-[0.1em] bg-stone-900 animate-cursor-blink motion-reduce:animate-none" />

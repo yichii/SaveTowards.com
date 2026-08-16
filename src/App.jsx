@@ -11,6 +11,7 @@ import { DataPortability } from './components/DataPortability'
 import { TotalsSummary } from './components/TotalsSummary'
 import { Modal } from './components/Modal'
 import { SharedGoalView } from './components/SharedGoalView'
+import { Logo } from './components/Logo'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
 
@@ -97,7 +98,13 @@ function App() {
   }
 
   if (showLanding) {
-    return <LandingPage onStart={() => setIsTransitioning(true)} onRestore={handleRestoreFromLanding} />
+    return (
+      <LandingPage
+        onStart={() => setIsTransitioning(true)}
+        onRestore={handleRestoreFromLanding}
+        onBack={storedGoals.length > 0 ? () => setShowLanding(false) : undefined}
+      />
+    )
   }
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null
@@ -142,7 +149,16 @@ function App() {
     <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-14">
       <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-3 lg:mb-10">
-          <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">SaveTowards</h1>
+          <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">
+            <button
+              type="button"
+              onClick={() => setShowLanding(true)}
+              className="flex items-center gap-2 transition-opacity hover:opacity-80"
+            >
+              <Logo size={22} className="text-cyan-600 lg:h-7 lg:w-7" />
+              SaveTowards
+            </button>
+          </h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <button
               type="button"

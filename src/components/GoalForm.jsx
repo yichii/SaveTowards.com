@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Lock } from 'lucide-react'
 import { CATEGORIES, CategoryPicker } from './CategoryPicker'
-import { EmojiPicker } from './EmojiPicker'
 import { LivePlanPreview } from './LivePlanPreview'
 
 const PAY_FREQUENCIES = [
@@ -31,9 +30,9 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   const [takeHomePay, setTakeHomePay] = useState(initialGoal?.takeHomePay ? String(initialGoal.takeHomePay) : '')
   const [errors, setErrors] = useState({})
 
-  function handleCategoryChange(nextCategory) {
+  function handleCategoryChange(nextCategory, nextEmoji) {
     setCategory(nextCategory)
-    setEmoji(CATEGORIES.find((c) => c.key === nextCategory)?.emojiOptions?.[0] ?? '')
+    setEmoji(nextEmoji)
   }
 
   function validate() {
@@ -217,9 +216,6 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
             className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           />
         </div>
-        <p className="text-xs text-stone-400">
-          Lets us show your savings as a share of your paycheck too. Stays on this device, never shared.
-        </p>
         {errors.takeHomePay && <p className="text-sm text-red-600">{errors.takeHomePay}</p>}
       </div>
 
@@ -235,19 +231,8 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         <span className="text-sm font-medium text-stone-700">
           Category <span className="text-stone-400">(optional)</span>
         </span>
-        <CategoryPicker value={category} onChange={handleCategoryChange} />
+        <CategoryPicker value={category} emoji={emoji} onChange={handleCategoryChange} />
       </div>
-
-      {category && (
-        <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-stone-700">Icon</span>
-          <EmojiPicker
-            options={CATEGORIES.find((c) => c.key === category)?.emojiOptions}
-            value={emoji}
-            onChange={setEmoji}
-          />
-        </div>
-      )}
 
       <p className="mt-2 text-sm text-stone-500">
         {initialGoal ? 'Nice work keeping this up to date.' : "You've got this — every plan starts somewhere."}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Sparkles, Trash2 } from 'lucide-react'
-import { calculateSavingsPlan } from '../utils/calculations'
+import { calculateSavingsPlan, headlineUnitWord } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
 import { JourneyProgress } from './JourneyProgress'
 import { ProgressBar } from './ProgressBar'
@@ -15,6 +15,7 @@ const CARD_STYLES = {
   overdue: 'border-amber-200 bg-amber-50/40',
   'due-today': 'border-stone-200 bg-white',
   'on-track': 'border-stone-200 bg-white',
+  'deadline-imminent': 'border-stone-200 bg-white',
 }
 
 function headline(plan, goal) {
@@ -39,9 +40,11 @@ function headline(plan, goal) {
     month: 'short',
     day: 'numeric',
   })
+  const amount = plan[plan.headlineUnit]
+  const unitWord = headlineUnitWord(plan.headlineUnit)
   return label
-    ? `${currency.format(plan.perWeek)}/week toward ${label} by ${dateLabel}`
-    : `${currency.format(plan.perWeek)}/week to reach this by ${dateLabel}`
+    ? `${currency.format(amount)}/${unitWord} toward ${label} by ${dateLabel}`
+    : `${currency.format(amount)}/${unitWord} to reach this by ${dateLabel}`
 }
 
 const MILESTONES = [25, 50, 75, 100]
@@ -54,6 +57,7 @@ const MILESTONE_MESSAGES = {
 }
 
 function savingsInputLabel(payFrequency) {
+  if (payFrequency === 'daily') return 'Add what you saved today'
   if (payFrequency === 'weekly') return 'Add what you saved this week'
   if (payFrequency === 'monthly') return 'Add what you saved this month'
   return 'Add what you saved since your last paycheck'
@@ -225,24 +229,22 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
         </button>
       )}
 
-      {showMore && plan.status !== 'met' && (
-        <div className="grid grid-cols-2 gap-3 rounded-lg bg-stone-50 p-4 text-sm sm:grid-cols-4">
-          <div>
-            <p className="text-stone-500">Per day</p>
-            <p className="font-semibold text-stone-900">{currency.format(plan.perDay)}</p>
-          </div>
-          <div>
-            <p className="text-stone-500">Per week</p>
-            <p className="font-semibold text-stone-900">{currency.format(plan.perWeek)}</p>
-          </div>
-          <div>
-            <p className="text-stone-500">Per month</p>
-            <p className="font-semibold text-stone-900">{currency.format(plan.perMonth)}</p>
-          </div>
-          <div>
-            <p className="text-stone-500">Per paycheck</p>
-            <p className="font-semibold text-stone-900">{currency.format(plan.perPaycheck)}</p>
-          </div>
+      {showMore && plan.status !== 'met' && plan.breakdownMode === 'single-line' && (
+        <p className="rounded-lg bg-stone-50 p-4 text-sm text-stone-600">
+          {plan.daysRemaining > 0
+            ? `${currency.format(plan.amountRemaining)} left, with ${plan.daysRemaining} day${plan.daysRemaining === 1 ? '' : 's'} to go.`
+            : `${currency.format(plan.amountRemaining)} left to save.`}
+        </p>
+      )}
+
+      {showMore && plan.status !== 'met' && plan.breakdownMode === 'grid' && (
+        <div className="grid grid-cols-2 gap-3 rounded-lg bg-stone-50 p-4 text-sm">
+          {plan.rows.filter((row) => row.visible).map((row) => (
+            <div key={row.key}>
+              <p className="text-stone-500">{row.label}</p>
+              <p className="font-semibold text-stone-900">{currency.format(row.value)}</p>
+            </div>
+          ))}
         </div>
       )}
 

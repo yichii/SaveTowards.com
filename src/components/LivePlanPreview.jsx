@@ -41,24 +41,24 @@ function PlanBreakdown({ plan }) {
     return <p className="text-stone-500">Target date is today — you'd need {currency.format(plan.amountRemaining)} today.</p>
   }
 
+  if (plan.breakdownMode === 'single-line') {
+    return (
+      <p className="text-stone-500">
+        {plan.daysRemaining > 0
+          ? `${currency.format(plan.amountRemaining)} left, with ${plan.daysRemaining} day${plan.daysRemaining === 1 ? '' : 's'} to go.`
+          : `${currency.format(plan.amountRemaining)} left to save.`}
+      </p>
+    )
+  }
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      <div>
-        <p className="text-stone-500">Per day</p>
-        <p className="font-semibold text-stone-900">{currency.format(plan.perDay)}</p>
-      </div>
-      <div>
-        <p className="text-stone-500">Per week</p>
-        <p className="font-semibold text-stone-900">{currency.format(plan.perWeek)}</p>
-      </div>
-      <div>
-        <p className="text-stone-500">Per month</p>
-        <p className="font-semibold text-stone-900">{currency.format(plan.perMonth)}</p>
-      </div>
-      <div>
-        <p className="text-stone-500">Per paycheck</p>
-        <p className="font-semibold text-stone-900">{currency.format(plan.perPaycheck)}</p>
-      </div>
+    <div className="grid grid-cols-2 gap-3">
+      {plan.rows.filter((row) => row.visible).map((row) => (
+        <div key={row.key}>
+          <p className="text-stone-500">{row.label}</p>
+          <p className="font-semibold text-stone-900">{currency.format(row.value)}</p>
+        </div>
+      ))}
     </div>
   )
 }

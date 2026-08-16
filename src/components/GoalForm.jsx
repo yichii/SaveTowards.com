@@ -5,6 +5,7 @@ import { EmojiPicker } from './EmojiPicker'
 import { LivePlanPreview } from './LivePlanPreview'
 
 const PAY_FREQUENCIES = [
+  { key: 'daily', label: 'Daily' },
   { key: 'weekly', label: 'Weekly' },
   { key: 'biweekly', label: 'Biweekly' },
   { key: 'monthly', label: 'Monthly' },
@@ -65,17 +66,22 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
     e.preventDefault()
     if (!validate()) return
 
+    const now = new Date().toISOString()
+    const nextAmountSaved = initialGoal ? Number(amountSaved) : 0
+    const savedAmountChanged = !initialGoal || nextAmountSaved !== initialGoal.amountSaved
+
     onSave({
       id: initialGoal?.id ?? crypto.randomUUID(),
       name: name.trim(),
       targetAmount: Number(targetAmount),
-      amountSaved: initialGoal ? Number(amountSaved) : 0,
+      amountSaved: nextAmountSaved,
       targetDate,
       category,
       emoji,
       payFrequency,
       visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
-      createdAt: initialGoal?.createdAt ?? new Date().toISOString(),
+      createdAt: initialGoal?.createdAt ?? now,
+      lastUpdatedAt: savedAmountChanged ? now : (initialGoal?.lastUpdatedAt ?? now),
     })
   }
 

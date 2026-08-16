@@ -37,6 +37,22 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const prefersReducedMotion = usePrefersReducedMotion()
 
+  // Goals saved before createdAt/lastUpdatedAt existed are missing them —
+  // backfill both with today's date once, and persist the migration so it
+  // only needs to run once per goal.
+  useEffect(() => {
+    setGoals((prev) => {
+      const now = new Date().toISOString()
+      let changed = false
+      const migrated = prev.map((g) => {
+        if (g.createdAt && g.lastUpdatedAt) return g
+        changed = true
+        return { ...g, createdAt: g.createdAt ?? now, lastUpdatedAt: g.lastUpdatedAt ?? now }
+      })
+      return changed ? migrated : prev
+    })
+  }, [])
+
   useEffect(() => {
     if (!isTransitioning) return
     const delay = prefersReducedMotion ? 0 : LANDING_TRANSITION_MS
@@ -70,7 +86,9 @@ function App() {
   }
 
   function handleUpdateSaved(id, amountSaved) {
-    setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, amountSaved } : g)))
+    setGoals((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, amountSaved, lastUpdatedAt: new Date().toISOString() } : g))
+    )
   }
 
   function handleChangeVisualization(id, visualizationStyle) {

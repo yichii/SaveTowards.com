@@ -9,6 +9,7 @@ import { LandingPage } from './components/LandingPage'
 import { TransitionScreen } from './components/TransitionScreen'
 import { DataPortability } from './components/DataPortability'
 import { TotalsSummary } from './components/TotalsSummary'
+import { Modal } from './components/Modal'
 import { SharedGoalView } from './components/SharedGoalView'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
@@ -170,28 +171,18 @@ function App() {
 
         {!isCreating && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-            {goals.map((goal) =>
-              editingGoal?.id === goal.id ? (
-                <div key={goal.id} className="col-span-full lg:mx-auto lg:w-full lg:max-w-2xl">
-                  <GoalForm
-                    initialGoal={goal}
-                    onSave={handleSave}
-                    onCancel={() => setEditingId(null)}
-                  />
-                </div>
-              ) : (
-                <GoalCard
-                  key={goal.id}
-                  goal={goal}
-                  onUpdateSaved={handleUpdateSaved}
-                  onEdit={setEditingId}
-                  onDelete={handleDelete}
-                  onChangeVisualization={handleChangeVisualization}
-                  justCreated={goal.id === justCreatedId}
-                  onIntroComplete={() => setJustCreatedId(null)}
-                />
-              )
-            )}
+            {goals.map((goal) => (
+              <GoalCard
+                key={goal.id}
+                goal={goal}
+                onUpdateSaved={handleUpdateSaved}
+                onEdit={setEditingId}
+                onDelete={handleDelete}
+                onChangeVisualization={handleChangeVisualization}
+                justCreated={goal.id === justCreatedId}
+                onIntroComplete={() => setJustCreatedId(null)}
+              />
+            ))}
 
             {goals.length > 0 && (
               <button
@@ -206,10 +197,14 @@ function App() {
           </div>
         )}
 
-        {!isCreating && !editingGoal && (
-          <DataPortability goals={goals} onImport={handleImportGoals} />
-        )}
+        {!isCreating && <DataPortability goals={goals} onImport={handleImportGoals} />}
       </div>
+
+      {editingGoal && (
+        <Modal onClose={() => setEditingId(null)}>
+          <GoalForm initialGoal={editingGoal} onSave={handleSave} onCancel={() => setEditingId(null)} />
+        </Modal>
+      )}
     </div>
   )
 }

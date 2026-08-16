@@ -8,6 +8,7 @@ import { EmptyState } from './components/EmptyState'
 import { LandingPage } from './components/LandingPage'
 import { TransitionScreen } from './components/TransitionScreen'
 import { DataPortability } from './components/DataPortability'
+import { TotalsSummary } from './components/TotalsSummary'
 import { SharedGoalView } from './components/SharedGoalView'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
@@ -164,6 +165,8 @@ function App() {
             <GoalForm onSave={handleSave} onCancel={() => setEditingId(null)} />
           </div>
         )}
+
+        {!isCreating && <TotalsSummary goals={goals} />}
 
         {!isCreating && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">

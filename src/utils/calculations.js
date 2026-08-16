@@ -147,3 +147,56 @@ export function calculateSavingsPlan(goal) {
 export function headlineUnitWord(unit) {
   return UNIT_WORDS[unit] ?? 'week'
 }
+
+/**
+ * Combines per-goal plans into one required-savings figure, so someone with
+ * several goals can see what they add up to. Sums each active goal's perDay
+ * (already accounts for that goal's own deadline/overdue edge cases) and
+ * derives week/month from it — the same linear-scaling trick calculateSavingsPlan
+ * uses, so it stays correct no matter how many goals are combined. Per-paycheck
+ * only makes sense to sum when every active goal shares the same pay frequency;
+ * otherwise it's left out rather than showing a number that mixes windows.
+ */
+export function calculateCombinedPlan(goals) {
+  const plans = goals.map((goal) => ({ goal, plan: calculateSavingsPlan(goal) }))
+  const active = plans.filter(({ plan }) => plan.status !== 'met')
+
+  const totalTargetAmount = goals.reduce((sum, g) => sum + Math.max(Number(g.targetAmount) || 0, 0), 0)
+  const totalAmountSaved = goals.reduce((sum, g) => sum + Math.max(Number(g.amountSaved) || 0, 0), 0)
+
+  if (active.length === 0) {
+    return {
+      activeGoalsCount: 0,
+      totalGoalsCount: goals.length,
+      totalTargetAmount,
+      totalAmountSaved,
+      totalAmountRemaining: 0,
+      perDay: 0,
+      perWeek: 0,
+      perMonth: 0,
+      perPaycheck: null,
+    }
+  }
+
+  const totalAmountRemaining = active.reduce((sum, { plan }) => sum + plan.amountRemaining, 0)
+  const perDay = active.reduce((sum, { plan }) => sum + plan.perDay, 0)
+  const perWeek = perDay * 7
+  const perMonth = perDay * AVG_DAYS_PER_MONTH
+
+  const payFrequencies = new Set(active.map(({ goal }) => goal.payFrequency || 'biweekly'))
+  const perPaycheck = payFrequencies.size === 1
+    ? active.reduce((sum, { plan }) => sum + plan.perPaycheck, 0)
+    : null
+
+  return {
+    activeGoalsCount: active.length,
+    totalGoalsCount: goals.length,
+    totalTargetAmount,
+    totalAmountSaved,
+    totalAmountRemaining,
+    perDay,
+    perWeek,
+    perMonth,
+    perPaycheck,
+  }
+}

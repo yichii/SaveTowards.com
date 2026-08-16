@@ -5,9 +5,9 @@ import { SharedGoalCard } from './SharedGoalCard'
 // localStorage — the recipient's own goals, if any, are never touched.
 export function SharedGoalView({ payload, onStartOwn }) {
   return (
-    <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
-      <div className="mx-auto flex max-w-md flex-col gap-8">
-        <h1 className="text-center font-heading text-2xl font-bold text-stone-900">SaveTowards</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-stone-50 px-4 py-10">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-8 lg:max-w-lg">
+        <h1 className="text-center font-heading text-2xl font-bold text-stone-900 lg:text-3xl">SaveTowards</h1>
 
         <SharedGoalCard
           name={payload.name}

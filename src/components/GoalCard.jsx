@@ -142,7 +142,7 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
 
   return (
     <div
-      className={`flex flex-col gap-4 rounded-xl border p-6 shadow-sm transition-colors ${
+      className={`@container flex flex-col gap-4 rounded-xl border p-6 shadow-sm transition-colors ${
         CARD_STYLES[plan.status] ?? CARD_STYLES['on-track']
       }`}
     >
@@ -253,7 +253,7 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
       )}
 
       {showMore && plan.status !== 'met' && plan.breakdownMode === 'grid' && (
-        <div className="grid grid-cols-2 gap-3 rounded-lg bg-stone-50 p-4 text-sm">
+        <div className="grid grid-cols-2 gap-3 rounded-lg bg-stone-50 p-4 text-sm @sm:grid-cols-4">
           {plan.rows.filter((row) => row.visible).map((row) => (
             <div key={row.key}>
               <p className="text-stone-500">{row.label}</p>

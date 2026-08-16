@@ -68,7 +68,7 @@ function PlanBreakdown({ plan }) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 @lg:grid-cols-4">
         {plan.rows.filter((row) => row.visible).map((row) => (
           <div key={row.key}>
             <p className="text-stone-500">{row.label}</p>

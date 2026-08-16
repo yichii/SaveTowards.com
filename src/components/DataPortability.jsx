@@ -42,7 +42,7 @@ export function DataPortability({ goals, onImport }) {
   }
 
   return (
-    <div className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 text-center">
+    <div className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 text-center lg:flex-row lg:flex-wrap lg:justify-between lg:gap-4 lg:px-6 lg:text-left">
       <div>
         <p className="text-sm font-medium text-stone-700">Your goals, yours to keep</p>
         <p className="mt-0.5 text-xs text-stone-500">
@@ -50,7 +50,7 @@ export function DataPortability({ goals, onImport }) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
           onClick={handleExport}

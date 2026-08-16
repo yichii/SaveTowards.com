@@ -137,15 +137,15 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
-      <div className="mx-auto max-w-md">
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <h1 className="font-heading text-2xl font-bold text-stone-900">SaveTowards</h1>
+    <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-14">
+      <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
+        <div className="mb-6 flex items-center justify-between gap-3 lg:mb-10">
+          <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">SaveTowards</h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <button
               type="button"
               onClick={() => setEditingId('new')}
-              className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
+              className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
             >
               <Plus size={16} />
               New Goal
@@ -153,22 +153,29 @@ function App() {
           )}
         </div>
 
-        {goals.length === 0 && !isCreating && <EmptyState onCreate={() => setEditingId('new')} />}
+        {goals.length === 0 && !isCreating && (
+          <div className="lg:mx-auto lg:max-w-xl">
+            <EmptyState onCreate={() => setEditingId('new')} />
+          </div>
+        )}
 
         {isCreating && (
-          <GoalForm onSave={handleSave} onCancel={() => setEditingId(null)} />
+          <div className="lg:mx-auto lg:max-w-2xl">
+            <GoalForm onSave={handleSave} onCancel={() => setEditingId(null)} />
+          </div>
         )}
 
         {!isCreating && (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
             {goals.map((goal) =>
               editingGoal?.id === goal.id ? (
-                <GoalForm
-                  key={goal.id}
-                  initialGoal={goal}
-                  onSave={handleSave}
-                  onCancel={() => setEditingId(null)}
-                />
+                <div key={goal.id} className="col-span-full lg:mx-auto lg:w-full lg:max-w-2xl">
+                  <GoalForm
+                    initialGoal={goal}
+                    onSave={handleSave}
+                    onCancel={() => setEditingId(null)}
+                  />
+                </div>
               ) : (
                 <GoalCard
                   key={goal.id}
@@ -187,7 +194,7 @@ function App() {
               <button
                 type="button"
                 onClick={() => setEditingId('new')}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-stone-300 py-3 text-sm font-medium text-stone-500 transition-colors hover:border-cyan-400 hover:text-cyan-700"
+                className="col-span-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-stone-300 py-3 text-sm font-medium text-stone-500 transition-colors hover:border-cyan-400 hover:text-cyan-700"
               >
                 <Plus size={16} />
                 Add another goal

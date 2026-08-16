@@ -94,8 +94,8 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
-      <h1 className="font-heading text-xl font-semibold text-stone-900">
+    <form onSubmit={handleSubmit} className="@container flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-6 shadow-sm lg:p-8">
+      <h1 className="font-heading text-xl font-semibold text-stone-900 lg:text-2xl">
         {initialGoal ? 'Update your goal' : "Let's set up your goal"}
       </h1>
 
@@ -113,88 +113,92 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="targetAmount" className="text-sm font-medium text-stone-700">
-          What are you saving up for?
-        </label>
-        <div className="relative">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
-          <input
-            id="targetAmount"
-            type="number"
-            inputMode="decimal"
-            min="0"
-            step="0.01"
-            value={targetAmount}
-            onChange={(e) => setTargetAmount(e.target.value)}
-            placeholder="2000"
-            className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
-          />
-        </div>
-        {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
-      </div>
-
-      {initialGoal && (
+      <div className={initialGoal ? 'grid grid-cols-1 gap-4 @lg:grid-cols-2' : ''}>
         <div className="flex flex-col gap-1">
-          <label htmlFor="amountSaved" className="text-sm font-medium text-stone-700">
-            How much have you saved so far?
+          <label htmlFor="targetAmount" className="text-sm font-medium text-stone-700">
+            What are you saving up for?
           </label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
             <input
-              id="amountSaved"
+              id="targetAmount"
               type="number"
               inputMode="decimal"
               min="0"
               step="0.01"
-              value={amountSaved}
-              onChange={(e) => setAmountSaved(e.target.value)}
+              value={targetAmount}
+              onChange={(e) => setTargetAmount(e.target.value)}
+              placeholder="2000"
               className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
           </div>
-          <p className="text-xs text-stone-400">
-            Adjust the total here anytime. For day-to-day deposits, use “Add to savings” on the goal card.
-          </p>
-          {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
+          {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
         </div>
-      )}
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="targetDate" className="text-sm font-medium text-stone-700">
-          When do you want to get there?
-        </label>
-        <input
-          id="targetDate"
-          type="date"
-          min={todayIso()}
-          value={targetDate}
-          onChange={(e) => setTargetDate(e.target.value)}
-          className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
-        />
-        {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
+        {initialGoal && (
+          <div className="flex flex-col gap-1">
+            <label htmlFor="amountSaved" className="text-sm font-medium text-stone-700">
+              How much have you saved so far?
+            </label>
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+              <input
+                id="amountSaved"
+                type="number"
+                inputMode="decimal"
+                min="0"
+                step="0.01"
+                value={amountSaved}
+                onChange={(e) => setAmountSaved(e.target.value)}
+                className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              />
+            </div>
+            <p className="text-xs text-stone-400">
+              Adjust the total here anytime. For day-to-day deposits, use “Add to savings” on the goal card.
+            </p>
+            {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium text-stone-700">How often are you paid?</span>
-        <div className="flex gap-2">
-          {PAY_FREQUENCIES.map(({ key, label }) => {
-            const selected = payFrequency === key
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setPayFrequency(key)}
-                aria-pressed={selected}
-                className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
-                  selected
-                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
-                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
-                }`}
-              >
-                {label}
-              </button>
-            )
-          })}
+      <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="targetDate" className="text-sm font-medium text-stone-700">
+            When do you want to get there?
+          </label>
+          <input
+            id="targetDate"
+            type="date"
+            min={todayIso()}
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+          />
+          {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <span className="text-sm font-medium text-stone-700">How often are you paid?</span>
+          <div className="flex gap-2">
+            {PAY_FREQUENCIES.map(({ key, label }) => {
+              const selected = payFrequency === key
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setPayFrequency(key)}
+                  aria-pressed={selected}
+                  className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                    selected
+                      ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                      : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                  }`}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
@@ -202,7 +206,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         <label htmlFor="takeHomePay" className="text-sm font-medium text-stone-700">
           Take-home pay per paycheck <span className="text-stone-400">(optional)</span>
         </label>
-        <div className="relative">
+        <div className="relative @lg:max-w-[calc(50%-0.5rem)]">
           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
           <input
             id="takeHomePay"

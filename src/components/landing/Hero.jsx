@@ -1,9 +1,10 @@
 import { ArrowRight } from 'lucide-react'
 import { HeroDemo } from './HeroDemo'
+import { RestoreLink } from './RestoreLink'
 import { useHeroDemo } from './useHeroDemo'
 import { useViewportTier } from '../../hooks/useViewportTier'
 
-export function Hero({ onStart }) {
+export function Hero({ onStart, onRestore }) {
   const demo = useHeroDemo()
   const { compact, ultraCompact, wide } = useViewportTier()
   const iconSize = ultraCompact ? 48 : wide ? 108 : compact ? 64 : 84
@@ -50,6 +51,7 @@ export function Hero({ onStart }) {
               No accounts, no bank link, no risk — your data stays yours.
             </p>
           )}
+          <RestoreLink onRestore={onRestore} />
         </div>
         <div className="flex w-full justify-center lg:w-[26rem] lg:shrink-0 xl:w-[30rem] 2xl:w-[34rem]">
           <HeroDemo

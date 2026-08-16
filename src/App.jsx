@@ -7,6 +7,8 @@ import { GoalCard } from './components/GoalCard'
 import { EmptyState } from './components/EmptyState'
 import { LandingPage } from './components/LandingPage'
 import { TransitionScreen } from './components/TransitionScreen'
+import { DataPortability } from './components/DataPortability'
+import { mergeGoals } from './utils/goalIO'
 
 const LANDING_TRANSITION_MS = 500
 
@@ -69,7 +71,7 @@ function App() {
   }
 
   if (showLanding) {
-    return <LandingPage onStart={() => setIsTransitioning(true)} />
+    return <LandingPage onStart={() => setIsTransitioning(true)} onRestore={handleRestoreFromLanding} />
   }
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null
@@ -99,10 +101,21 @@ function App() {
     setGoals((prev) => prev.filter((g) => g.id !== id))
   }
 
+  function handleImportGoals(importedGoals) {
+    const { merged, added, alreadyPresent } = mergeGoals(storedGoals, importedGoals)
+    setGoals(merged)
+    return { added, alreadyPresent }
+  }
+
+  function handleRestoreFromLanding(importedGoals) {
+    handleImportGoals(importedGoals)
+    setShowLanding(false)
+  }
+
   return (
     <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-md">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between gap-3">
           <h1 className="font-heading text-2xl font-bold text-stone-900">SaveTowards</h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <button
@@ -157,6 +170,10 @@ function App() {
               </button>
             )}
           </div>
+        )}
+
+        {!isCreating && !editingGoal && (
+          <DataPortability goals={goals} onImport={handleImportGoals} />
         )}
       </div>
     </div>

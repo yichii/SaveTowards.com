@@ -8,7 +8,9 @@ import { EmptyState } from './components/EmptyState'
 import { LandingPage } from './components/LandingPage'
 import { TransitionScreen } from './components/TransitionScreen'
 import { DataPortability } from './components/DataPortability'
+import { SharedGoalView } from './components/SharedGoalView'
 import { mergeGoals } from './utils/goalIO'
+import { decodeSharePayload } from './utils/shareLink'
 
 const LANDING_TRANSITION_MS = 500
 
@@ -38,6 +40,10 @@ function App() {
   const [showLanding, setShowLanding] = useState(() => storedGoals.length === 0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const prefersReducedMotion = usePrefersReducedMotion()
+  // A shared-goal link overrides everything else on load, even for a
+  // returning user with their own goals — it's read once at mount and never
+  // touches localStorage, so the recipient's own data stays untouched.
+  const [sharedPayload, setSharedPayload] = useState(() => decodeSharePayload(window.location.hash))
 
   // Goals saved before createdAt/lastUpdatedAt existed are missing them —
   // backfill both with today's date once, and persist the migration so it
@@ -65,6 +71,24 @@ function App() {
     }, delay)
     return () => clearTimeout(timer)
   }, [isTransitioning, prefersReducedMotion])
+
+  if (sharedPayload) {
+    return (
+      <SharedGoalView
+        payload={sharedPayload}
+        onStartOwn={() => {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search)
+          setSharedPayload(null)
+          if (storedGoals.length === 0) {
+            setIsTransitioning(true)
+          } else {
+            setShowLanding(false)
+            setEditingId('new')
+          }
+        }}
+      />
+    )
+  }
 
   if (isTransitioning) {
     return <TransitionScreen />

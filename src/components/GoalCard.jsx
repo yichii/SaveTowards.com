@@ -7,6 +7,7 @@ import { ProgressBar } from './ProgressBar'
 import { RingProgress } from './RingProgress'
 import { VisualizationPicker } from './VisualizationPicker'
 import { CATEGORIES } from './CategoryPicker'
+import { ShareGoal } from './ShareGoal'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
@@ -217,6 +218,8 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
       <p className="text-sm text-stone-500">
         {currency.format(goal.amountSaved)} of {currency.format(goal.targetAmount)} saved
       </p>
+
+      {plan.status === 'met' && <ShareGoal goal={goal} />}
 
       {plan.status !== 'met' && (
         <button

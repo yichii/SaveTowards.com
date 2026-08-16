@@ -28,6 +28,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
     return CATEGORIES.find((c) => c.key === initialGoal?.category)?.emojiOptions?.[0] ?? ''
   })
   const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
+  const [takeHomePay, setTakeHomePay] = useState(initialGoal?.takeHomePay ? String(initialGoal.takeHomePay) : '')
   const [errors, setErrors] = useState({})
 
   function handleCategoryChange(nextCategory) {
@@ -58,6 +59,13 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       nextErrors.targetDate = 'Target date can’t be in the past'
     }
 
+    if (takeHomePay !== '') {
+      const pay = Number(takeHomePay)
+      if (Number.isNaN(pay) || pay < 0) {
+        nextErrors.takeHomePay = 'Enter an amount of $0 or more'
+      }
+    }
+
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
   }
@@ -79,6 +87,7 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       category,
       emoji,
       payFrequency,
+      takeHomePay: takeHomePay === '' ? undefined : Number(takeHomePay),
       visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
       createdAt: initialGoal?.createdAt ?? now,
       lastUpdatedAt: savedAmountChanged ? now : (initialGoal?.lastUpdatedAt ?? now),
@@ -190,11 +199,36 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
         </div>
       </div>
 
+      <div className="flex flex-col gap-1">
+        <label htmlFor="takeHomePay" className="text-sm font-medium text-stone-700">
+          Take-home pay per paycheck <span className="text-stone-400">(optional)</span>
+        </label>
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+          <input
+            id="takeHomePay"
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={takeHomePay}
+            onChange={(e) => setTakeHomePay(e.target.value)}
+            placeholder="Skip if you'd rather not say"
+            className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+          />
+        </div>
+        <p className="text-xs text-stone-400">
+          Lets us show your savings as a share of your paycheck too. Stays on this device, never shared.
+        </p>
+        {errors.takeHomePay && <p className="text-sm text-red-600">{errors.takeHomePay}</p>}
+      </div>
+
       <LivePlanPreview
         targetAmount={targetAmount}
         amountSaved={initialGoal ? amountSaved : 0}
         targetDate={targetDate}
         payFrequency={payFrequency}
+        takeHomePay={takeHomePay}
       />
 
       <div className="flex flex-col gap-1">

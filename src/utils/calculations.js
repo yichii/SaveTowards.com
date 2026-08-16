@@ -16,6 +16,9 @@ const ROW_LABELS = {
   perPaycheck: 'Per paycheck',
 }
 
+// Below this, income share isn't called out — the dollar figure alone is enough.
+export const HIGH_INCOME_SHARE_THRESHOLD = 50
+
 const UNIT_WORDS = {
   perDay: 'day',
   perWeek: 'week',
@@ -33,6 +36,15 @@ function daysUntil(targetDate, fromDate = new Date()) {
   const t = new Date(year, month - 1, day)
   const f = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate())
   return Math.round((t - f) / 86400000)
+}
+
+// Required savings and take-home pay both scale linearly off a per-day rate,
+// so the share of income is the same fraction no matter which window
+// (day/week/month/paycheck) you compute it over — one scalar covers all of them.
+function computeIncomeShare({ takeHomePay, paycheckDays, perDay }) {
+  if (!takeHomePay || takeHomePay <= 0) return null
+  const takeHomePerDay = takeHomePay / paycheckDays
+  return (perDay / takeHomePerDay) * 100
 }
 
 // A row is meaningful only if its window actually fits inside the time
@@ -74,6 +86,7 @@ export function calculateSavingsPlan(goal) {
     : 100
   const daysRemaining = daysUntil(goal.targetDate)
   const paycheckDays = PAY_FREQUENCY_DAYS[goal.payFrequency] || PAY_FREQUENCY_DAYS.biweekly
+  const takeHomePay = Math.max(Number(goal.takeHomePay) || 0, 0)
 
   if (amountRemaining <= 0) {
     const rows = buildRows({ perDay: 0, perWeek: 0, perMonth: 0, perPaycheck: 0, paycheckDays, daysRemaining })
@@ -89,6 +102,8 @@ export function calculateSavingsPlan(goal) {
       rows,
       breakdownMode: 'grid',
       headlineUnit: 'perWeek',
+      headlineIncomeShare: null,
+      exceedsFullPaycheck: false,
     }
   }
 
@@ -100,6 +115,7 @@ export function calculateSavingsPlan(goal) {
   const perMonth = perDay * AVG_DAYS_PER_MONTH
   const perPaycheck = perDay * paycheckDays
 
+  const incomeShare = computeIncomeShare({ takeHomePay, paycheckDays, perDay })
   const rows = buildRows({ perDay, perWeek, perMonth, perPaycheck, paycheckDays, daysRemaining })
   const visibleNonDayRows = rows.filter((r) => r.key !== 'perDay' && r.visible)
   const breakdownMode = visibleNonDayRows.length === 0 ? 'single-line' : 'grid'
@@ -123,6 +139,8 @@ export function calculateSavingsPlan(goal) {
     rows,
     breakdownMode,
     headlineUnit,
+    headlineIncomeShare: incomeShare,
+    exceedsFullPaycheck: incomeShare != null ? incomeShare >= 100 : false,
   }
 }
 

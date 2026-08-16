@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Sparkles, Trash2 } from 'lucide-react'
-import { calculateSavingsPlan, headlineUnitWord } from '../utils/calculations'
+import { calculateSavingsPlan, headlineUnitWord, HIGH_INCOME_SHARE_THRESHOLD } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
 import { JourneyProgress } from './JourneyProgress'
 import { ProgressBar } from './ProgressBar'
@@ -57,6 +57,15 @@ const MILESTONE_MESSAGES = {
   100: "You did it! Goal reached.",
 }
 
+function incomeShareNote(plan) {
+  if (plan.headlineIncomeShare == null) return null
+  if (plan.exceedsFullPaycheck) return "That's more than a full paycheck each pay period."
+  if (plan.headlineIncomeShare >= HIGH_INCOME_SHARE_THRESHOLD) {
+    return `That's about ${plan.headlineIncomeShare.toFixed(0)}% of your take-home pay.`
+  }
+  return null
+}
+
 function savingsInputLabel(payFrequency) {
   if (payFrequency === 'daily') return 'Add what you saved today'
   if (payFrequency === 'weekly') return 'Add what you saved this week'
@@ -74,6 +83,7 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
   const plan = calculateSavingsPlan(goal)
   const category = CATEGORIES.find((c) => c.key === goal.category)
   const Icon = category?.icon
+  const shareNote = plan.status !== 'met' ? incomeShareNote(plan) : null
 
   const prevPercentRef = useRef(null)
   const celebrationHideTimeoutRef = useRef(null)
@@ -176,6 +186,8 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
           </p>
         )}
       </div>
+
+      {shareNote && <p className="-mt-2 text-sm text-stone-500">{shareNote}</p>}
 
       <div className="relative flex flex-col items-center gap-1 py-1">
         {celebration && (

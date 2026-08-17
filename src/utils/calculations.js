@@ -148,6 +148,47 @@ export function headlineUnitWord(unit) {
   return UNIT_WORDS[unit] ?? 'week'
 }
 
+// Everyday-cost bands to make a daily figure feel doable rather than
+// abstract, each paired with a short second-person nudge so it reads as
+// encouragement rather than a trivia fact. Ordered smallest-first; the
+// first band whose ceiling the per-day amount fits under wins. Deliberately
+// food/drink-based and generic (no brand names) so it reads for a broad,
+// non-finance audience. Above the top band the comparison stops feeling
+// relatable, so callers should fall back to progressPhrase instead.
+const PACE_COMPARISONS = [
+  { upTo: 2, phrase: "Less than a candy bar a day — you'll barely notice it." },
+  { upTo: 5, phrase: 'About a coffee a day. Easy to keep up.' },
+  { upTo: 10, phrase: 'About a lunch out a day — very doable.' },
+  { upTo: 20, phrase: 'About a takeout dinner a day — worth it for this one.' },
+]
+
+/**
+ * Returns a relatable everyday comparison (as a complete, ready-to-render
+ * sentence) for a per-day savings amount, or null if the amount is too
+ * large for a food/drink comparison to feel encouraging rather than
+ * trivializing.
+ */
+export function paceComparison(perDay) {
+  const band = PACE_COMPARISONS.find(({ upTo }) => perDay <= upTo)
+  return band ? band.phrase : null
+}
+
+// Percent-complete bands for a warm nudge when a dollar-based comparison
+// (paceComparison) doesn't apply — ordered highest-first so the first band
+// the percent clears wins.
+const PROGRESS_PHRASES = [
+  { atLeast: 75, phrase: "Almost there — the finish line's close." },
+  { atLeast: 50, phrase: 'More than halfway there — keep the momentum going.' },
+  { atLeast: 25, phrase: 'Well underway. Nice progress.' },
+  { atLeast: 0.01, phrase: "Ambitious, but you're already moving." },
+]
+
+/** Returns a percent-complete encouragement phrase, no dollar figures. */
+export function progressPhrase(percentSaved) {
+  const band = PROGRESS_PHRASES.find(({ atLeast }) => percentSaved >= atLeast)
+  return band ? band.phrase : 'Every bit from here counts.'
+}
+
 /**
  * Combines per-goal plans into one required-savings figure, so someone with
  * several goals can see what they add up to. Sums each active goal's perDay
@@ -156,6 +197,12 @@ export function headlineUnitWord(unit) {
  * uses, so it stays correct no matter how many goals are combined. Per-paycheck
  * only makes sense to sum when every active goal shares the same pay frequency;
  * otherwise it's left out rather than showing a number that mixes windows.
+ *
+ * Row visibility reuses the same "does this window fit inside the time left"
+ * rule as the individual goal card (buildRows), but applied against the
+ * *nearest* upcoming deadline across all active goals — that's the binding
+ * constraint, since a wider window is only meaningful if every goal (not just
+ * the average) actually has that much runway left.
  */
 export function calculateCombinedPlan(goals) {
   const plans = goals.map((goal) => ({ goal, plan: calculateSavingsPlan(goal) }))
@@ -175,6 +222,10 @@ export function calculateCombinedPlan(goals) {
       perWeek: 0,
       perMonth: 0,
       perPaycheck: null,
+      rows: [],
+      headlineUnit: 'perWeek',
+      breakdownMode: 'grid',
+      daysRemaining: 0,
     }
   }
 
@@ -187,6 +238,26 @@ export function calculateCombinedPlan(goals) {
   const perPaycheck = payFrequencies.size === 1
     ? active.reduce((sum, { plan }) => sum + plan.perPaycheck, 0)
     : null
+  const paycheckDays = payFrequencies.size === 1
+    ? PAY_FREQUENCY_DAYS[[...payFrequencies][0]] || PAY_FREQUENCY_DAYS.biweekly
+    : null
+
+  const nearestDaysRemaining = Math.min(...active.map(({ plan }) => plan.daysRemaining))
+  const rows = buildRows({
+    perDay,
+    perWeek,
+    perMonth,
+    perPaycheck: perPaycheck ?? 0,
+    paycheckDays: paycheckDays ?? Infinity,
+    daysRemaining: nearestDaysRemaining,
+  }).filter((row) => row.key !== 'perPaycheck' || perPaycheck != null)
+  const headlineUnit = pickHeadlineUnit(rows)
+  const visibleNonDayRows = rows.filter((r) => r.key !== 'perDay' && r.visible)
+  const breakdownMode = visibleNonDayRows.length === 0 ? 'single-line' : 'grid'
+
+  const percentSaved = totalTargetAmount > 0
+    ? Math.min((totalAmountSaved / totalTargetAmount) * 100, 100)
+    : 100
 
   return {
     activeGoalsCount: active.length,
@@ -194,9 +265,14 @@ export function calculateCombinedPlan(goals) {
     totalTargetAmount,
     totalAmountSaved,
     totalAmountRemaining,
+    percentSaved,
     perDay,
     perWeek,
     perMonth,
     perPaycheck,
+    rows,
+    headlineUnit,
+    breakdownMode,
+    daysRemaining: nearestDaysRemaining,
   }
 }

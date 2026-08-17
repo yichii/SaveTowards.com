@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CheckCircle2, ChevronDown, ChevronUp, PiggyBank } from 'lucide-react'
-import { calculateCombinedPlan } from '../utils/calculations'
+import { calculateCombinedPlan, headlineUnitWord, paceComparison, progressPhrase } from '../utils/calculations'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
@@ -14,6 +14,9 @@ export function TotalsSummary({ goals }) {
   if (combined.totalGoalsCount < 2) return null
 
   const allMet = combined.activeGoalsCount === 0
+  const headlineValue = combined[combined.headlineUnit]
+  const headlineWord = headlineUnitWord(combined.headlineUnit)
+  const pace = paceComparison(combined.perDay)
 
   return (
     <div className="@container mb-4 flex flex-col gap-3 rounded-xl border border-cyan-200 bg-cyan-50/50 p-6 shadow-sm lg:mb-6">
@@ -30,13 +33,12 @@ export function TotalsSummary({ goals }) {
       ) : (
         <>
           <p className="font-heading text-2xl font-semibold text-stone-900">
-            {currency.format(combined.perWeek)}/week across {combined.activeGoalsCount} goal
+            {currency.format(headlineValue)}/{headlineWord} across {combined.activeGoalsCount} goal
             {combined.activeGoalsCount === 1 ? '' : 's'}
           </p>
 
           <p className="text-sm text-stone-500">
-            {currency.format(combined.totalAmountRemaining)} left to save toward{' '}
-            {currency.format(combined.totalTargetAmount)} total
+            {pace || progressPhrase(combined.percentSaved)}
           </p>
         </>
       )}
@@ -52,26 +54,22 @@ export function TotalsSummary({ goals }) {
         </button>
       )}
 
-      {!allMet && showMore && (
+      {!allMet && showMore && combined.breakdownMode === 'single-line' && (
+        <p className="rounded-lg bg-white/60 p-4 text-sm text-stone-600">
+          {combined.daysRemaining > 0
+            ? `${currency.format(combined.totalAmountRemaining)} left, with ${combined.daysRemaining} day${combined.daysRemaining === 1 ? '' : 's'} to go.`
+            : `${currency.format(combined.totalAmountRemaining)} left to save.`}
+        </p>
+      )}
+
+      {!allMet && showMore && combined.breakdownMode === 'grid' && (
         <div className="grid grid-cols-2 gap-3 rounded-lg bg-white/60 p-4 text-sm @sm:grid-cols-4">
-          <div>
-            <p className="text-stone-500">Per day</p>
-            <p className="font-semibold text-stone-900">{currency.format(combined.perDay)}</p>
-          </div>
-          <div>
-            <p className="text-stone-500">Per week</p>
-            <p className="font-semibold text-stone-900">{currency.format(combined.perWeek)}</p>
-          </div>
-          <div>
-            <p className="text-stone-500">Per month</p>
-            <p className="font-semibold text-stone-900">{currency.format(combined.perMonth)}</p>
-          </div>
-          {combined.perPaycheck != null && (
-            <div>
-              <p className="text-stone-500">Per paycheck</p>
-              <p className="font-semibold text-stone-900">{currency.format(combined.perPaycheck)}</p>
+          {combined.rows.filter((row) => row.visible).map((row) => (
+            <div key={row.key}>
+              <p className="text-stone-500">{row.label}</p>
+              <p className="font-semibold text-stone-900">{currency.format(row.value)}</p>
             </div>
-          )}
+          ))}
         </div>
       )}
     </div>

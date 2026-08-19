@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { Plane, Car, Heart, Laptop, Home } from 'lucide-react'
+import { KeyRound, Landmark, Sofa, Truck } from 'lucide-react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 export const EXAMPLE_GOALS = [
-  { phrase: 'Your Toyota Camry', label: 'Your Toyota Camry · $6,000', icon: Car, emoji: '🚗', amount: 6000, weeks: 20, pct: 76 },
-  { phrase: 'Your Wedding Day', label: 'Your Wedding Day · $15,000', icon: Heart, emoji: '💍', amount: 15000, weeks: 40, pct: 62 },
-  { phrase: 'Your Trip to Vegas', label: 'Your Trip to Vegas · $2,400', icon: Plane, emoji: '✈️', amount: 2400, weeks: 12, pct: 35 },
-  { phrase: 'Your New Laptop', label: 'Your New Laptop · $1,800', icon: Laptop, emoji: '💻', amount: 1800, weeks: 10, pct: 50 },
-  { phrase: 'Your Dream Home', label: 'Your Dream Home · $20,000', icon: Home, emoji: '🏠', amount: 20000, weeks: 52, pct: 45 },
+  { phrase: 'My Down Payment?', label: 'My Down Payment? · $25,000', icon: Landmark, emoji: '🏡', amount: 25000, weeks: 78, pct: 45 },
+  { phrase: 'Moving Day?', label: 'Moving Day? · $3,000', icon: Truck, emoji: '📦', amount: 3000, weeks: 16, pct: 65 },
+  { phrase: 'First Apartment?', label: 'First Apartment? · $4,500', icon: KeyRound, emoji: '🔑', amount: 4500, weeks: 16, pct: 50 },
+  { phrase: 'Furnishing a Home?', label: 'Furnishing a Home? · $16,000', icon: Sofa, emoji: '🛋️', amount: 16000, weeks: 52, pct: 20 },
 ]
+
+// Demoted secondary examples — folded into a small, low-emphasis line rather
+// than cycled through the main headline/demo-card animation.
+export const SECONDARY_EXAMPLES = 'a car, a wedding, a trip'
 
 const DELETE_MS_PER_CHAR = 30
 const TYPE_MS_PER_CHAR = 55

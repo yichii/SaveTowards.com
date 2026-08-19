@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { HeroDemo } from './HeroDemo'
 import { RestoreLink } from './RestoreLink'
-import { useHeroDemo } from './useHeroDemo'
+import { useHeroDemo, SECONDARY_EXAMPLES } from './useHeroDemo'
 import { useViewportTier } from '../../hooks/useViewportTier'
 import { Logo } from '../Logo'
 
@@ -9,7 +9,6 @@ export function Hero({ onStart, onRestore, onBack }) {
   const demo = useHeroDemo()
   const { compact, ultraCompact, wide } = useViewportTier()
   const iconSize = ultraCompact ? 48 : wide ? 108 : compact ? 64 : 84
-  const logoSize = iconSize < 84 ? 22 : 28
 
   return (
     <section className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden px-4 py-[clamp(0.5rem,3dvh,3rem)]">
@@ -19,31 +18,40 @@ export function Hero({ onStart, onRestore, onBack }) {
       />
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-[clamp(0.75rem,3.5dvh,3rem)] lg:flex-row lg:items-center lg:justify-between lg:max-w-6xl lg:gap-16 xl:max-w-7xl xl:gap-20 2xl:max-w-[90rem] 2xl:gap-24">
         <div className="flex flex-col items-center text-center lg:max-w-xl lg:items-start lg:text-left xl:max-w-2xl 2xl:max-w-3xl">
-          <h1 className="sr-only">SaveTowards — plan and track any savings goal</h1>
-          <div aria-hidden="true">
-            {onBack ? (
-              <button
-                type="button"
-                onClick={onBack}
-                className="flex items-center justify-center gap-2 font-heading text-[clamp(1rem,2.8dvh,1.875rem)] font-bold text-stone-900 transition-opacity hover:opacity-80 sm:justify-start lg:text-3xl xl:text-4xl 2xl:text-4xl"
-              >
-                <Logo size={logoSize} className="text-cyan-600 lg:h-8 lg:w-8 xl:h-9 xl:w-9 2xl:h-9 2xl:w-9" />
-                SaveTowards
-              </button>
-            ) : (
-              <div className="flex items-center justify-center gap-2 font-heading text-[clamp(1rem,2.8dvh,1.875rem)] font-bold text-stone-900 sm:justify-start lg:text-3xl xl:text-4xl 2xl:text-4xl">
-                <Logo size={logoSize} className="text-cyan-600 lg:h-8 lg:w-8 xl:h-9 xl:w-9 2xl:h-9 2xl:w-9" />
-                SaveTowards
-              </div>
-            )}
-            <p className="mt-1 whitespace-nowrap font-heading text-[clamp(1.375rem,4.6dvh,3rem)] font-bold tracking-tight text-stone-900 lg:text-5xl xl:text-6xl 2xl:text-7xl">
+          {onBack ? (
+            <button
+              type="button"
+              onClick={onBack}
+              aria-label="Back"
+              className="flex items-center justify-center gap-2 font-heading text-[clamp(0.875rem,2dvh,1.25rem)] font-bold text-stone-600 transition-opacity hover:opacity-80 sm:justify-start"
+            >
+              <Logo size={22} className="text-cyan-600" />
+              SaveTowards
+            </button>
+          ) : (
+            <div className="flex items-center justify-center gap-2 font-heading text-[clamp(0.875rem,2dvh,1.25rem)] font-bold text-stone-600 sm:justify-start">
+              <Logo size={22} className="text-cyan-600" />
+              SaveTowards
+            </div>
+          )}
+          <h1 className="mt-[clamp(0.75rem,2.4dvh,1.5rem)] font-heading text-[clamp(1.25rem,min(6vw,5dvh),3.25rem)] font-bold tracking-tight text-stone-900 lg:text-5xl xl:text-6xl 2xl:text-7xl">
+            <span className="sr-only">
+              How do I start saving for my down payment, moving day, first apartment, or furnishing a home?
+            </span>
+            {/* Prefix and animated ending are separate fixed-height lines so the
+                typing/deleting animation only changes line width, never line
+                count — nothing below the headline shifts while it plays. */}
+            <span aria-hidden="true" className="block whitespace-nowrap">
+              How do I start saving for
+            </span>
+            <span aria-hidden="true" className="block whitespace-nowrap">
               <span className="underline decoration-cyan-400 decoration-4 underline-offset-4">{demo.typed}</span>
-              <span className="ml-1 inline-block h-[0.85em] w-[3px] translate-y-[0.1em] bg-stone-900 animate-cursor-blink motion-reduce:animate-none" />
-            </p>
-          </div>
+              <span className="ml-1 inline-block h-[0.8em] w-[3px] translate-y-[0.1em] bg-stone-900 animate-cursor-blink motion-reduce:animate-none" />
+            </span>
+          </h1>
           {!ultraCompact && (
-            <p className="mt-[clamp(0.5rem,1.6dvh,1rem)] max-w-md text-[clamp(0.8125rem,1.9dvh,1.125rem)] text-stone-600 lg:max-w-lg lg:text-xl xl:max-w-xl xl:text-2xl 2xl:max-w-2xl 2xl:text-3xl">
-              Set a goal and a date. We'll give you the number and show your progress as you go.
+            <p className="mt-[clamp(0.625rem,2dvh,1.25rem)] max-w-md text-[clamp(0.8125rem,1.9dvh,1.125rem)] text-stone-600 lg:max-w-lg lg:text-xl xl:max-w-xl xl:text-2xl 2xl:max-w-2xl 2xl:text-3xl">
+              Tell us the goal and the date. We'll break it down into something you can actually save each week.
             </p>
           )}
           <button
@@ -55,8 +63,8 @@ export function Hero({ onStart, onRestore, onBack }) {
             <ArrowRight size={18} />
           </button>
           {!ultraCompact && (
-            <p className="mt-2 text-xs text-stone-400 lg:text-sm">
-              No accounts, no bank link, no risk — your data stays yours.
+            <p className="mt-3 text-xs text-stone-400 lg:text-sm">
+              No accounts, no bank link — your data stays yours. Works for {SECONDARY_EXAMPLES} too.
             </p>
           )}
           <RestoreLink onRestore={onRestore} />

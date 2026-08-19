@@ -86,9 +86,11 @@ export function TradeoffSlider({ goal, plan, onApplyRate }) {
       <p className="text-stone-600">
         {projection.targetDate
           ? isCurrentRate
-            ? `You'd reach this goal by ${formatDateLabel(projection.targetDate)} — your current plan.`
-            : `You'd reach this goal by ${formatDateLabel(projection.targetDate)}${diffLabel ? ` — ${diffLabel}` : ''}.`
-          : "That rate won't get you there — try a higher amount."}
+            ? `Right on track — you'd reach this goal by ${formatDateLabel(projection.targetDate)}.`
+            : deltaDays < 0
+              ? `Nice — you'd reach this goal by ${formatDateLabel(projection.targetDate)}, ${diffLabel}!`
+              : `You'd still reach this goal by ${formatDateLabel(projection.targetDate)}${diffLabel ? `, ${diffLabel}` : ''} — that works too.`
+          : "That rate won't quite get you there — try a bit higher."}
       </p>
       {!isCurrentRate && projection.targetDate && onApplyRate && (
         <button

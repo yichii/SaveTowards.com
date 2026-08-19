@@ -62,6 +62,17 @@ const MILESTONE_MESSAGES = {
   100: "You did it! Goal reached.",
 }
 
+// Rotates so frequent savers (e.g. every paycheck) don't see the same line
+// back-to-back. Kept intentionally short — this is a subtle touch, not a
+// feature to expand.
+const SAVE_ACK_MESSAGES = [
+  'Nice — got it added.',
+  "Logged. You're getting closer.",
+  'Added — nice work.',
+  'Got it. Every bit counts.',
+  'Saved. Onward.',
+]
+
 function incomeShareNote(plan) {
   if (plan.headlineIncomeShare == null) return null
   if (plan.exceedsFullPaycheck) return "That's more than a full paycheck each pay period."
@@ -83,6 +94,11 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
   const [savedInput, setSavedInput] = useState('')
   const [celebration, setCelebration] = useState(null)
   const [celebrationLeaving, setCelebrationLeaving] = useState(false)
+  const [saveAck, setSaveAck] = useState(false)
+  const [saveAckLeaving, setSaveAckLeaving] = useState(false)
+  const [saveAckMessage, setSaveAckMessage] = useState(SAVE_ACK_MESSAGES[0])
+  const [inputNotice, setInputNotice] = useState(null)
+  const [inputNoticeLeaving, setInputNoticeLeaving] = useState(false)
   const [introVisible, setIntroVisible] = useState(justCreated)
 
   const plan = calculateSavingsPlan(goal)
@@ -93,6 +109,11 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
   const prevPercentRef = useRef(null)
   const celebrationHideTimeoutRef = useRef(null)
   const celebrationRemoveTimeoutRef = useRef(null)
+  const saveAckHideTimeoutRef = useRef(null)
+  const saveAckRemoveTimeoutRef = useRef(null)
+  const saveAckIndexRef = useRef(0)
+  const inputNoticeHideTimeoutRef = useRef(null)
+  const inputNoticeRemoveTimeoutRef = useRef(null)
 
   // Skip the celebration on first mount (prevPercentRef starts null) so
   // loading an already-progressed goal doesn't fire a stale milestone.
@@ -104,6 +125,12 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
         const threshold = newlyCrossed[newlyCrossed.length - 1]
         if (celebrationHideTimeoutRef.current) clearTimeout(celebrationHideTimeoutRef.current)
         if (celebrationRemoveTimeoutRef.current) clearTimeout(celebrationRemoveTimeoutRef.current)
+        // A milestone popup always wins over a lingering lightweight ack —
+        // never show both at once, regardless of what triggered this.
+        if (saveAckHideTimeoutRef.current) clearTimeout(saveAckHideTimeoutRef.current)
+        if (saveAckRemoveTimeoutRef.current) clearTimeout(saveAckRemoveTimeoutRef.current)
+        setSaveAck(false)
+        setSaveAckLeaving(false)
         setCelebration({ threshold, key: Date.now() })
         setCelebrationLeaving(false)
         celebrationHideTimeoutRef.current = setTimeout(() => setCelebrationLeaving(true), 2300)
@@ -116,6 +143,10 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
   useEffect(() => () => {
     if (celebrationHideTimeoutRef.current) clearTimeout(celebrationHideTimeoutRef.current)
     if (celebrationRemoveTimeoutRef.current) clearTimeout(celebrationRemoveTimeoutRef.current)
+    if (saveAckHideTimeoutRef.current) clearTimeout(saveAckHideTimeoutRef.current)
+    if (saveAckRemoveTimeoutRef.current) clearTimeout(saveAckRemoveTimeoutRef.current)
+    if (inputNoticeHideTimeoutRef.current) clearTimeout(inputNoticeHideTimeoutRef.current)
+    if (inputNoticeRemoveTimeoutRef.current) clearTimeout(inputNoticeRemoveTimeoutRef.current)
   }, [])
 
   const onIntroCompleteRef = useRef(onIntroComplete)
@@ -130,13 +161,83 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
     return () => clearTimeout(t)
   }, [justCreated])
 
+  // Hard-dismiss (no fade) each message type so a new action never renders
+  // alongside one still fading out from a previous action — only one of
+  // celebration / saveAck / inputNotice should ever be visible at a time.
+  function dismissCelebration() {
+    if (celebrationHideTimeoutRef.current) clearTimeout(celebrationHideTimeoutRef.current)
+    if (celebrationRemoveTimeoutRef.current) clearTimeout(celebrationRemoveTimeoutRef.current)
+    setCelebration(null)
+    setCelebrationLeaving(false)
+  }
+
+  function dismissSaveAck() {
+    if (saveAckHideTimeoutRef.current) clearTimeout(saveAckHideTimeoutRef.current)
+    if (saveAckRemoveTimeoutRef.current) clearTimeout(saveAckRemoveTimeoutRef.current)
+    setSaveAck(false)
+    setSaveAckLeaving(false)
+  }
+
+  function dismissInputNotice() {
+    if (inputNoticeHideTimeoutRef.current) clearTimeout(inputNoticeHideTimeoutRef.current)
+    if (inputNoticeRemoveTimeoutRef.current) clearTimeout(inputNoticeRemoveTimeoutRef.current)
+    setInputNotice(null)
+    setInputNoticeLeaving(false)
+  }
+
+  function showInputNotice(message) {
+    dismissInputNotice()
+    setInputNotice(message)
+    inputNoticeHideTimeoutRef.current = setTimeout(() => setInputNoticeLeaving(true), 1900)
+    inputNoticeRemoveTimeoutRef.current = setTimeout(() => setInputNotice(null), 2200)
+  }
+
+  function handleSavedInputChange(e) {
+    setSavedInput(e.target.value)
+    // Typing toward the next entry means the previous ack/notice no longer
+    // applies to what's on screen — clear it rather than let it linger.
+    dismissSaveAck()
+    dismissInputNotice()
+  }
+
   function handleUpdateSaved(e) {
     e.preventDefault()
-    if (savedInput.trim() === '') return
-    const delta = Number(savedInput)
+
+    // A new Add action always replaces whatever message is currently
+    // showing (or fading out), rather than letting the two overlap.
+    dismissCelebration()
+    dismissSaveAck()
+    dismissInputNotice()
+
+    const trimmed = savedInput.trim()
+    if (trimmed === '') {
+      showInputNotice('Add an amount to log it.')
+      return
+    }
+    const delta = Number(trimmed)
     if (Number.isNaN(delta)) return
-    onUpdateSaved(goal.id, Math.max(0, goal.amountSaved + delta))
+    if (delta === 0) {
+      setSavedInput('')
+      showInputNotice("That's a $0 update — nothing to add yet!")
+      return
+    }
+    const newAmountSaved = Math.max(0, goal.amountSaved + delta)
+    onUpdateSaved(goal.id, newAmountSaved)
     setSavedInput('')
+
+    // The full milestone popup (see the effect above) already covers the
+    // case where this save crosses a threshold — only show the lightweight
+    // ack when it doesn't, so the two never compete for attention.
+    const newPercent = goal.targetAmount > 0 ? (newAmountSaved / goal.targetAmount) * 100 : 0
+    const crossesMilestone = MILESTONES.some((m) => plan.percentSaved < m && newPercent >= m)
+    if (!crossesMilestone) {
+      setSaveAckMessage(SAVE_ACK_MESSAGES[saveAckIndexRef.current % SAVE_ACK_MESSAGES.length])
+      saveAckIndexRef.current += 1
+      setSaveAck(true)
+      setSaveAckLeaving(false)
+      saveAckHideTimeoutRef.current = setTimeout(() => setSaveAckLeaving(true), 1400)
+      saveAckRemoveTimeoutRef.current = setTimeout(() => setSaveAck(false), 1700)
+    }
   }
 
   function handleDelete() {
@@ -233,7 +334,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       </div>
 
       <p className="text-sm text-stone-500">
-        {currency.format(goal.amountSaved)} of {currency.format(goal.targetAmount)} saved
+        {currency.format(Math.min(goal.amountSaved, goal.targetAmount))} of {currency.format(goal.targetAmount)} saved
       </p>
 
       {plan.status === 'met' && <ShareGoal goal={goal} />}
@@ -290,7 +391,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
                 inputMode="decimal"
                 step="0.01"
                 value={savedInput}
-                onChange={(e) => setSavedInput(e.target.value)}
+                onChange={handleSavedInputChange}
                 placeholder="0"
                 className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
               />
@@ -303,6 +404,27 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
             Add
           </button>
         </form>
+      )}
+
+      {saveAck && (
+        <p
+          className={`-mt-2 flex items-center gap-1 text-xs font-medium text-cyan-600 transition-opacity duration-300 ease-in ${
+            saveAckLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
+          }`}
+        >
+          <CheckCircle2 size={12} className="shrink-0" />
+          {saveAckMessage}
+        </p>
+      )}
+
+      {inputNotice && (
+        <p
+          className={`-mt-2 text-xs font-medium text-stone-500 transition-opacity duration-300 ease-in ${
+            inputNoticeLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
+          }`}
+        >
+          {inputNotice}
+        </p>
       )}
     </div>
   )

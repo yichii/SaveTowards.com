@@ -34,7 +34,12 @@ function normalizeGoal(goal) {
 
 function App() {
   const [storedGoals, setGoals] = useLocalStorage('savetowards-goals', [])
+  const [takeHomePay, setTakeHomePay] = useLocalStorage('savetowards-take-home-pay', '')
   const goals = storedGoals.map(normalizeGoal)
+  // Feeds income-share math on the cards/orchestration view without
+  // polluting the stored/exported goal objects — take-home pay lives once,
+  // globally, not per goal.
+  const goalsWithIncome = goals.map((g) => ({ ...g, takeHomePay: Number(takeHomePay) || 0 }))
   const [editingId, setEditingId] = useState(null)
   const [justCreatedId, setJustCreatedId] = useState(null)
   const [showOrchestration, setShowOrchestration] = useState(false)
@@ -64,6 +69,18 @@ function App() {
       })
       return changed ? migrated : prev
     })
+  }, [])
+
+  // Take-home pay used to live per-goal — adopt the first value found as the
+  // new global setting, then strip the now-unused field from every goal.
+  useEffect(() => {
+    const legacyValue = storedGoals.find((g) => g.takeHomePay)?.takeHomePay
+    if (legacyValue && takeHomePay === '') {
+      setTakeHomePay(String(legacyValue))
+    }
+    if (storedGoals.some((g) => 'takeHomePay' in g)) {
+      setGoals((prev) => prev.map(({ takeHomePay, ...rest }) => rest))
+    }
   }, [])
 
   useEffect(() => {
@@ -210,7 +227,12 @@ function App() {
 
         {isCreating && (
           <div className="lg:mx-auto lg:max-w-2xl">
-            <GoalForm onSave={handleSave} onCancel={() => setEditingId(null)} />
+            <GoalForm
+              onSave={handleSave}
+              onCancel={() => setEditingId(null)}
+              takeHomePay={takeHomePay}
+              onTakeHomePayChange={setTakeHomePay}
+            />
           </div>
         )}
 
@@ -218,7 +240,7 @@ function App() {
 
         {!isCreating && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-            {goals.map((goal) => (
+            {goalsWithIncome.map((goal) => (
               <GoalCard
                 key={goal.id}
                 goal={goal}
@@ -250,13 +272,19 @@ function App() {
 
       {editingGoal && (
         <Modal onClose={() => setEditingId(null)}>
-          <GoalForm initialGoal={editingGoal} onSave={handleSave} onCancel={() => setEditingId(null)} />
+          <GoalForm
+            initialGoal={editingGoal}
+            onSave={handleSave}
+            onCancel={() => setEditingId(null)}
+            takeHomePay={takeHomePay}
+            onTakeHomePayChange={setTakeHomePay}
+          />
         </Modal>
       )}
 
       {showOrchestration && (
         <Modal onClose={() => setShowOrchestration(false)}>
-          <GoalOrchestration goals={goals} onApply={handleApplyOrchestration} />
+          <GoalOrchestration goals={goalsWithIncome} onApply={handleApplyOrchestration} />
         </Modal>
       )}
     </div>

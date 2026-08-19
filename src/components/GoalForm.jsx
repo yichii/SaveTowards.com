@@ -16,7 +16,7 @@ function todayIso() {
   return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10)
 }
 
-export function GoalForm({ initialGoal, onSave, onCancel }) {
+export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHomePayChange }) {
   const [name, setName] = useState(initialGoal?.name ?? '')
   const [targetAmount, setTargetAmount] = useState(initialGoal ? String(initialGoal.targetAmount) : '')
   const [amountSaved, setAmountSaved] = useState(initialGoal ? String(initialGoal.amountSaved) : '0')
@@ -27,7 +27,6 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
     return CATEGORIES.find((c) => c.key === initialGoal?.category)?.emojiOptions?.[0] ?? ''
   })
   const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
-  const [takeHomePay, setTakeHomePay] = useState(initialGoal?.takeHomePay ? String(initialGoal.takeHomePay) : '')
   const [errors, setErrors] = useState({})
 
   function handleCategoryChange(nextCategory, nextEmoji) {
@@ -86,7 +85,6 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
       category,
       emoji,
       payFrequency,
-      takeHomePay: takeHomePay === '' ? undefined : Number(takeHomePay),
       visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
       createdAt: initialGoal?.createdAt ?? now,
       lastUpdatedAt: savedAmountChanged ? now : (initialGoal?.lastUpdatedAt ?? now),
@@ -215,11 +213,12 @@ export function GoalForm({ initialGoal, onSave, onCancel }) {
             min="0"
             step="0.01"
             value={takeHomePay}
-            onChange={(e) => setTakeHomePay(e.target.value)}
+            onChange={(e) => onTakeHomePayChange(e.target.value)}
             placeholder="Skip if you'd rather not say"
             className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           />
         </div>
+        <p className="text-xs text-stone-400">Used across all your goals, not just this one.</p>
         {errors.takeHomePay && <p className="text-sm text-red-600">{errors.takeHomePay}</p>}
       </div>
 

@@ -4,10 +4,10 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 export const EXAMPLE_GOALS = [
-  { phrase: 'My Down Payment?', label: 'My Down Payment? · $25,000', icon: Landmark, emoji: '🏡', amount: 25000, weeks: 78, pct: 45 },
-  { phrase: 'Moving Day?', label: 'Moving Day? · $3,000', icon: Truck, emoji: '📦', amount: 3000, weeks: 16, pct: 65 },
-  { phrase: 'First Apartment?', label: 'First Apartment? · $4,500', icon: KeyRound, emoji: '🔑', amount: 4500, weeks: 16, pct: 50 },
-  { phrase: 'Furnishing a Home?', label: 'Furnishing a Home? · $16,000', icon: Sofa, emoji: '🛋️', amount: 16000, weeks: 52, pct: 20 },
+  { phrase: 'my down payment?', label: 'My Down Payment? · $25,000', icon: Landmark, emoji: '🏡', amount: 25000, weeks: 78, pct: 45 },
+  { phrase: 'moving day?', label: 'Moving Day? · $3,000', icon: Truck, emoji: '📦', amount: 3000, weeks: 16, pct: 65 },
+  { phrase: 'my first apartment?', label: 'My First Apartment? · $4,500', icon: KeyRound, emoji: '🔑', amount: 4500, weeks: 16, pct: 50 },
+  { phrase: 'furnishing a home?', label: 'Furnishing a Home? · $16,000', icon: Sofa, emoji: '🛋️', amount: 16000, weeks: 52, pct: 20 },
 ]
 
 // Demoted secondary examples — folded into a small, low-emphasis line rather

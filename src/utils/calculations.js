@@ -148,6 +148,72 @@ export function headlineUnitWord(unit) {
   return UNIT_WORDS[unit] ?? 'week'
 }
 
+// Same window sizes buildRows uses for visibility, exposed so callers (the
+// tradeoff slider) can convert a chosen "$X per <unit>" rate to a daily rate
+// without duplicating the pay-frequency lookup.
+export function windowDaysForUnit(unit, payFrequency) {
+  const paycheckDays = PAY_FREQUENCY_DAYS[payFrequency] || PAY_FREQUENCY_DAYS.biweekly
+  return { perDay: 1, perWeek: 7, perMonth: AVG_DAYS_PER_MONTH, perPaycheck: paycheckDays }[unit] ?? 1
+}
+
+function toISODateString(date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+/**
+ * Projects the date a goal would be reached at a hypothetical contribution
+ * rate — the inverse of calculateSavingsPlan's perDay math. Used by the
+ * tradeoff slider to preview "what if I saved $X/period" without touching
+ * the goal's stored targetDate. Rate must be > 0 (callers should floor
+ * their slider range above zero) — a non-positive rate never reaches the
+ * goal, so there's no date to project.
+ */
+export function projectDateForRate({ amountRemaining, rate, windowDays, fromDate = new Date() }) {
+  if (amountRemaining <= 0) return { daysNeeded: 0, targetDate: toISODateString(fromDate) }
+  const perDay = rate / windowDays
+  if (perDay <= 0) return { daysNeeded: Infinity, targetDate: null }
+
+  // A rate that covers the whole remaining amount within a single day's
+  // pace needs no extra days at all — reachable today (daysNeeded: 0), not
+  // "tomorrow." Without this, Math.ceil below floors at 1 for any nonzero
+  // remainder, which made due-today goals always project one day later than
+  // the current plan no matter how large the chosen rate was.
+  if (amountRemaining <= perDay) return { daysNeeded: 0, targetDate: toISODateString(fromDate) }
+
+  const daysNeeded = Math.ceil(amountRemaining / perDay)
+  const projected = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + daysNeeded)
+  return { daysNeeded, targetDate: toISODateString(projected) }
+}
+
+// Above this, an exact day/week/month count stops being meaningful to a
+// reader — "11 years earlier" reads the same as "14 years earlier" — so
+// formatDurationDiff rounds off to a floor instead of an exact count.
+const LONG_HORIZON_DAYS = 3650
+
+/**
+ * Turns a day-count difference between two projected dates into a short,
+ * human-scale phrase ("3 weeks earlier", "2 months later"). Returns null
+ * for no meaningful difference (same day).
+ */
+export function formatDurationDiff(deltaDays) {
+  if (!Number.isFinite(deltaDays) || deltaDays === 0) return null
+
+  const direction = deltaDays < 0 ? 'earlier' : 'later'
+  const abs = Math.abs(deltaDays)
+
+  if (abs >= LONG_HORIZON_DAYS) return `over 10 years ${direction}`
+  if (abs < 14) return `${abs} day${abs === 1 ? '' : 's'} ${direction}`
+  if (abs < AVG_DAYS_PER_MONTH * 2) {
+    const weeks = Math.round(abs / 7)
+    return `${weeks} week${weeks === 1 ? '' : 's'} ${direction}`
+  }
+  const months = Math.round(abs / AVG_DAYS_PER_MONTH)
+  return `${months} month${months === 1 ? '' : 's'} ${direction}`
+}
+
 // Everyday-cost bands to make a daily figure feel doable rather than
 // abstract, each paired with a short second-person nudge so it reads as
 // encouragement rather than a trivia fact. Ordered smallest-first; the

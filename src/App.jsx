@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, Layers } from 'lucide-react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { GoalForm } from './components/GoalForm'
@@ -9,6 +9,7 @@ import { LandingPage } from './components/LandingPage'
 import { TransitionScreen } from './components/TransitionScreen'
 import { DataPortability } from './components/DataPortability'
 import { TotalsSummary } from './components/TotalsSummary'
+import { GoalOrchestration } from './components/GoalOrchestration'
 import { Modal } from './components/Modal'
 import { SharedGoalView } from './components/SharedGoalView'
 import { Logo } from './components/Logo'
@@ -36,6 +37,7 @@ function App() {
   const goals = storedGoals.map(normalizeGoal)
   const [editingId, setEditingId] = useState(null)
   const [justCreatedId, setJustCreatedId] = useState(null)
+  const [showOrchestration, setShowOrchestration] = useState(false)
   // Returning users with goals already saved skip straight to the dashboard —
   // only first-time visitors (nothing in localStorage yet) see the landing
   // page. Decided once at mount so deleting all goals mid-session doesn't
@@ -130,6 +132,12 @@ function App() {
     setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, visualizationStyle } : g)))
   }
 
+  function handleUpdateGoal(id, updates) {
+    setGoals((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, ...updates, lastUpdatedAt: new Date().toISOString() } : g))
+    )
+  }
+
   function handleDelete(id) {
     setGoals((prev) => prev.filter((g) => g.id !== id))
   }
@@ -143,6 +151,17 @@ function App() {
   function handleRestoreFromLanding(importedGoals) {
     handleImportGoals(importedGoals)
     setShowLanding(false)
+  }
+
+  function handleApplyOrchestration(updates) {
+    const now = new Date().toISOString()
+    setGoals((prev) =>
+      prev.map((g) => {
+        const update = updates.find((u) => u.id === g.id)
+        return update ? { ...g, targetDate: update.targetDate, lastUpdatedAt: now } : g
+      })
+    )
+    setShowOrchestration(false)
   }
 
   return (
@@ -160,14 +179,26 @@ function App() {
             </button>
           </h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
-            <button
-              type="button"
-              onClick={() => setEditingId('new')}
-              className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
-            >
-              <Plus size={16} />
-              New Goal
-            </button>
+            <div className="flex items-center gap-2">
+              {goals.length >= 2 && (
+                <button
+                  type="button"
+                  onClick={() => setShowOrchestration(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-cyan-700 transition-colors hover:bg-cyan-100 lg:px-4 lg:py-2"
+                >
+                  <Layers size={16} />
+                  Plan across goals
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setEditingId('new')}
+                className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
+              >
+                <Plus size={16} />
+                New Goal
+              </button>
+            </div>
           )}
         </div>
 
@@ -192,6 +223,7 @@ function App() {
                 key={goal.id}
                 goal={goal}
                 onUpdateSaved={handleUpdateSaved}
+                onUpdateGoal={handleUpdateGoal}
                 onEdit={setEditingId}
                 onDelete={handleDelete}
                 onChangeVisualization={handleChangeVisualization}
@@ -219,6 +251,12 @@ function App() {
       {editingGoal && (
         <Modal onClose={() => setEditingId(null)}>
           <GoalForm initialGoal={editingGoal} onSave={handleSave} onCancel={() => setEditingId(null)} />
+        </Modal>
+      )}
+
+      {showOrchestration && (
+        <Modal onClose={() => setShowOrchestration(false)}>
+          <GoalOrchestration goals={goals} onApply={handleApplyOrchestration} />
         </Modal>
       )}
     </div>

@@ -8,6 +8,7 @@ import { RingProgress } from './RingProgress'
 import { VisualizationPicker } from './VisualizationPicker'
 import { CATEGORIES } from './CategoryPicker'
 import { ShareGoal } from './ShareGoal'
+import { TradeoffSlider } from './TradeoffSlider'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
@@ -37,9 +38,13 @@ function headline(plan, goal) {
   // Parse as local date components — new Date(goal.targetDate) treats a
   // "YYYY-MM-DD" string as UTC midnight, which can display a day early.
   const [year, month, day] = goal.targetDate.split('-').map(Number)
+  // Only show the year when the target isn't this year — "by Aug 20" is
+  // unambiguous for a same-year goal, but silently means next year (or any
+  // other year) once the date crosses a Jan 1 boundary.
   const dateLabel = new Date(year, month - 1, day).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
+    year: year !== new Date().getFullYear() ? 'numeric' : undefined,
   })
   const amount = plan[plan.headlineUnit]
   const unitWord = headlineUnitWord(plan.headlineUnit)
@@ -73,7 +78,7 @@ function savingsInputLabel(payFrequency) {
   return 'Add what you saved since your last paycheck'
 }
 
-export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisualization, justCreated, onIntroComplete }) {
+export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, onChangeVisualization, justCreated, onIntroComplete }) {
   const [showMore, setShowMore] = useState(false)
   const [savedInput, setSavedInput] = useState('')
   const [celebration, setCelebration] = useState(null)
@@ -261,6 +266,14 @@ export function GoalCard({ goal, onUpdateSaved, onEdit, onDelete, onChangeVisual
             </div>
           ))}
         </div>
+      )}
+
+      {showMore && plan.status !== 'met' && plan.status !== 'overdue' && (
+        <TradeoffSlider
+          goal={goal}
+          plan={plan}
+          onApplyRate={onUpdateGoal ? (targetDate) => onUpdateGoal(goal.id, { targetDate }) : undefined}
+        />
       )}
 
       {plan.status !== 'met' && (

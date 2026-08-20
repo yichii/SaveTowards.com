@@ -105,6 +105,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
   const category = CATEGORIES.find((c) => c.key === goal.category)
   const Icon = category?.icon
   const shareNote = plan.status !== 'met' ? incomeShareNote(plan) : null
+  const percentLabel = `${Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved`
 
   const prevPercentRef = useRef(null)
   const celebrationHideTimeoutRef = useRef(null)
@@ -214,7 +215,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       showInputNotice('Add an amount to log it.')
       return
     }
-    const delta = Number(trimmed)
+    const delta = Math.round(Number(trimmed) * 100) / 100
     if (Number.isNaN(delta)) return
     if (delta === 0) {
       setSavedInput('')
@@ -295,35 +296,37 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
 
       {shareNote && <p className="-mt-2 text-sm text-stone-500">{shareNote}</p>}
 
-      <div className="relative flex flex-col items-center gap-1 py-1">
-        {celebration && (
-          <div
-            className={`absolute left-1/2 top-1/2 z-10 flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-lg bg-cyan-50 px-3 py-2 text-sm font-medium text-cyan-700 shadow-sm ring-1 ring-cyan-100 transition-opacity duration-300 ease-in ${
-              celebrationLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
-            }`}
-          >
-            <Sparkles size={14} className="shrink-0" />
-            {MILESTONE_MESSAGES[celebration.threshold]}
-          </div>
-        )}
-        {goal.visualizationStyle === 'bar' && <ProgressBar percent={plan.percentSaved} />}
-        {goal.visualizationStyle === 'ring' && <RingProgress percent={plan.percentSaved} />}
-        {goal.visualizationStyle === 'journey' && (
-          <>
+      <div className="flex flex-col items-center gap-1 py-1">
+        {/* Celebration badge overlaps only the icon/graphic, not the "% saved"
+            text below it — centering it on the whole column (icon + text)
+            used to sit right on top of that text for a couple of seconds. */}
+        <div className="relative flex w-full items-center justify-center">
+          {celebration && (
+            <div
+              className={`absolute left-1/2 top-1/2 z-10 flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-lg bg-cyan-50 px-3 py-2 text-sm font-medium text-cyan-700 shadow-sm ring-1 ring-cyan-100 transition-opacity duration-300 ease-in ${
+                celebrationLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
+              }`}
+            >
+              <Sparkles size={14} className="shrink-0" />
+              {MILESTONE_MESSAGES[celebration.threshold]}
+            </div>
+          )}
+          {goal.visualizationStyle === 'bar' && <ProgressBar percent={plan.percentSaved} showLabel={false} />}
+          {goal.visualizationStyle === 'ring' && <RingProgress percent={plan.percentSaved} />}
+          {goal.visualizationStyle === 'journey' && (
             <JourneyProgress icon={Icon} percent={plan.percentSaved} celebrating={!!celebration} />
-            <p className="text-xs text-stone-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
-          </>
-        )}
-        {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
-          <>
+          )}
+          {(!goal.visualizationStyle || goal.visualizationStyle === 'fill') && (
             <FillIcon
               emoji={goal.emoji || category?.emojiOptions?.[0]}
               label={category?.label}
               percent={plan.percentSaved}
               celebrating={!!celebration}
             />
-            <p className="text-xs text-stone-500">{Math.min(Math.max(plan.percentSaved, 0), 100).toFixed(0)}% saved</p>
-          </>
+          )}
+        </div>
+        {goal.visualizationStyle !== 'ring' && (
+          <p className="text-xs text-stone-500">{percentLabel}</p>
         )}
         {onChangeVisualization && (
           <VisualizationPicker
@@ -389,7 +392,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
                 id="savedAmount"
                 type="number"
                 inputMode="decimal"
-                step="0.01"
+                step="any"
                 value={savedInput}
                 onChange={handleSavedInputChange}
                 placeholder="0"

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Car, Plane, Home, Gift, MoreHorizontal } from 'lucide-react'
+import { Car, Plane, Home, Gift, Target } from 'lucide-react'
 
 export const CATEGORIES = [
   { key: 'home', label: 'Home', icon: Home, emojiOptions: ['🏠', '🏡', '🔑'] },
   { key: 'car', label: 'Car', icon: Car, emojiOptions: ['🚗', '🚙', '🏎️'] },
   { key: 'travel', label: 'Travel', icon: Plane, emojiOptions: ['✈️', '🧳', '🌴'] },
   { key: 'gift', label: 'Gift', icon: Gift, emojiOptions: ['🎁', '💍', '🎉'] },
-  { key: 'other', label: 'Other', icon: MoreHorizontal, emojiOptions: ['🎯', '⭐', '💰', '📈', '💸'] },
+  { key: 'other', label: 'Other', icon: Target, emojiOptions: ['🎯', '⭐', '💰', '📈', '💸'] },
 ]
 
 // value/onChange cover the category; emoji/onChange also carries the icon so

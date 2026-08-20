@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Lock } from 'lucide-react'
 import { CATEGORIES, CategoryPicker } from './CategoryPicker'
 import { LivePlanPreview } from './LivePlanPreview'
+import { isValidTargetDateString, MAX_YEARS_OUT, maxTargetDateIso } from '../utils/dateValidation'
 
 const PAY_FREQUENCIES = [
   { key: 'daily', label: 'Daily' },
@@ -14,6 +15,13 @@ function todayIso() {
   const now = new Date()
   const offset = now.getTimezoneOffset()
   return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10)
+}
+
+// Amounts are dollars-and-cents — anything typed beyond that (e.g. a stray
+// third decimal digit) is rounded away rather than rejected, since it isn't
+// meaningfully different from what the user meant.
+function roundToCents(value) {
+  return Math.round(Number(value) * 100) / 100
 }
 
 export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHomePayChange }) {
@@ -53,6 +61,8 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
 
     if (!targetDate) {
       nextErrors.targetDate = 'Pick a target date'
+    } else if (!isValidTargetDateString(targetDate)) {
+      nextErrors.targetDate = `Pick a date within the next ${MAX_YEARS_OUT} years`
     } else if (targetDate < todayIso() && !keepingOriginalDate) {
       nextErrors.targetDate = 'Target date can’t be in the past'
     }
@@ -73,13 +83,13 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
     if (!validate()) return
 
     const now = new Date().toISOString()
-    const nextAmountSaved = initialGoal ? Number(amountSaved) : 0
+    const nextAmountSaved = initialGoal ? roundToCents(amountSaved) : 0
     const savedAmountChanged = !initialGoal || nextAmountSaved !== initialGoal.amountSaved
 
     onSave({
       id: initialGoal?.id ?? crypto.randomUUID(),
       name: name.trim(),
-      targetAmount: Number(targetAmount),
+      targetAmount: roundToCents(targetAmount),
       amountSaved: nextAmountSaved,
       targetDate,
       category,
@@ -124,7 +134,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
               type="number"
               inputMode="decimal"
               min="0"
-              step="0.01"
+              step="any"
               value={targetAmount}
               onChange={(e) => setTargetAmount(e.target.value)}
               placeholder="25,000"
@@ -146,7 +156,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
                 type="number"
                 inputMode="decimal"
                 min="0"
-                step="0.01"
+                step="any"
                 value={amountSaved}
                 onChange={(e) => setAmountSaved(e.target.value)}
                 className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
@@ -169,6 +179,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
             id="targetDate"
             type="date"
             min={todayIso()}
+            max={maxTargetDateIso()}
             value={targetDate}
             onChange={(e) => setTargetDate(e.target.value)}
             className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
@@ -212,7 +223,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
             type="number"
             inputMode="decimal"
             min="0"
-            step="0.01"
+            step="any"
             value={takeHomePay}
             onChange={(e) => onTakeHomePayChange(e.target.value)}
             placeholder="Skip if you'd rather not say"

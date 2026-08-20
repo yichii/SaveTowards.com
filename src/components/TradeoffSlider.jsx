@@ -27,8 +27,12 @@ export function TradeoffSlider({ goal, plan, onApplyRate }) {
   const currentRate = Math.max(Math.round(plan[unit]), 1)
 
   const min = Math.max(1, Math.round(currentRate * MIN_RATE_FACTOR))
-  const max = Math.max(min + 1, Math.round(currentRate * MAX_RATE_FACTOR))
-  const step = Math.max(1, Math.round((max - min) / 100))
+  const rawMax = Math.max(min + 1, Math.round(currentRate * MAX_RATE_FACTOR))
+  const step = Math.max(1, Math.round((rawMax - min) / 100))
+  // Round up to the nearest step boundary so `max` itself is a reachable
+  // value — min + step*n otherwise rarely lands exactly on rawMax, leaving
+  // the declared max just out of reach of drag/keyboard/click interaction.
+  const max = min + step * Math.ceil((rawMax - min) / step)
 
   const [rate, setRate] = useState(currentRate)
 

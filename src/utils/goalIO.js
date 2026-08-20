@@ -1,3 +1,5 @@
+import { isValidTargetDateString } from './dateValidation'
+
 const EXPORT_VERSION = 1
 
 export function exportGoals(goals) {
@@ -26,8 +28,12 @@ function isValidGoal(goal) {
     typeof goal.id === 'string' &&
     goal.id.length > 0 &&
     typeof goal.targetAmount === 'number' &&
+    Number.isFinite(goal.targetAmount) &&
+    goal.targetAmount >= 0 &&
     typeof goal.amountSaved === 'number' &&
-    typeof goal.targetDate === 'string'
+    Number.isFinite(goal.amountSaved) &&
+    goal.amountSaved >= 0 &&
+    isValidTargetDateString(goal.targetDate)
   )
 }
 

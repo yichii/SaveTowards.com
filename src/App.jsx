@@ -15,6 +15,7 @@ import { SharedGoalView } from './components/SharedGoalView'
 import { Logo } from './components/Logo'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
+import { calculateSavingsPlan } from './utils/calculations'
 
 const LANDING_TRANSITION_MS = 500
 
@@ -128,6 +129,11 @@ function App() {
 
   const editingGoal = editingId && editingId !== 'new' ? goals.find((g) => g.id === editingId) : null
   const isCreating = editingId === 'new'
+  // Past-due goals still count as "active" for this purpose — only goals
+  // that have hit their target (status 'met') are excluded, since there's
+  // nothing left to allocate toward them.
+  const activeGoalsCount = goals.filter((g) => calculateSavingsPlan(g).status !== 'met').length
+  const canPlanAcrossGoals = activeGoalsCount >= 2
 
   function handleSave(goal) {
     const isNewGoal = isCreating
@@ -197,16 +203,19 @@ function App() {
           </h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <div className="flex items-center gap-2">
-              {goals.length >= 2 && (
-                <button
-                  type="button"
-                  onClick={() => setShowOrchestration(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-cyan-700 transition-colors hover:bg-cyan-100 lg:px-4 lg:py-2"
-                >
-                  <Layers size={16} />
-                  Plan across goals
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => canPlanAcrossGoals && setShowOrchestration(true)}
+                title={canPlanAcrossGoals ? undefined : 'Add another goal to plan an allocation across them'}
+                className={`flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
+                  canPlanAcrossGoals
+                    ? 'transition-colors hover:bg-cyan-100'
+                    : 'cursor-not-allowed opacity-40'
+                }`}
+              >
+                <Layers size={16} />
+                Plan goals
+              </button>
               <button
                 type="button"
                 onClick={() => setEditingId('new')}

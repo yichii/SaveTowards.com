@@ -27,6 +27,7 @@ const GOAL_DEFAULTS = {
   category: '',
   payFrequency: 'biweekly',
   visualizationStyle: 'fill',
+  celebrationShown: false,
 }
 
 function normalizeGoal(goal) {
@@ -165,6 +166,10 @@ function App() {
     setGoals((prev) => prev.filter((g) => g.id !== id))
   }
 
+  function handleCelebrationShown(id) {
+    setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, celebrationShown: true } : g)))
+  }
+
   function handleImportGoals(importedGoals) {
     const { merged, added, alreadyPresent } = mergeGoals(storedGoals, importedGoals)
     setGoals(merged)
@@ -245,7 +250,7 @@ function App() {
           </div>
         )}
 
-        {!isCreating && <TotalsSummary goals={goals} />}
+        {!isCreating && <TotalsSummary goals={goals} onCelebrationShown={handleCelebrationShown} />}
 
         {!isCreating && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">

@@ -264,11 +264,12 @@ export function progressPhrase(percentSaved) {
  * only makes sense to sum when every active goal shares the same pay frequency;
  * otherwise it's left out rather than showing a number that mixes windows.
  *
- * Row visibility reuses the same "does this window fit inside the time left"
- * rule as the individual goal card (buildRows), but applied against the
- * *nearest* upcoming deadline across all active goals — that's the binding
- * constraint, since a wider window is only meaningful if every goal (not just
- * the average) actually has that much runway left.
+ * A period row is only shown if it's visible on *every* contributing active
+ * goal's own card (reusing that goal's own row.visible) — a wider window is
+ * only meaningful for the combined total if every goal, not just the
+ * average, actually has that much runway left. Suppressing the whole row
+ * rather than dropping the one goal that doesn't support it keeps the shown
+ * total honest about which goals it represents.
  */
 export function calculateCombinedPlan(goals) {
   const plans = goals.map((goal) => ({ goal, plan: calculateSavingsPlan(goal) }))
@@ -309,14 +310,24 @@ export function calculateCombinedPlan(goals) {
     : null
 
   const nearestDaysRemaining = Math.min(...active.map(({ plan }) => plan.daysRemaining))
-  const rows = buildRows({
-    perDay,
-    perWeek,
-    perMonth,
-    perPaycheck: perPaycheck ?? 0,
-    paycheckDays: paycheckDays ?? Infinity,
-    daysRemaining: nearestDaysRemaining,
-  }).filter((row) => row.key !== 'perPaycheck' || perPaycheck != null)
+
+  // A period is only meaningful on the combined card if it's meaningful for
+  // *every* contributing goal's own card — summing a goal's real per-period
+  // rate together with another goal's "meaningless past this window" rate
+  // would misrepresent the total, so an unsuppressed goal doesn't rescue a
+  // suppressed one. This reuses each goal's own row.visible (from
+  // calculateSavingsPlan) rather than re-deriving the rule, so it can never
+  // drift from what that goal's own card shows.
+  const rowVisibleForAll = (key) => active.every(({ plan }) => plan.rows.find((r) => r.key === key)?.visible)
+
+  const rows = [
+    { key: 'perDay', label: ROW_LABELS.perDay, value: perDay, visible: true },
+    { key: 'perWeek', label: ROW_LABELS.perWeek, value: perWeek, visible: rowVisibleForAll('perWeek') },
+    { key: 'perMonth', label: ROW_LABELS.perMonth, value: perMonth, visible: rowVisibleForAll('perMonth') },
+    ...(perPaycheck != null
+      ? [{ key: 'perPaycheck', label: ROW_LABELS.perPaycheck, value: perPaycheck, visible: rowVisibleForAll('perPaycheck') }]
+      : []),
+  ]
   const headlineUnit = pickHeadlineUnit(rows)
   const visibleNonDayRows = rows.filter((r) => r.key !== 'perDay' && r.visible)
   const breakdownMode = visibleNonDayRows.length === 0 ? 'single-line' : 'grid'

@@ -88,6 +88,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
       visualizationStyle: initialGoal?.visualizationStyle ?? 'fill',
       createdAt: initialGoal?.createdAt ?? now,
       lastUpdatedAt: savedAmountChanged ? now : (initialGoal?.lastUpdatedAt ?? now),
+      celebrationShown: initialGoal?.celebrationShown ?? false,
     })
   }
 

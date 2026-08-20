@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Car, Plane, Home, Gift, MoreHorizontal } from 'lucide-react'
 
 export const CATEGORIES = [
+  { key: 'home', label: 'Home', icon: Home, emojiOptions: ['🏠', '🏡', '🔑'] },
   { key: 'car', label: 'Car', icon: Car, emojiOptions: ['🚗', '🚙', '🏎️'] },
   { key: 'travel', label: 'Travel', icon: Plane, emojiOptions: ['✈️', '🧳', '🌴'] },
-  { key: 'home', label: 'Home', icon: Home, emojiOptions: ['🏠', '🏡', '🔑'] },
   { key: 'gift', label: 'Gift', icon: Gift, emojiOptions: ['🎁', '💍', '🎉'] },
   { key: 'other', label: 'Other', icon: MoreHorizontal, emojiOptions: ['🎯', '⭐', '💰'] },
 ]

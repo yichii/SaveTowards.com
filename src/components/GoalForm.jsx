@@ -107,7 +107,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Trip to Japan"
+          placeholder="e.g. House down payment"
           className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
         />
       </div>
@@ -127,7 +127,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
               step="0.01"
               value={targetAmount}
               onChange={(e) => setTargetAmount(e.target.value)}
-              placeholder="2000"
+              placeholder="25,000"
               className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
             />
           </div>
@@ -239,7 +239,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
       </div>
 
       <p className="mt-2 text-sm text-stone-500">
-        {initialGoal ? 'Nice work keeping this up to date.' : "You've got this — every plan starts somewhere."}
+        {initialGoal ? 'Nice work keeping this up to date.' : "Every home starts with a plan."}
       </p>
 
       <div className="flex gap-2">

@@ -6,7 +6,7 @@ export const CATEGORIES = [
   { key: 'car', label: 'Car', icon: Car, emojiOptions: ['🚗', '🚙', '🏎️'] },
   { key: 'travel', label: 'Travel', icon: Plane, emojiOptions: ['✈️', '🧳', '🌴'] },
   { key: 'gift', label: 'Gift', icon: Gift, emojiOptions: ['🎁', '💍', '🎉'] },
-  { key: 'other', label: 'Other', icon: MoreHorizontal, emojiOptions: ['🎯', '⭐', '💰'] },
+  { key: 'other', label: 'Other', icon: MoreHorizontal, emojiOptions: ['🎯', '⭐', '💰', '📈', '💸'] },
 ]
 
 // value/onChange cover the category; emoji/onChange also carries the icon so

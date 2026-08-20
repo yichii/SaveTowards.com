@@ -48,9 +48,16 @@ export function CategoryPicker({ value, emoji, onChange }) {
 
   return (
     <div ref={containerRef} className="flex gap-2">
-      {CATEGORIES.map(({ key, label, icon: Icon, emojiOptions }) => {
+      {CATEGORIES.map(({ key, label, icon: Icon, emojiOptions }, index) => {
         const selected = value === key
         const open = openKey === key
+        const isFirst = index === 0
+        const isLast = index === CATEGORIES.length - 1
+        const menuPositionClasses = isFirst
+          ? 'left-0'
+          : isLast
+            ? 'right-0'
+            : 'left-1/2 -translate-x-1/2'
 
         return (
           <div key={key} className="relative flex-1">
@@ -74,7 +81,7 @@ export function CategoryPicker({ value, emoji, onChange }) {
             </button>
 
             {open && (
-              <div className="absolute left-1/2 top-full z-10 mt-2 flex -translate-x-1/2 gap-1.5 rounded-lg border border-stone-200 bg-white p-2 shadow-md">
+              <div className={`absolute top-full z-10 mt-2 flex gap-1.5 rounded-lg border border-stone-200 bg-white p-2 shadow-md ${menuPositionClasses}`}>
                 {emojiOptions.map((option) => (
                   <button
                     key={option}

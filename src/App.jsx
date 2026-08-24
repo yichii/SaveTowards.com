@@ -13,9 +13,11 @@ import { GoalOrchestration } from './components/GoalOrchestration'
 import { Modal } from './components/Modal'
 import { SharedGoalView } from './components/SharedGoalView'
 import { Logo } from './components/Logo'
+import { SortMenu } from './components/SortMenu'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
 import { calculateSavingsPlan } from './utils/calculations'
+import { defaultDirectionFor, sortGoals } from './utils/sortGoals'
 
 const LANDING_TRANSITION_MS = 500
 
@@ -37,6 +39,8 @@ function normalizeGoal(goal) {
 function App() {
   const [storedGoals, setGoals] = useLocalStorage('savetowards-goals', [])
   const [takeHomePay, setTakeHomePay] = useLocalStorage('savetowards-take-home-pay', '')
+  const [sortType, setSortType] = useLocalStorage('savetowards-sort-type', 'recent')
+  const [sortDirection, setSortDirection] = useLocalStorage('savetowards-sort-direction', 'desc')
   const goals = storedGoals.map(normalizeGoal)
   // Feeds income-share math on the cards/orchestration view without
   // polluting the stored/exported goal objects — take-home pay lives once,
@@ -181,6 +185,15 @@ function App() {
     setShowLanding(false)
   }
 
+  function handleSortChange(nextType) {
+    if (nextType === sortType) {
+      setSortDirection((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortType(nextType)
+      setSortDirection(defaultDirectionFor(nextType))
+    }
+  }
+
   function handleApplyOrchestration(updates) {
     const now = new Date().toISOString()
     setGoals((prev) =>
@@ -208,20 +221,25 @@ function App() {
           </h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
             <div className="flex items-center gap-1.5 lg:gap-2">
-              <button
-                type="button"
-                onClick={() => canPlanAcrossGoals && setShowOrchestration(true)}
-                title={canPlanAcrossGoals ? undefined : 'Add another goal to plan an allocation across them'}
-                aria-label="Plan goals"
-                className={`flex items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 p-2 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
-                  canPlanAcrossGoals
-                    ? 'transition-colors hover:bg-cyan-100'
-                    : 'cursor-not-allowed opacity-40'
-                }`}
-              >
-                <Layers size={16} className="shrink-0" />
-                <span className="hidden lg:inline">Plan goals</span>
-              </button>
+              {goals.length > 1 && (
+                <SortMenu sortType={sortType} direction={sortDirection} onChange={handleSortChange} />
+              )}
+              {goals.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => canPlanAcrossGoals && setShowOrchestration(true)}
+                  title={canPlanAcrossGoals ? undefined : 'Add another goal to plan an allocation across them'}
+                  aria-label="Plan goals"
+                  className={`flex items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 p-2 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
+                    canPlanAcrossGoals
+                      ? 'transition-colors hover:bg-cyan-100'
+                      : 'cursor-not-allowed opacity-40'
+                  }`}
+                >
+                  <Layers size={16} className="shrink-0" />
+                  <span className="hidden lg:inline">Plan goals</span>
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setEditingId('new')}
@@ -256,7 +274,7 @@ function App() {
 
         {!isCreating && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-            {goalsWithIncome.map((goal) => (
+            {sortGoals(goalsWithIncome, sortType, sortDirection).map((goal) => (
               <GoalCard
                 key={goal.id}
                 goal={goal}

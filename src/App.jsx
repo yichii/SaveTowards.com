@@ -195,7 +195,7 @@ function App() {
   return (
     <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-14">
       <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
-        <div className="mb-6 flex items-center justify-between gap-3 lg:mb-10">
+        <div className="mb-6 flex items-center justify-between gap-2 lg:mb-10 lg:gap-3">
           <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">
             <button
               type="button"
@@ -207,27 +207,29 @@ function App() {
             </button>
           </h1>
           {goals.length > 0 && !isCreating && !editingGoal && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 lg:gap-2">
               <button
                 type="button"
                 onClick={() => canPlanAcrossGoals && setShowOrchestration(true)}
                 title={canPlanAcrossGoals ? undefined : 'Add another goal to plan an allocation across them'}
-                className={`flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
+                aria-label="Plan goals"
+                className={`flex items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 p-2 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
                   canPlanAcrossGoals
                     ? 'transition-colors hover:bg-cyan-100'
                     : 'cursor-not-allowed opacity-40'
                 }`}
               >
-                <Layers size={16} />
-                Plan goals
+                <Layers size={16} className="shrink-0" />
+                <span className="hidden lg:inline">Plan goals</span>
               </button>
               <button
                 type="button"
                 onClick={() => setEditingId('new')}
-                className="flex items-center gap-1.5 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
+                aria-label="New Goal"
+                className="flex items-center justify-center gap-1.5 rounded-lg bg-cyan-500 p-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
               >
-                <Plus size={16} />
-                New Goal
+                <Plus size={16} className="shrink-0" />
+                <span className="hidden lg:inline">New Goal</span>
               </button>
             </div>
           )}

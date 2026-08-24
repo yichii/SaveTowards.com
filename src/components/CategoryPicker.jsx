@@ -46,63 +46,76 @@ export function CategoryPicker({ value, emoji, onChange }) {
     setOpenKey(null)
   }
 
+  const selectedCategory = CATEGORIES.find((c) => c.key === value)
+  const PreviewIcon = selectedCategory?.icon ?? Target
+
   return (
-    <div ref={containerRef} className="flex gap-2">
-      {CATEGORIES.map(({ key, label, icon: Icon, emojiOptions }, index) => {
-        const selected = value === key
-        const open = openKey === key
-        const isFirst = index === 0
-        const isLast = index === CATEGORIES.length - 1
-        const menuPositionClasses = isFirst
-          ? 'left-0'
-          : isLast
-            ? 'right-0'
-            : 'left-1/2 -translate-x-1/2'
+    <div ref={containerRef} className="flex flex-col items-center gap-4">
+      <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-cyan-200 bg-cyan-50">
+        {emoji ? (
+          <span className="text-5xl leading-none" aria-hidden="true">{emoji}</span>
+        ) : (
+          <PreviewIcon size={40} className="text-cyan-600" />
+        )}
+      </div>
 
-        return (
-          <div key={key} className="relative flex-1">
-            <button
-              type="button"
-              onClick={() => handleCategoryClick(key)}
-              aria-pressed={selected}
-              aria-expanded={open}
-              className={`flex w-full flex-col items-center gap-1 rounded-lg border px-2 py-3 text-xs transition-colors ${
-                selected
-                  ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
-                  : 'border-stone-200 text-stone-500 hover:border-stone-300'
-              }`}
-            >
-              {selected && emoji ? (
-                <span className="text-xl leading-none" aria-hidden="true">{emoji}</span>
-              ) : (
-                <Icon size={20} />
+      <div className="flex w-full gap-2">
+        {CATEGORIES.map(({ key, label, icon: Icon, emojiOptions }, index) => {
+          const selected = value === key
+          const open = openKey === key
+          const isFirst = index === 0
+          const isLast = index === CATEGORIES.length - 1
+          const menuPositionClasses = isFirst
+            ? 'left-0'
+            : isLast
+              ? 'right-0'
+              : 'left-1/2 -translate-x-1/2'
+
+          return (
+            <div key={key} className="relative flex-1">
+              <button
+                type="button"
+                onClick={() => handleCategoryClick(key)}
+                aria-pressed={selected}
+                aria-expanded={open}
+                className={`flex w-full flex-col items-center gap-1 rounded-lg border px-2 py-3 text-xs transition-colors ${
+                  selected
+                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                }`}
+              >
+                {selected && emoji ? (
+                  <span className="text-xl leading-none" aria-hidden="true">{emoji}</span>
+                ) : (
+                  <Icon size={20} />
+                )}
+                {label}
+              </button>
+
+              {open && (
+                <div className={`absolute top-full z-10 mt-2 flex gap-1.5 rounded-lg border border-stone-200 bg-white p-2 shadow-md ${menuPositionClasses}`}>
+                  {emojiOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => handleEmojiSelect(key, option)}
+                      aria-pressed={emoji === option}
+                      aria-label={`Use ${option} icon`}
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg border text-lg transition-colors ${
+                        emoji === option
+                          ? 'border-cyan-500 bg-cyan-50'
+                          : 'border-stone-200 hover:border-stone-300'
+                      }`}
+                    >
+                      <span aria-hidden="true">{option}</span>
+                    </button>
+                  ))}
+                </div>
               )}
-              {label}
-            </button>
-
-            {open && (
-              <div className={`absolute top-full z-10 mt-2 flex gap-1.5 rounded-lg border border-stone-200 bg-white p-2 shadow-md ${menuPositionClasses}`}>
-                {emojiOptions.map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => handleEmojiSelect(key, option)}
-                    aria-pressed={emoji === option}
-                    aria-label={`Use ${option} icon`}
-                    className={`flex h-9 w-9 items-center justify-center rounded-lg border text-lg transition-colors ${
-                      emoji === option
-                        ? 'border-cyan-500 bg-cyan-50'
-                        : 'border-stone-200 hover:border-stone-300'
-                    }`}
-                  >
-                    <span aria-hidden="true">{option}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )
-      })}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

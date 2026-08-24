@@ -29,10 +29,11 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
   const [targetAmount, setTargetAmount] = useState(initialGoal ? String(initialGoal.targetAmount) : '')
   const [amountSaved, setAmountSaved] = useState(initialGoal ? String(initialGoal.amountSaved) : '0')
   const [targetDate, setTargetDate] = useState(initialGoal?.targetDate ?? '')
-  const [category, setCategory] = useState(initialGoal?.category ?? '')
+  const [category, setCategory] = useState(initialGoal?.category ?? 'other')
   const [emoji, setEmoji] = useState(() => {
     if (initialGoal?.emoji) return initialGoal.emoji
-    return CATEGORIES.find((c) => c.key === initialGoal?.category)?.emojiOptions?.[0] ?? ''
+    const initialCategory = initialGoal?.category ?? 'other'
+    return CATEGORIES.find((c) => c.key === initialCategory)?.emojiOptions?.[0] ?? ''
   })
   const [payFrequency, setPayFrequency] = useState(initialGoal?.payFrequency ?? 'biweekly')
   const [errors, setErrors] = useState({})
@@ -110,7 +111,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
 
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-sm font-medium text-stone-700">
-          What should we call it? <span className="text-stone-400">(optional)</span>
+          What should we call it? <span className="text-stone-400"></span>
         </label>
         <input
           id="name"
@@ -120,6 +121,11 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
           placeholder="e.g. House down payment"
           className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
         />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        {/* <span className="text-sm font-medium text-stone-700">Category</span> */}
+        <CategoryPicker value={category} emoji={emoji} onChange={handleCategoryChange} />
       </div>
 
       <div className={initialGoal ? 'grid grid-cols-1 gap-4 @lg:grid-cols-2' : ''}>
@@ -241,13 +247,6 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
         payFrequency={payFrequency}
         takeHomePay={takeHomePay}
       />
-
-      <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium text-stone-700">
-          Category <span className="text-stone-400">(optional)</span>
-        </span>
-        <CategoryPicker value={category} emoji={emoji} onChange={handleCategoryChange} />
-      </div>
 
       <p className="mt-2 text-sm text-stone-500">
         {initialGoal ? 'Nice work keeping this up to date.' : "Every home starts with a plan."}

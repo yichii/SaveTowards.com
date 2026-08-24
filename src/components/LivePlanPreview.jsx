@@ -1,4 +1,4 @@
-import { calculateSavingsPlan, HIGH_INCOME_SHARE_THRESHOLD } from '../utils/calculations'
+import { calculateSavingsPlan } from '../utils/calculations'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
@@ -32,15 +32,12 @@ export function LivePlanPreview({ targetAmount, amountSaved, targetDate, payFreq
 function IncomeShareNote({ plan }) {
   if (plan.headlineIncomeShare == null) return null
 
-  if (plan.exceedsFullPaycheck) {
-    return <p className="mt-2 text-stone-500">That's more than a full paycheck each pay period.</p>
-  }
-
-  if (plan.headlineIncomeShare >= HIGH_INCOME_SHARE_THRESHOLD) {
-    return <p className="mt-2 text-stone-500">That's about {plan.headlineIncomeShare.toFixed(0)}% of your take-home pay.</p>
-  }
-
-  return null
+  return (
+    <div className="mt-2 text-stone-500">
+      {plan.exceedsFullPaycheck && <p>That's more than a full paycheck each pay period.</p>}
+      <p>{plan.headlineIncomeShare.toFixed(0)}% of your paycheck</p>
+    </div>
+  )
 }
 
 function PlanBreakdown({ plan }) {

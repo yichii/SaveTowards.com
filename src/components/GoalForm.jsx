@@ -220,7 +220,7 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
 
       <div className="flex flex-col gap-1">
         <label htmlFor="takeHomePay" className="text-sm font-medium text-stone-700">
-          Take-home pay per paycheck <span className="text-stone-400">(optional)</span>
+          Your take-home pay
         </label>
         <div className="relative @lg:max-w-[calc(50%-0.5rem)]">
           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>

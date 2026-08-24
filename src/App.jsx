@@ -193,7 +193,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 px-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-14">
+    <div className="min-h-screen-safe bg-stone-50 px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-[calc(3.5rem+env(safe-area-inset-top))]">
       <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-2 lg:mb-10 lg:gap-3">
           <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">

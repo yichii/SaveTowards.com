@@ -6,7 +6,7 @@ import { Logo } from './Logo'
 // localStorage — the recipient's own goals, if any, are never touched.
 export function SharedGoalView({ payload, onStartOwn }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-stone-50 px-4 py-10">
+    <div className="flex min-h-screen-safe flex-col items-center justify-center bg-stone-50 px-4 py-10">
       <div className="mx-auto flex w-full max-w-md flex-col gap-8 lg:max-w-lg">
         <h1 className="flex items-center justify-center gap-2 font-heading text-2xl font-bold text-stone-900 lg:text-3xl">
           <Logo size={22} className="text-cyan-600 lg:h-7 lg:w-7" />

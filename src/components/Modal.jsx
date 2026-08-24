@@ -17,7 +17,7 @@ export function Modal({ onClose, children }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-stone-900/50 p-4 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:pt-14"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-stone-900/50 p-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:pt-[calc(3.5rem+env(safe-area-inset-top))]"
       onClick={onClose}
     >
       <div className="relative w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>

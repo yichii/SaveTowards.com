@@ -5,6 +5,19 @@
   --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
+html,
+body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+@layer utilities {
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
 @keyframes celebrate-glow {
   0% {
     filter: drop-shadow(0 0 0 rgba(8, 145, 178, 0));

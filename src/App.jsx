@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Plus, Layers } from 'lucide-react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
@@ -14,12 +14,14 @@ import { Modal } from './components/Modal'
 import { SharedGoalView } from './components/SharedGoalView'
 import { Logo } from './components/Logo'
 import { SortMenu } from './components/SortMenu'
+import { UndoToast } from './components/UndoToast'
 import { mergeGoals } from './utils/goalIO'
 import { decodeSharePayload } from './utils/shareLink'
 import { calculateSavingsPlan } from './utils/calculations'
 import { defaultDirectionFor, sortGoals } from './utils/sortGoals'
 
 const LANDING_TRANSITION_MS = 500
+const UNDO_DELETE_MS = 8000
 
 // Older saved goals predate these fields — fill in defaults so they render
 // and edit correctly instead of showing "undefined" or crashing.
@@ -60,6 +62,16 @@ function App() {
   // returning user with their own goals — it's read once at mount and never
   // touches localStorage, so the recipient's own data stays untouched.
   const [sharedPayload, setSharedPayload] = useState(() => decodeSharePayload(window.location.hash))
+  // Holds a just-deleted goal for the undo window — deliberately not
+  // persisted, so a refresh forfeits the undo just like the timer expiring.
+  const [lastDeletedGoal, setLastDeletedGoal] = useState(null)
+  const undoTimeoutRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current)
+    }
+  }, [])
 
   // Goals saved before createdAt/lastUpdatedAt existed are missing them —
   // backfill both with today's date once, and persist the migration so it
@@ -167,7 +179,29 @@ function App() {
   }
 
   function handleDelete(id) {
+    const goalToDelete = storedGoals.find((g) => g.id === id)
+    if (!goalToDelete) return
+
+    // Deleting while a toast is already showing replaces it outright — the
+    // previous pending goal is discarded, not stacked.
+    if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current)
+
     setGoals((prev) => prev.filter((g) => g.id !== id))
+    setLastDeletedGoal(goalToDelete)
+    undoTimeoutRef.current = setTimeout(() => {
+      setLastDeletedGoal(null)
+      undoTimeoutRef.current = null
+    }, UNDO_DELETE_MS)
+  }
+
+  function handleUndoDelete() {
+    if (!lastDeletedGoal) return
+    if (undoTimeoutRef.current) {
+      clearTimeout(undoTimeoutRef.current)
+      undoTimeoutRef.current = null
+    }
+    setGoals((prev) => [...prev, lastDeletedGoal])
+    setLastDeletedGoal(null)
   }
 
   function handleCelebrationShown(id) {
@@ -321,6 +355,8 @@ function App() {
           <GoalOrchestration goals={goalsWithIncome} onApply={handleApplyOrchestration} />
         </Modal>
       )}
+
+      {lastDeletedGoal && <UndoToast message="Goal deleted" onUndo={handleUndoDelete} />}
     </div>
   )
 }

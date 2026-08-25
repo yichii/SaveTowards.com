@@ -242,9 +242,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
   }
 
   function handleDelete() {
-    if (window.confirm('Delete this savings goal? This can’t be undone.')) {
-      onDelete(goal.id)
-    }
+    onDelete(goal.id)
   }
 
   return (

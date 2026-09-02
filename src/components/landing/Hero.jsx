@@ -36,7 +36,7 @@ export function Hero({ onStart, onRestore, onBack }) {
           )}
           <h1 className="mt-[clamp(0.75rem,2.4dvh,1.5rem)] font-heading text-[clamp(1.25rem,min(6vw,5dvh),3.25rem)] font-bold tracking-tight text-stone-900 lg:text-5xl xl:text-6xl 2xl:text-7xl">
             <span className="sr-only">
-              How do I start saving for my down payment, moving day, my first apartment, or furnishing a home?
+              How do I start saving for my first house, our Japan trip, a Tacoma TRD Pro, or my sister's wedding?
             </span>
             {/* Prefix and animated ending are separate fixed-height lines so the
                 typing/deleting animation only changes line width, never line

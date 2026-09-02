@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
-import { KeyRound, Landmark, Sofa, Truck } from 'lucide-react'
+import { Car, Gift, Landmark, Plane } from 'lucide-react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
+// One concrete example per broad category so the hero reads as general-purpose,
+// not homeowner-specific: a down payment, a vacation, a car, and a gift.
 export const EXAMPLE_GOALS = [
-  { phrase: 'my down payment?', label: 'My Down Payment? · $25,000', icon: Landmark, emoji: '🏡', amount: 25000, weeks: 78, pct: 45 },
-  { phrase: 'moving day?', label: 'Moving Day? · $3,000', icon: Truck, emoji: '📦', amount: 3000, weeks: 16, pct: 65 },
-  { phrase: 'my first apartment?', label: 'My First Apartment? · $4,500', icon: KeyRound, emoji: '🔑', amount: 4500, weeks: 16, pct: 50 },
-  { phrase: 'furnishing a home?', label: 'Furnishing a Home? · $16,000', icon: Sofa, emoji: '🛋️', amount: 16000, weeks: 52, pct: 20 },
+  { phrase: 'my first house?', label: 'My First House · $40,000', icon: Landmark, emoji: '🏡', amount: 40000, weeks: 156, pct: 45 },
+  { phrase: 'our Japan trip?', label: 'Our Japan Trip · $7,500', icon: Plane, emoji: '✈️', amount: 7500, weeks: 44, pct: 40 },
+  { phrase: 'a Tacoma TRD Pro?', label: 'Tacoma TRD Pro · $54,000', icon: Car, emoji: '🚗', amount: 54000, weeks: 156, pct: 30 },
+  { phrase: "my sister's wedding?", label: "My Sister's Wedding · $1,200", icon: Gift, emoji: '🎁', amount: 1200, weeks: 20, pct: 55 },
 ]
 
 // Demoted secondary examples — folded into a small, low-emphasis line rather
 // than cycled through the main headline/demo-card animation.
-export const SECONDARY_EXAMPLES = 'a car, a wedding, a trip'
+export const SECONDARY_EXAMPLES = 'a wedding, tuition, an emergency fund'
 
 const DELETE_MS_PER_CHAR = 30
 const TYPE_MS_PER_CHAR = 55

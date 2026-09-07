@@ -45,11 +45,15 @@ function renderSeoHead(def) {
     `<meta property="og:title" content="${esc(def.title)}" />`,
     `<meta property="og:description" content="${esc(def.description)}" />`,
     `<meta property="og:url" content="${url}" />`,
-    `<meta property="og:image" content="${SITE}/favicon.svg" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    `<meta property="og:image" content="${SITE}/og-image.png" />`,
+    `<meta property="og:image:type" content="image/png" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="${esc(def.h1)} — SaveTowards" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${esc(def.title)}" />`,
     `<meta name="twitter:description" content="${esc(def.description)}" />`,
-    `<meta name="twitter:image" content="${SITE}/favicon.svg" />`,
+    `<meta name="twitter:image" content="${SITE}/og-image.png" />`,
     `<script type="application/ld+json">${faqLd}</script>`,
   ].join('\n    ')
 }

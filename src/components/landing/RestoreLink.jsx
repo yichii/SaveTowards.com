@@ -27,11 +27,11 @@ export function RestoreLink({ onRestore }) {
   }
 
   return (
-    <div className="mt-2 text-xs text-stone-400 lg:text-sm">
+    <div className="mt-2 text-xs text-emerald-900/45 lg:text-sm">
       <button
         type="button"
         onClick={() => fileInputRef.current?.click()}
-        className="underline decoration-dotted underline-offset-2 hover:text-stone-600"
+        className="underline decoration-dotted underline-offset-2 hover:text-emerald-800"
       >
         Already have goals saved? Restore from a file.
       </button>

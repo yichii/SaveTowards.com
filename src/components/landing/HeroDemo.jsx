@@ -25,14 +25,14 @@ export function HeroDemo({
   ultraCompact = false,
 }) {
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-emerald-100 bg-white/90 p-[clamp(0.875rem,2.6dvh,1.5rem)] shadow-xl shadow-emerald-950/5 backdrop-blur lg:max-w-md lg:p-8 xl:max-w-lg xl:p-9 2xl:max-w-xl 2xl:p-10">
+    <div className="w-full max-w-sm rounded-2xl border border-emerald-900/10 bg-white p-[clamp(0.875rem,2.6dvh,1.5rem)] shadow-sm lg:max-w-md lg:p-8 xl:max-w-lg xl:p-9 2xl:max-w-xl 2xl:p-10">
       <div className="mb-[clamp(0.5rem,1.4dvh,1rem)]">
-        <p className="min-w-0 truncate text-sm font-medium text-stone-500 lg:text-base xl:text-lg">{goal.label}</p>
+        <p className="min-w-0 truncate text-sm font-medium text-emerald-900/55 lg:text-base xl:text-lg">{goal.label}</p>
       </div>
 
       <div className="flex flex-col items-center justify-center gap-[clamp(0.375rem,1dvh,0.75rem)] py-[clamp(0.25rem,0.8dvh,0.5rem)] lg:gap-4 lg:py-3 xl:gap-5 xl:py-4">
         <FillIcon emoji={goal.emoji} label={goal.label} percent={percent} size={iconSize} />
-        <p className="text-xs font-medium text-stone-500 lg:text-sm xl:text-base">{percent}% saved</p>
+        <p className="text-xs font-medium text-emerald-900/55 lg:text-sm xl:text-base">{percent}% saved</p>
       </div>
 
       {!ultraCompact && (
@@ -70,6 +70,11 @@ export function HeroDemo({
       />
 
       <div className={`mt-[clamp(0.5rem,1.4dvh,1rem)] rounded-xl bg-emerald-50 px-4 text-center lg:px-5 ${compact ? 'py-2' : 'py-3 lg:py-4'}`}>
+        {plan.status !== 'met' && (
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-700/60 lg:text-[11px]">
+            You&apos;d save
+          </p>
+        )}
         <p className="font-heading text-[clamp(1.125rem,3dvh,1.5rem)] font-bold text-emerald-700 lg:text-3xl xl:text-4xl 2xl:text-5xl">
           {plan.status === 'met' ? 'Goal reached!' : `${currency.format(plan.perWeek)}/week`}
         </p>

@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { Modal } from '../Modal'
+import { SectionHeading } from './SectionHeading'
 
 // Everyday goals all run through today's general calculator, so their tiles
 // route straight into it (`live: true`). Home / Car / Retirement are getting
@@ -96,18 +97,13 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
     <section
       ref={ref}
       id="calculators"
-      className="scroll-mt-20 bg-cream px-4 pt-6 pb-14 lg:pt-8"
+      className="scroll-mt-20 bg-cream px-4 py-14 lg:py-20"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="mb-6 text-center">
-          <h2 className="font-heading text-xl font-bold text-emerald-950 sm:text-2xl lg:text-3xl">
-            Saving success starts with a goal
-          </h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-emerald-900/70 lg:text-base">
-            Pick a category to start. Simple goals are live now — dedicated Home, Car, and
-            Retirement calculators are on the way.
-          </p>
-        </div>
+        <SectionHeading
+          title="Saving success starts with a goal"
+          subtitle="Pick a category to get started."
+        />
 
         <div className="rounded-2xl shadow-sm">
           <div className="relative rounded-t-2xl bg-emerald-900 px-4 py-3.5 text-center sm:px-6 sm:py-4">
@@ -152,8 +148,8 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
               </div>
             </div>
 
-            <p className="mt-4 text-sm leading-relaxed text-stone-600 lg:text-base">{preview.blurb}</p>
-            <p className="mt-3 text-sm text-stone-500">
+            <p className="mt-4 text-sm leading-relaxed text-emerald-900/70 lg:text-base">{preview.blurb}</p>
+            <p className="mt-3 text-sm text-emerald-900/55">
               It isn&apos;t live yet — the general goal calculator can handle this in the meantime.
             </p>
 
@@ -172,7 +168,7 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
               <button
                 type="button"
                 onClick={() => setPreviewKey(null)}
-                className="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-700"
+                className="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold text-emerald-900/55 transition-colors hover:bg-emerald-50 hover:text-emerald-800"
               >
                 Back to categories
               </button>

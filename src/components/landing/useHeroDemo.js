@@ -4,17 +4,14 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 // One concrete example per broad category so the hero reads as general-purpose,
-// not homeowner-specific: a down payment, a vacation, a car, and a gift.
+// not homeowner-specific: a down payment, a vacation, a car, and a gift. Each
+// phrase follows the headline's "Save Towards your ___", so no leading article.
 export const EXAMPLE_GOALS = [
-  { phrase: 'my first house?', label: 'My First House · $40,000', icon: Landmark, emoji: '🏡', amount: 40000, weeks: 156, pct: 45 },
-  { phrase: 'our Japan trip?', label: 'Our Japan Trip · $7,500', icon: Plane, emoji: '✈️', amount: 7500, weeks: 44, pct: 40 },
-  { phrase: 'a Tacoma TRD Pro?', label: 'Tacoma TRD Pro · $54,000', icon: Car, emoji: '🚗', amount: 54000, weeks: 156, pct: 30 },
-  { phrase: "my sister's wedding?", label: "My Sister's Wedding · $1,200", icon: Gift, emoji: '🎁', amount: 1200, weeks: 20, pct: 55 },
+  { phrase: 'first house', label: 'My First House · $40,000', icon: Landmark, emoji: '🏡', amount: 40000, weeks: 156, pct: 45 },
+  { phrase: 'Japan trip', label: 'Our Japan Trip · $7,500', icon: Plane, emoji: '✈️', amount: 7500, weeks: 44, pct: 40 },
+  { phrase: 'Tacoma TRD Pro', label: 'Tacoma TRD Pro · $54,000', icon: Car, emoji: '🚗', amount: 54000, weeks: 156, pct: 30 },
+  { phrase: "sister's wedding", label: "My Sister's Wedding · $1,200", icon: Gift, emoji: '🎁', amount: 1200, weeks: 20, pct: 55 },
 ]
-
-// Demoted secondary examples — folded into a small, low-emphasis line rather
-// than cycled through the main headline/demo-card animation.
-export const SECONDARY_EXAMPLES = 'a wedding, tuition, an emergency fund'
 
 const DELETE_MS_PER_CHAR = 30
 const TYPE_MS_PER_CHAR = 55

@@ -40,7 +40,7 @@ export function Footer({ onExplore }) {
 
   return (
     <footer className="border-t border-emerald-900/10 bg-cream">
-      <div className="mx-auto max-w-5xl px-4 pt-12 pb-[calc(3rem+env(safe-area-inset-bottom))] lg:pt-14">
+      <div className="mx-auto max-w-5xl px-4 pt-14 pb-[calc(3rem+env(safe-area-inset-bottom))] lg:pt-20">
         <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
           <div>
             <div className="flex items-center gap-2">

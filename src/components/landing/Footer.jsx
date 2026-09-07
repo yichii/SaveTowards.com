@@ -1,6 +1,5 @@
 import { ArrowUp } from 'lucide-react'
 import { Logo } from '../Logo'
-import { SEO_CALCULATORS } from '../../pages/seoCalculators/registry'
 
 // "What you can save for" — search-intent phrasing that links to the
 // standalone calculator page for that goal where one exists, or to the goal
@@ -46,7 +45,7 @@ export function Footer({ onExplore }) {
   return (
     <footer className="border-t border-emerald-900/10 bg-cream">
       <div className="mx-auto max-w-5xl px-4 pt-14 pb-[calc(3rem+env(safe-area-inset-bottom))] lg:pt-20">
-        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
           <div>
             <div className="flex items-center gap-2">
               <Logo size={20} className="text-emerald-700" />
@@ -72,24 +71,6 @@ export function Footer({ onExplore }) {
                     className="text-xs text-emerald-900/60 transition-colors hover:text-emerald-800"
                   >
                     {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <nav aria-label="Savings calculators">
-            <h2 className="text-xs font-bold uppercase tracking-wide text-emerald-950">
-              Savings calculators
-            </h2>
-            <ul className="mt-3 space-y-2">
-              {SEO_CALCULATORS.map(({ slug, navLabel }) => (
-                <li key={slug}>
-                  <a
-                    href={`/${slug}`}
-                    className="text-xs text-emerald-900/60 transition-colors hover:text-emerald-800"
-                  >
-                    {navLabel}
                   </a>
                 </li>
               ))}

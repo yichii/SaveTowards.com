@@ -70,6 +70,39 @@ function pickHeadlineUnit(rows) {
   return ['perMonth', 'perPaycheck', 'perDay'].find((key) => visible.has(key)) ?? 'perDay'
 }
 
+// Straight-line pace check: how far along the goal actually is versus how
+// much of its own created-to-target timeline has elapsed. Feeds
+// encouragement copy only — it never touches the required-rate math. Null
+// whenever there's nothing fair to compare against: the goal has no
+// createdAt, it's only days old, it's already met, or its date has passed
+// (those cases have their own dedicated states).
+const PACE_GRACE_DAYS = 7
+const PACE_GAP_POINTS = 10
+
+function computePace({ createdAt, targetDate, percentSaved, daysRemaining }) {
+  if (!createdAt || daysRemaining <= 0 || percentSaved >= 100) return null
+
+  const start = new Date(createdAt)
+  if (Number.isNaN(start.getTime())) return null
+
+  const [year, month, day] = targetDate.split('-').map(Number)
+  const target = new Date(year, month - 1, day)
+  const now = new Date()
+
+  const totalMs = target - start
+  const elapsedMs = now - start
+  if (totalMs <= 0 || elapsedMs < PACE_GRACE_DAYS * 86400000) return null
+
+  const expectedPercent = Math.min(Math.max((elapsedMs / totalMs) * 100, 0), 100)
+  const gapPoints = percentSaved - expectedPercent
+
+  let state = 'on-pace'
+  if (gapPoints <= -PACE_GAP_POINTS) state = 'behind'
+  else if (gapPoints >= PACE_GAP_POINTS) state = 'ahead'
+
+  return { state, expectedPercent, gapPoints }
+}
+
 /**
  * Computes the savings plan for a goal: derived state, progress, and
  * required contribution rates. No interest/inflation — simple division
@@ -104,6 +137,7 @@ export function calculateSavingsPlan(goal) {
       headlineUnit: 'perWeek',
       headlineIncomeShare: null,
       exceedsFullPaycheck: false,
+      pace: null,
     }
   }
 
@@ -141,6 +175,12 @@ export function calculateSavingsPlan(goal) {
     headlineUnit,
     headlineIncomeShare: incomeShare,
     exceedsFullPaycheck: incomeShare != null ? incomeShare >= 100 : false,
+    pace: computePace({
+      createdAt: goal.createdAt,
+      targetDate: goal.targetDate,
+      percentSaved,
+      daysRemaining,
+    }),
   }
 }
 

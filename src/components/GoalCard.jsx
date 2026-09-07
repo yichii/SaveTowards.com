@@ -3,7 +3,9 @@ import { CheckCircle2, ChevronDown, ChevronUp, Pencil, Sparkles, Trash2 } from '
 import { calculateSavingsPlan, headlineUnitWord, HIGH_INCOME_SHARE_THRESHOLD } from '../utils/calculations'
 import { FillIcon } from './FillIcon'
 import { JourneyProgress } from './JourneyProgress'
+import { PlanReassurance } from './PlanReassurance'
 import { ProgressBar } from './ProgressBar'
+import { RescheduleNudge } from './RescheduleNudge'
 import { RingProgress } from './RingProgress'
 import { VisualizationPicker } from './VisualizationPicker'
 import { CATEGORIES } from './CategoryPicker'
@@ -31,8 +33,8 @@ function headline(plan, goal) {
   }
   if (plan.status === 'overdue') {
     return label
-      ? `${label}: this date has passed — update your target date or add funds`
-      : 'This date has passed — update your target date or add funds'
+      ? `${label}: this date has passed — let's pick a new one`
+      : "This date has passed — let's pick a new one"
   }
 
   // Parse as local date components — new Date(goal.targetDate) treats a
@@ -75,7 +77,9 @@ const SAVE_ACK_MESSAGES = [
 
 function incomeShareNote(plan) {
   if (plan.headlineIncomeShare == null) return null
-  if (plan.exceedsFullPaycheck) return "That's more than a full paycheck each pay period."
+  // "More than a full paycheck" is handled by PlanReassurance instead, so it
+  // arrives with a way forward rather than as a bare warning.
+  if (plan.exceedsFullPaycheck) return null
   if (plan.headlineIncomeShare >= HIGH_INCOME_SHARE_THRESHOLD) {
     return `That's about ${plan.headlineIncomeShare.toFixed(0)}% of your take-home pay.`
   }
@@ -293,6 +297,17 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       </div>
 
       {shareNote && <p className="-mt-2 text-sm text-stone-500">{shareNote}</p>}
+
+      {plan.status === 'overdue' && onUpdateGoal && (
+        <RescheduleNudge
+          goal={goal}
+          onReschedule={(targetDate) => onUpdateGoal(goal.id, { targetDate })}
+        />
+      )}
+
+      {plan.status !== 'met' && plan.status !== 'overdue' && (
+        <PlanReassurance plan={plan} onGiveMoreTime={() => setShowMore(true)} />
+      )}
 
       <div className="flex flex-col items-center gap-1 py-1">
         {/* Celebration badge overlaps only the icon/graphic, not the "% saved"

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Car, Gift, Landmark, Plane } from 'lucide-react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
+import { useHydrated } from '../../hooks/useHydrated'
 import { calculateSavingsPlan } from '../../utils/calculations'
 
 // One concrete example per broad category so the hero reads as general-purpose,
@@ -46,12 +47,22 @@ function formatTargetDate(isoDate) {
  */
 export function useHeroDemo() {
   const reducedMotion = usePrefersReducedMotion()
+  const hydrated = useHydrated()
   const [goalIndex, setGoalIndex] = useState(0)
-  const [typed, setTyped] = useState(() => (reducedMotion ? EXAMPLE_GOALS[0].phrase : ''))
+  // Start motion-neutral (empty phrase, 0% fill) so the first client render
+  // matches the prerendered HTML. The autoplay effect drives it from there;
+  // reduced-motion users get the finished state via the effect below.
+  const [typed, setTyped] = useState('')
   const [iconKey, setIconKey] = useState(0)
-  const [percent, setPercent] = useState(() => (reducedMotion ? EXAMPLE_GOALS[0].pct : 0))
+  const [percent, setPercent] = useState(0)
   const [manual, setManual] = useState(false)
   const resumeTimeoutRef = useRef(null)
+
+  useEffect(() => {
+    if (!reducedMotion) return
+    setTyped(EXAMPLE_GOALS[0].phrase)
+    setPercent(EXAMPLE_GOALS[0].pct)
+  }, [reducedMotion])
 
   useEffect(() => {
     if (manual || reducedMotion) return
@@ -158,7 +169,9 @@ export function useHeroDemo() {
     targetDate,
     payFrequency: 'weekly',
   })
-  const targetDateLabel = formatTargetDate(targetDate)
+  // Depends on today's date, so it can't be prerendered — hold it back until
+  // after hydration rather than mismatch a build-time label against load-time.
+  const targetDateLabel = hydrated ? formatTargetDate(targetDate) : null
 
   return {
     goal,

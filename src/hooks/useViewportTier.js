@@ -11,21 +11,23 @@ const WIDE_QUERY = '(min-width: 1024px)'
 // heights (small phones, landscape) so it never needs to scroll, and grow
 // icon-driven sizing back up on wide desktop viewports where the height-based
 // clamps alone leave the hero looking sparse.
+//
+// All three start from their "not matched" default and sync in an effect
+// rather than reading matchMedia in the lazy initializer, so the first client
+// render matches the prerendered HTML — the real viewport values apply right
+// after hydration.
 export function useViewportTier() {
-  const [compact, setCompact] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(COMPACT_QUERY).matches : false
-  )
-  const [ultraCompact, setUltraCompact] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(ULTRA_COMPACT_QUERY).matches : false
-  )
-  const [wide, setWide] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(WIDE_QUERY).matches : false
-  )
+  const [compact, setCompact] = useState(false)
+  const [ultraCompact, setUltraCompact] = useState(false)
+  const [wide, setWide] = useState(false)
 
   useEffect(() => {
     const compactMql = window.matchMedia(COMPACT_QUERY)
     const ultraMql = window.matchMedia(ULTRA_COMPACT_QUERY)
     const wideMql = window.matchMedia(WIDE_QUERY)
+    setCompact(compactMql.matches)
+    setUltraCompact(ultraMql.matches)
+    setWide(wideMql.matches)
     const onCompactChange = (e) => setCompact(e.matches)
     const onUltraChange = (e) => setUltraCompact(e.matches)
     const onWideChange = (e) => setWide(e.matches)

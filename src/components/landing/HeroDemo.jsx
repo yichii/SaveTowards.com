@@ -79,7 +79,11 @@ export function HeroDemo({
           {plan.status === 'met' ? 'Goal reached!' : `${currency.format(plan.perWeek)}/week`}
         </p>
         <p className="text-xs text-emerald-700/70 lg:text-sm xl:text-base">
-          {plan.status === 'met' ? "That's the whole thing, paid for." : `to get there by ${targetDateLabel}`}
+          {plan.status === 'met'
+            ? "That's the whole thing, paid for."
+            : targetDateLabel
+              ? `to get there by ${targetDateLabel}`
+              : 'to reach your goal on time'}
         </p>
       </div>
     </div>

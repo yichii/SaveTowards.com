@@ -14,3 +14,18 @@ Key facts:
 ## Pages
 
 - [SaveTowards](https://savetowards.com/): The app itself. Single page — create a goal, see your required savings rate, and track progress toward it.
+
+## Calculators
+
+Each of these is a standalone page with its own explanation and an embedded calculator for that specific goal. All use the same simple division math (amount remaining / time remaining) and store nothing on a server.
+
+- [Savings goal calculator](https://savetowards.com/savings-goal-calculator): How much to save per day, week, month, or paycheck for any goal by a target date.
+- [How much to save per paycheck](https://savetowards.com/how-much-to-save-per-paycheck): The share of each paycheck to set aside, for weekly, biweekly, or monthly pay.
+- [Vacation savings calculator](https://savetowards.com/vacation-savings-calculator): Save a trip's cost by your travel date.
+- [Wedding savings calculator](https://savetowards.com/wedding-savings-calculator): Save a wedding budget by the date, split between two people if needed.
+- [Baby savings calculator](https://savetowards.com/baby-savings-calculator): Save upfront baby costs before the due date.
+- [College savings calculator](https://savetowards.com/college-savings-calculator): Save a chosen share of college costs by the year it starts.
+- [Emergency fund calculator](https://savetowards.com/emergency-fund-calculator): Build three to six months of expenses by a chosen date.
+- [House down payment savings calculator](https://savetowards.com/house-down-payment-savings-calculator): Save a down payment (and closing costs) by your target buy date.
+- [Car savings calculator](https://savetowards.com/car-savings-calculator): Save a car's price or down payment by a target date.
+- [Christmas savings calculator](https://savetowards.com/christmas-savings-calculator): Save your holiday spending total before December.

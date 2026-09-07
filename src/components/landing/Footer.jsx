@@ -1,20 +1,23 @@
 import { ArrowUp } from 'lucide-react'
 import { Logo } from '../Logo'
+import { SEO_CALCULATORS } from '../../pages/seoCalculators/registry'
 
-// Footer links all point at the category hub — they're crawlable anchors that
-// also smooth-scroll when JS is on. Labels are phrased for search intent
-// ("saving for a wedding") rather than the short tile labels.
+// "What you can save for" — search-intent phrasing that links to the
+// standalone calculator page for that goal where one exists, or to the goal
+// hub on this page (/#start) otherwise. `handleNav` only intercepts the
+// hub link for smooth-scroll; real page links navigate normally.
 const PLAN_LINKS = [
-  'Saving for an emergency fund',
-  'Saving for a vacation',
-  'Saving for a wedding',
-  'Saving for a car',
-  'Saving for a home down payment',
-  'Saving for a baby',
-  'Saving for college',
-  'Saving for a gift',
-  'Saving for retirement',
-  'Saving for anything else',
+  { label: 'Saving for an emergency fund', href: '/emergency-fund-calculator' },
+  { label: 'Saving for a vacation', href: '/vacation-savings-calculator' },
+  { label: 'Saving for a wedding', href: '/wedding-savings-calculator' },
+  { label: 'Saving for a baby', href: '/baby-savings-calculator' },
+  { label: 'Saving for college', href: '/college-savings-calculator' },
+  { label: 'Saving for a car', href: '/car-savings-calculator' },
+  { label: 'Saving for a home down payment', href: '/house-down-payment-savings-calculator' },
+  { label: 'Saving for a gift or the holidays', href: '/christmas-savings-calculator' },
+  { label: 'How much to save per paycheck', href: '/how-much-to-save-per-paycheck' },
+  { label: 'Saving for retirement', href: '/#start' },
+  { label: 'Saving for anything else', href: '/savings-goal-calculator' },
 ]
 
 const FEATURES = [
@@ -32,7 +35,9 @@ export function Footer({ onExplore }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function handleNav(e) {
+  // Only the goal-hub link is a smooth-scroll on this page; every other link
+  // is a real navigation to a standalone calculator page.
+  function handleHubNav(e) {
     if (!onExplore) return
     e.preventDefault()
     onExplore()
@@ -41,7 +46,7 @@ export function Footer({ onExplore }) {
   return (
     <footer className="border-t border-emerald-900/10 bg-cream">
       <div className="mx-auto max-w-5xl px-4 pt-14 pb-[calc(3rem+env(safe-area-inset-bottom))] lg:pt-20">
-        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
               <Logo size={20} className="text-emerald-700" />
@@ -58,15 +63,33 @@ export function Footer({ onExplore }) {
             <h2 className="text-xs font-bold uppercase tracking-wide text-emerald-950">
               What you can save for
             </h2>
-            <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-1">
-              {PLAN_LINKS.map((label) => (
+            <ul className="mt-3 space-y-2">
+              {PLAN_LINKS.map(({ label, href }) => (
                 <li key={label}>
                   <a
-                    href="#start"
-                    onClick={handleNav}
+                    href={href}
+                    onClick={href === '/#start' ? handleHubNav : undefined}
                     className="text-xs text-emerald-900/60 transition-colors hover:text-emerald-800"
                   >
                     {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Savings calculators">
+            <h2 className="text-xs font-bold uppercase tracking-wide text-emerald-950">
+              Savings calculators
+            </h2>
+            <ul className="mt-3 space-y-2">
+              {SEO_CALCULATORS.map(({ slug, navLabel }) => (
+                <li key={slug}>
+                  <a
+                    href={`/${slug}`}
+                    className="text-xs text-emerald-900/60 transition-colors hover:text-emerald-800"
+                  >
+                    {navLabel}
                   </a>
                 </li>
               ))}

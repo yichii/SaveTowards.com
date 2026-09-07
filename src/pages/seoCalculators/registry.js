@@ -9,6 +9,10 @@
 // Keep this file plain data with no JSX or non-node imports: scripts/prerender.js
 // imports it directly in Node, outside the Vite bundle.
 
+// `lastmod` is optional: an ISO date (YYYY-MM-DD) that pins this page's
+// <lastmod> in the sitemap. Omit it and scripts/prerender.js derives one from
+// the last commit touching the pages' shared source.
+//
 // `preset` seeds the embedded calculator: `amount` (dollars), `months` until
 // the target date, and the default pay frequency. `months` is also used for
 // the "rough example" line, computed with plain division — no calendar — so it

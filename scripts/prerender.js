@@ -6,6 +6,7 @@
 //   3. regenerates dist/sitemap.xml from the same page list
 // The client bundle still boots and hydrates all of this — see src/main.jsx.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { SEO_CALCULATORS } from '../src/pages/seoCalculators/registry.js'
@@ -54,15 +55,57 @@ for (const def of SEO_CALCULATORS) {
   console.log(`prerender: wrote dist/${def.slug}/index.html`)
 }
 
-// 3. Sitemap — home plus every calculator page.
+// 3. Sitemap — home plus every calculator page, each with a real <lastmod>.
 const today = new Date().toISOString().slice(0, 10)
-const paths = ['', ...SEO_CALCULATORS.map((c) => c.slug)]
+
+// Last commit date (YYYY-MM-DD) touching any of the given repo-relative paths,
+// or null if git is unavailable / the paths have no history in this checkout
+// (e.g. a shallow clone that doesn't reach the last change).
+function gitDate(paths) {
+  try {
+    const out = execFileSync(
+      'git',
+      ['log', '-1', '--format=%cs', '--', ...paths],
+      { cwd: root, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] },
+    ).trim()
+    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null
+  } catch {
+    return null
+  }
+}
+
+// Newest commit date in the checkout — the fallback when a specific path's
+// history isn't reachable. Falls back again to the build date.
+const repoDate = gitDate([]) || today
+
+// Files whose contents render the standalone calculator pages. A change to any
+// of them (copy in the registry, the shared page shell, or the math) is a real
+// content change for every calculator URL.
+const CALC_SOURCES = [
+  'src/pages/seoCalculators/registry.js',
+  'src/pages/seoCalculators/SeoCalculatorPage.jsx',
+  'src/pages/seoCalculators/StandaloneCalculator.jsx',
+  'src/entry-server.jsx',
+  'src/utils/calculations.js',
+]
+const HOME_SOURCES = ['src/components/LandingPage.jsx', 'src/components/landing', 'src/entry-server.jsx']
+
+const calcLastmod = gitDate(CALC_SOURCES) || repoDate
+const homeLastmod = gitDate(HOME_SOURCES) || repoDate
+
+// A registry entry may pin its own `lastmod` (YYYY-MM-DD) to override the
+// git-derived date; otherwise every calculator page shares calcLastmod.
+const entries = [
+  { path: '', lastmod: homeLastmod },
+  ...SEO_CALCULATORS.map((c) => ({ path: c.slug, lastmod: c.lastmod || calcLastmod })),
+]
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${paths
-  .map((p) => `  <url>\n    <loc>${SITE}/${p}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
+${entries
+  .map((e) => `  <url>\n    <loc>${SITE}/${e.path}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n  </url>`)
   .join('\n')}
 </urlset>
 `
 writeFileSync(resolve(root, 'dist/sitemap.xml'), sitemap)
-console.log(`prerender: wrote dist/sitemap.xml (${paths.length} urls)`)
+console.log(`prerender: wrote dist/sitemap.xml (${entries.length} urls)`)

@@ -3,6 +3,9 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  /* Warm off-white that anchors the landing page against dark-green brand
+     accents — deliberately not the stone-50 used by the dashboard. */
+  --color-cream: #f8f5ec;
 }
 
 html,

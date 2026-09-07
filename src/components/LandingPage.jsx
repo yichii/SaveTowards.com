@@ -1,9 +1,27 @@
+import { useRef } from 'react'
+import { Header } from './landing/Header'
 import { Hero } from './landing/Hero'
+import { CategoryHub } from './landing/CategoryHub'
+import { Footer } from './landing/Footer'
 
 export function LandingPage({ onStart, onRestore, onBack }) {
+  const hubRef = useRef(null)
+
+  function scrollToHub() {
+    hubRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // The page scrolls now: the hero fills the first screen and points down to
+  // the category hub, which is the primary interaction. `onStart` still means
+  // "open the general goal calculator" exactly as it did for the old single
+  // CTA — only the General tile (and the coming-soon previews' fallback link)
+  // calls it.
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-stone-50">
-      <Hero onStart={onStart} onRestore={onRestore} onBack={onBack} />
+    <div className="min-h-dvh bg-cream">
+      <Header onScrollToHub={scrollToHub} onBack={onBack} />
+      <Hero onScrollToHub={scrollToHub} onRestore={onRestore} />
+      <CategoryHub ref={hubRef} onStartGeneral={onStart} />
+      <Footer onExplore={scrollToHub} />
     </div>
   )
 }

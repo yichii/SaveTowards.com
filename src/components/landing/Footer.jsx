@@ -3,18 +3,18 @@ import { Logo } from '../Logo'
 
 // Footer links all point at the category hub — they're crawlable anchors that
 // also smooth-scroll when JS is on. Labels are phrased for search intent
-// ("emergency fund calculator") rather than the short tile labels.
-const CALCULATOR_LINKS = [
-  'Emergency fund calculator',
-  'Vacation savings calculator',
-  'Wedding savings calculator',
-  'Car savings calculator',
-  'Home down payment calculator',
-  'Baby savings fund',
-  'College savings calculator',
-  'Gift savings calculator',
-  'Retirement savings goal',
-  'Custom savings goal',
+// ("saving for a wedding") rather than the short tile labels.
+const PLAN_LINKS = [
+  'Saving for an emergency fund',
+  'Saving for a vacation',
+  'Saving for a wedding',
+  'Saving for a car',
+  'Saving for a home down payment',
+  'Saving for a baby',
+  'Saving for college',
+  'Saving for a gift',
+  'Saving for retirement',
+  'Saving for anything else',
 ]
 
 const FEATURES = [
@@ -48,21 +48,21 @@ export function Footer({ onExplore }) {
               <span className="font-heading text-base font-bold text-emerald-950">SaveTowards</span>
             </div>
             <p className="mt-3 text-xs leading-relaxed text-emerald-900/60">
-              SaveTowards is a free savings goal calculator. Enter a target amount and a date to see
-              exactly how much to save per day, week, month, or paycheck to get there — with a visual
-              progress tracker. No account, no bank connection, no fees.
+              SaveTowards turns a savings goal and a target date into a plan you can actually follow —
+              how much to set aside per day, week, month, or paycheck, with a visual tracker as it
+              fills. No account, no bank connection, no fees.
             </p>
           </div>
 
-          <nav aria-label="Savings calculators">
+          <nav aria-label="What you can save for">
             <h2 className="text-xs font-bold uppercase tracking-wide text-emerald-950">
-              Savings calculators
+              What you can save for
             </h2>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-1">
-              {CALCULATOR_LINKS.map((label) => (
+              {PLAN_LINKS.map((label) => (
                 <li key={label}>
                   <a
-                    href="#calculators"
+                    href="#start"
                     onClick={handleNav}
                     className="text-xs text-emerald-900/60 transition-colors hover:text-emerald-800"
                   >

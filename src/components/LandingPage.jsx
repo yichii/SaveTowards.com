@@ -16,7 +16,7 @@ export function LandingPage({ onStart, onRestore, onBack }) {
 
   // The page scrolls now: the hero fills the first screen and points down to
   // the category hub, which is the primary interaction. `onStart` still means
-  // "open the general goal calculator" exactly as it did for the old single
+  // "open the general goal plan flow" exactly as it did for the old single
   // CTA — only the General tile (and the coming-soon previews' fallback link)
   // calls it.
   return (

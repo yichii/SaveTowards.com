@@ -1,6 +1,6 @@
 import { SectionHeading } from './SectionHeading'
 
-// A slim, honest relatability strip between the hero and the calculator hub —
+// A slim, honest relatability strip between the hero and the goal hub —
 // concrete goals a broad audience actually saves for, not testimonials or
 // user-count claims. Non-interactive on purpose: it sets context, the hub is
 // the CTA. Amounts and phrasing stay specific and plain.

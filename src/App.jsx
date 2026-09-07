@@ -239,17 +239,31 @@ function App() {
     setShowOrchestration(false)
   }
 
+  // While creating a goal, the page carries the landing page's cream/emerald
+  // theme so the flow feels continuous from the goal hub through to the
+  // form — the dashboard itself stays cyan/stone.
   return (
-    <div className="min-h-screen-safe bg-stone-50 px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-[calc(3.5rem+env(safe-area-inset-top))]">
+    <div
+      className={`min-h-screen-safe px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-[calc(3.5rem+env(safe-area-inset-top))] ${
+        isCreating ? 'bg-cream' : 'bg-stone-50'
+      }`}
+    >
       <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-2 lg:mb-10 lg:gap-3">
-          <h1 className="font-heading text-2xl font-bold text-stone-900 lg:text-3xl">
+          <h1
+            className={`font-heading text-2xl font-bold lg:text-3xl ${
+              isCreating ? 'text-emerald-950' : 'text-stone-900'
+            }`}
+          >
             <button
               type="button"
               onClick={() => setShowLanding(true)}
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <Logo size={22} className="text-cyan-600 lg:h-7 lg:w-7" />
+              <Logo
+                size={22}
+                className={`lg:h-7 lg:w-7 ${isCreating ? 'text-emerald-700' : 'text-cyan-600'}`}
+              />
               SaveTowards
             </button>
           </h1>

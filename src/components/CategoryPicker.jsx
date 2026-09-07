@@ -51,11 +51,11 @@ export function CategoryPicker({ value, emoji, onChange }) {
 
   return (
     <div ref={containerRef} className="flex flex-col items-center gap-4">
-      <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-cyan-200 bg-cyan-50">
+      <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-emerald-200 bg-emerald-50">
         {emoji ? (
           <span className="text-5xl leading-none" aria-hidden="true">{emoji}</span>
         ) : (
-          <PreviewIcon size={40} className="text-cyan-600" />
+          <PreviewIcon size={40} className="text-emerald-700" />
         )}
       </div>
 
@@ -80,8 +80,8 @@ export function CategoryPicker({ value, emoji, onChange }) {
                 aria-expanded={open}
                 className={`flex w-full flex-col items-center gap-1 rounded-lg border px-2 py-3 text-xs transition-colors ${
                   selected
-                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
-                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                    ? 'border-emerald-600 bg-emerald-50 text-emerald-800'
+                    : 'border-emerald-900/15 text-emerald-900/60 hover:border-emerald-900/30'
                 }`}
               >
                 {selected && emoji ? (
@@ -93,7 +93,7 @@ export function CategoryPicker({ value, emoji, onChange }) {
               </button>
 
               {open && (
-                <div className={`absolute top-full z-10 mt-2 flex gap-1.5 rounded-lg border border-stone-200 bg-white p-2 shadow-md ${menuPositionClasses}`}>
+                <div className={`absolute top-full z-10 mt-2 flex gap-1.5 rounded-lg border border-emerald-900/10 bg-white p-2 shadow-md ${menuPositionClasses}`}>
                   {emojiOptions.map((option) => (
                     <button
                       key={option}
@@ -103,8 +103,8 @@ export function CategoryPicker({ value, emoji, onChange }) {
                       aria-label={`Use ${option} icon`}
                       className={`flex h-9 w-9 items-center justify-center rounded-lg border text-lg transition-colors ${
                         emoji === option
-                          ? 'border-cyan-500 bg-cyan-50'
-                          : 'border-stone-200 hover:border-stone-300'
+                          ? 'border-emerald-600 bg-emerald-50'
+                          : 'border-emerald-900/15 hover:border-emerald-900/30'
                       }`}
                     >
                       <span aria-hidden="true">{option}</span>

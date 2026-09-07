@@ -43,12 +43,12 @@ export function Hero({ onScrollToHub, onRestore }) {
             onClick={onScrollToHub}
             className="mt-[clamp(0.875rem,2.4dvh,2rem)] flex w-full max-w-xs items-center justify-center gap-2 rounded-lg bg-emerald-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 sm:w-auto sm:max-w-none sm:py-[clamp(0.5rem,1.4dvh,0.75rem)] lg:px-8 lg:py-4 lg:text-lg xl:px-10 xl:py-5 xl:text-xl"
           >
-            See the calculators
+            Start your plan
             <ChevronDown size={18} />
           </button>
           {!ultraCompact && (
             <p className="mt-3 hidden text-xs text-emerald-900/45 sm:block lg:text-sm">
-              A dedicated Home, Car, and Retirement calculator are on the way.
+              Dedicated plans for Home, Car, and Retirement are on the way.
             </p>
           )}
           <RestoreLink onRestore={onRestore} />

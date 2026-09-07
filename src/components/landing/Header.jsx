@@ -3,7 +3,7 @@ import { Logo } from '../Logo'
 
 // Landing-only top bar. Mirrors the dark-green panel header on `CategoryHub`
 // and the Fidelity "Goal Booster" reference. Links are limited to actions
-// that actually exist: scroll to the calculator hub, and (for a returning
+// that actually exist: scroll to the goal hub, and (for a returning
 // visitor) go back to their dashboard. No fake "How it works" / "Log in".
 export function Header({ onScrollToHub, onBack }) {
   return (
@@ -29,8 +29,8 @@ export function Header({ onScrollToHub, onBack }) {
             onClick={onScrollToHub}
             className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 sm:px-3 sm:text-sm"
           >
-            <span className="sm:hidden">Calculators</span>
-            <span className="hidden sm:inline">See the calculators</span>
+            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">Start your plan</span>
             <ChevronDown size={15} className="shrink-0" />
           </button>
         </nav>

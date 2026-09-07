@@ -1,4 +1,4 @@
-import { Target, Calculator, TrendingUp } from 'lucide-react'
+import { Target, Coins, TrendingUp } from 'lucide-react'
 import { SectionHeading } from './SectionHeading'
 
 // Compact three-step explainer — the at-a-glance answer to "what does this
@@ -6,7 +6,7 @@ import { SectionHeading } from './SectionHeading'
 // How-It-Works section that was removed earlier.
 const STEPS = [
   { icon: Target, title: 'Enter your goal and date' },
-  { icon: Calculator, title: 'See your daily or weekly amount' },
+  { icon: Coins, title: 'See your daily or weekly amount' },
   { icon: TrendingUp, title: 'Track it as it fills' },
 ]
 

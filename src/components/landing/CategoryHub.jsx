@@ -15,11 +15,11 @@ import {
 import { Modal } from '../Modal'
 import { SectionHeading } from './SectionHeading'
 
-// Everyday goals all run through today's general calculator, so their tiles
+// Everyday goals all run through today's general plan flow, so their tiles
 // route straight into it (`live: true`). Home / Car / Retirement are getting
-// dedicated calculators with advanced fields later — their tiles are
-// preview-only: a "Coming soon" pill and a short description of what's coming.
-// "Other" is the live catch-all and stays last in the grid.
+// dedicated plans with advanced fields later — their tiles are preview-only:
+// a "Coming soon" pill and a short description of what's coming. "Other" is
+// the live catch-all and stays last in the grid.
 const TILES = [
   {
     key: 'vacation',
@@ -96,13 +96,13 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
   return (
     <section
       ref={ref}
-      id="calculators"
+      id="start"
       className="scroll-mt-20 bg-cream px-4 py-14 lg:py-20"
     >
       <div className="mx-auto max-w-5xl">
         <SectionHeading
-          title="Saving success starts with a goal"
-          subtitle="Pick a category to get started."
+          title="Saving for something starts with a plan"
+          subtitle="Pick what you're saving for to begin."
         />
 
         <div className="rounded-2xl shadow-sm">
@@ -140,7 +140,7 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
               </span>
               <div>
                 <h3 className="font-heading text-lg font-bold text-emerald-950">
-                  {preview.label} calculator
+                  {preview.label} plan
                 </h3>
                 <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700/70">
                   Coming soon
@@ -150,7 +150,7 @@ export const CategoryHub = forwardRef(function CategoryHub({ onStartGeneral }, r
 
             <p className="mt-4 text-sm leading-relaxed text-emerald-900/70 lg:text-base">{preview.blurb}</p>
             <p className="mt-3 text-sm text-emerald-900/55">
-              It isn&apos;t live yet — the general goal calculator can handle this in the meantime.
+              It isn&apos;t live yet — you can plan this as a general goal in the meantime.
             </p>
 
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">

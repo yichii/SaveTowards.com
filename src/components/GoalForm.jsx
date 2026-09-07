@@ -104,14 +104,14 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
   }
 
   return (
-    <form onSubmit={handleSubmit} className="@container flex flex-col gap-4 rounded-xl border border-stone-200 bg-white p-6 shadow-sm lg:p-8">
-      <h1 className="font-heading text-xl font-semibold text-stone-900 lg:text-2xl">
+    <form onSubmit={handleSubmit} className="@container flex flex-col gap-4 rounded-xl border border-emerald-900/10 bg-white p-6 shadow-sm lg:p-8">
+      <h1 className="font-heading text-xl font-semibold text-emerald-950 lg:text-2xl">
         {initialGoal ? 'Update your goal' : "Let's set up your goal"}
       </h1>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium text-stone-700">
-          What should we call it? <span className="text-stone-400"></span>
+        <label htmlFor="name" className="text-sm font-medium text-emerald-900">
+          What should we call it? <span className="text-emerald-900/40"></span>
         </label>
         <input
           id="name"
@@ -119,22 +119,22 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. House down payment"
-          className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+          className="rounded-lg border border-emerald-900/20 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        {/* <span className="text-sm font-medium text-stone-700">Category</span> */}
+        {/* <span className="text-sm font-medium text-emerald-900">Category</span> */}
         <CategoryPicker value={category} emoji={emoji} onChange={handleCategoryChange} />
       </div>
 
       <div className={initialGoal ? 'grid grid-cols-1 gap-4 @lg:grid-cols-2' : ''}>
         <div className="flex flex-col gap-1">
-          <label htmlFor="targetAmount" className="text-sm font-medium text-stone-700">
+          <label htmlFor="targetAmount" className="text-sm font-medium text-emerald-900">
             What are you saving up for?
           </label>
           <div className="relative">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-900/40">$</span>
             <input
               id="targetAmount"
               type="number"
@@ -144,19 +144,19 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
               value={targetAmount}
               onChange={(e) => setTargetAmount(e.target.value)}
               placeholder="25,000"
-              className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              className="w-full rounded-lg border border-emerald-900/20 py-2 pl-7 pr-3 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
             />
           </div>
-          {errors.targetAmount && <p className="text-sm text-red-600">{errors.targetAmount}</p>}
+          {errors.targetAmount && <p className="text-sm text-rose-600">{errors.targetAmount}</p>}
         </div>
 
         {initialGoal && (
           <div className="flex flex-col gap-1">
-            <label htmlFor="amountSaved" className="text-sm font-medium text-stone-700">
+            <label htmlFor="amountSaved" className="text-sm font-medium text-emerald-900">
               How much have you saved so far?
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-900/40">$</span>
               <input
                 id="amountSaved"
                 type="number"
@@ -165,20 +165,20 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
                 step="any"
                 value={amountSaved}
                 onChange={(e) => setAmountSaved(e.target.value)}
-                className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-emerald-900/20 py-2 pl-7 pr-3 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
               />
             </div>
-            <p className="text-xs text-stone-400">
+            <p className="text-xs text-emerald-900/50">
               Adjust the total here anytime. For day-to-day deposits, use “Add to savings” on the goal card.
             </p>
-            {errors.amountSaved && <p className="text-sm text-red-600">{errors.amountSaved}</p>}
+            {errors.amountSaved && <p className="text-sm text-rose-600">{errors.amountSaved}</p>}
           </div>
         )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="targetDate" className="text-sm font-medium text-stone-700">
+          <label htmlFor="targetDate" className="text-sm font-medium text-emerald-900">
             When do you want to get there?
           </label>
           <input
@@ -188,13 +188,13 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
             max={maxTargetDateIso()}
             value={targetDate}
             onChange={(e) => setTargetDate(e.target.value)}
-            className="rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            className="rounded-lg border border-emerald-900/20 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
           />
-          {errors.targetDate && <p className="text-sm text-red-600">{errors.targetDate}</p>}
+          {errors.targetDate && <p className="text-sm text-rose-600">{errors.targetDate}</p>}
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-stone-700">How often are you paid?</span>
+          <span className="text-sm font-medium text-emerald-900">How often are you paid?</span>
           <div className="flex gap-2">
             {PAY_FREQUENCIES.map(({ key, label }) => {
               const selected = payFrequency === key
@@ -206,8 +206,8 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
                   aria-pressed={selected}
                   className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
                     selected
-                      ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
-                      : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-800'
+                      : 'border-emerald-900/15 text-emerald-900/60 hover:border-emerald-900/30'
                   }`}
                 >
                   {label}
@@ -219,11 +219,11 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="takeHomePay" className="text-sm font-medium text-stone-700">
+        <label htmlFor="takeHomePay" className="text-sm font-medium text-emerald-900">
           Your take-home pay
         </label>
         <div className="relative @lg:max-w-[calc(50%-0.5rem)]">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-900/40">$</span>
           <input
             id="takeHomePay"
             type="number"
@@ -233,11 +233,11 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
             value={takeHomePay}
             onChange={(e) => onTakeHomePayChange(e.target.value)}
             placeholder="Skip if you'd rather not say"
-            className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            className="w-full rounded-lg border border-emerald-900/20 py-2 pl-7 pr-3 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
           />
         </div>
-        <p className="text-xs text-stone-400">Used across all your goals, not just this one.</p>
-        {errors.takeHomePay && <p className="text-sm text-red-600">{errors.takeHomePay}</p>}
+        <p className="text-xs text-emerald-900/50">Used across all your goals, not just this one.</p>
+        {errors.takeHomePay && <p className="text-sm text-rose-600">{errors.takeHomePay}</p>}
       </div>
 
       <LivePlanPreview
@@ -248,14 +248,14 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
         takeHomePay={takeHomePay}
       />
 
-      <p className="mt-2 text-sm text-stone-500">
-        {initialGoal ? 'Nice work keeping this up to date.' : "Every home starts with a plan."}
+      <p className="mt-2 text-sm text-emerald-900/60">
+        {initialGoal ? 'Nice work keeping this up to date.' : 'Every goal starts with a plan.'}
       </p>
 
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
+          className="flex-1 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
         >
           {initialGoal ? 'Save changes' : 'Create goal'}
         </button>
@@ -263,14 +263,14 @@ export function GoalForm({ initialGoal, onSave, onCancel, takeHomePay, onTakeHom
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-50"
+            className="rounded-lg border border-emerald-900/20 px-4 py-2 text-sm font-semibold text-emerald-900 transition-colors hover:bg-emerald-50"
           >
             Cancel
           </button>
         )}
       </div>
 
-      <p className="flex items-center justify-center gap-1.5 text-xs text-stone-400">
+      <p className="flex items-center justify-center gap-1.5 text-xs text-emerald-900/50">
         <Lock size={12} />
         Saved privately on this device — no account needed
       </p>

@@ -1,5 +1,5 @@
 // One centered title/subtitle block shared by every landing content section
-// (saving examples, calculator hub, FAQ) so they keep the same rhythm and
+// (saving examples, goal hub, FAQ) so they keep the same rhythm and
 // type scale instead of each rolling its own.
 export function SectionHeading({ title, subtitle }) {
   return (

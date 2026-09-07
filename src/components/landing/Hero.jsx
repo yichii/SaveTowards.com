@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react'
+import { Logo } from '../Logo'
 import { HeroDemo } from './HeroDemo'
 import { RestoreLink } from './RestoreLink'
 import { useHeroDemo } from './useHeroDemo'
@@ -24,7 +25,8 @@ export function Hero({ onScrollToHub, onRestore }) {
             {/* Prefix and animated phrase sit on their own fixed-height lines so
                 the typing animation only changes line width, never line count —
                 nothing below the headline shifts while it plays. */}
-            <span aria-hidden="true" className="block">
+            <span aria-hidden="true" className="flex items-center justify-center gap-[0.35em] lg:justify-start">
+              <Logo className="h-[0.82em] w-[0.82em] shrink-0 text-emerald-700" />
               Save Towards your
             </span>
             <span aria-hidden="true" className="block whitespace-nowrap">

@@ -17,7 +17,7 @@ export function Modal({ onClose, children }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-stone-900/50 p-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:pt-[calc(3.5rem+env(safe-area-inset-top))]"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-emerald-950/50 p-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:pt-[calc(3.5rem+env(safe-area-inset-top))]"
       onClick={onClose}
     >
       <div className="relative w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
@@ -25,7 +25,7 @@ export function Modal({ onClose, children }) {
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute -top-3 -right-3 z-10 rounded-full border border-stone-200 bg-white p-1.5 text-stone-500 shadow-md transition-colors hover:text-stone-700"
+          className="absolute -top-3 -right-3 z-10 rounded-full border border-emerald-900/10 bg-white p-1.5 text-emerald-900/55 shadow-md transition-colors hover:text-emerald-900"
         >
           <X size={16} />
         </button>

@@ -69,12 +69,12 @@ export function TradeoffSlider({ goal, plan, onApplyRate }) {
   const diffLabel = deltaDays !== null ? formatDurationDiff(deltaDays) : null
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg bg-stone-50 p-4 text-sm">
+    <div className="flex flex-col gap-2 rounded-lg bg-emerald-50 p-4 text-sm">
       <div className="flex items-center justify-between gap-2">
-        <label htmlFor={`rate-${goal.id}`} className="font-medium text-stone-700">
+        <label htmlFor={`rate-${goal.id}`} className="font-medium text-emerald-900">
           What if I saved this much per {unitWord}?
         </label>
-        <span className="font-semibold text-stone-900">{currency.format(rate)}</span>
+        <span className="font-semibold text-emerald-950">{currency.format(rate)}</span>
       </div>
       <input
         id={`rate-${goal.id}`}
@@ -84,10 +84,10 @@ export function TradeoffSlider({ goal, plan, onApplyRate }) {
         step={step}
         value={rate}
         onChange={(e) => setRate(Number(e.target.value))}
-        className="w-full accent-cyan-600"
+        className="w-full accent-emerald-700"
         aria-label={`Contribution per ${unitWord}`}
       />
-      <p className="text-stone-600">
+      <p className="text-emerald-900/70">
         {projection.targetDate
           ? isCurrentRate
             ? `Right on track — you'd reach this goal by ${formatDateLabel(projection.targetDate)}.`
@@ -100,7 +100,7 @@ export function TradeoffSlider({ goal, plan, onApplyRate }) {
         <button
           type="button"
           onClick={() => onApplyRate(projection.targetDate)}
-          className="self-start rounded-lg bg-cyan-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-700"
+          className="self-start rounded-lg bg-emerald-700 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
         >
           Apply this rate
         </button>

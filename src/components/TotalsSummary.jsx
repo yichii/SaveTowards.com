@@ -51,21 +51,21 @@ export function TotalsSummary({ goals, onCelebrationShown }) {
   const hasSupplementaryDetail = combined.activeGoalsCount > 1
 
   return (
-    <div className="@container mb-4 flex flex-col gap-3 rounded-xl border border-cyan-200 bg-cyan-50/50 p-6 shadow-sm lg:mb-6">
-      <div className="flex items-center gap-2 text-sm font-medium text-cyan-800">
+    <div className="@container mb-4 flex flex-col gap-3 rounded-xl border border-emerald-200 bg-emerald-50/50 p-6 shadow-sm lg:mb-6">
+      <div className="flex items-center gap-2 text-sm font-medium text-emerald-800">
         <PiggyBank size={16} />
         All goals combined
       </div>
 
       {allMet ? (
-        <p className="flex items-center gap-2 font-heading text-2xl font-semibold text-cyan-700">
-          <CheckCircle2 size={24} className="shrink-0 text-cyan-600" />
+        <p className="flex items-center gap-2 font-heading text-2xl font-semibold text-emerald-700">
+          <CheckCircle2 size={24} className="shrink-0 text-emerald-700" />
           All {combined.totalGoalsCount} goal{combined.totalGoalsCount === 1 ? '' : 's'} reached
           {celebratingGoal ? ' 🎉' : ''}!
         </p>
       ) : (
         <>
-          <p className="font-heading text-2xl font-semibold text-stone-900">
+          <p className="font-heading text-2xl font-semibold text-emerald-950">
             {celebratingGoal
               ? `1 goal complete 🎉 — ${combined.activeGoalsCount} to go`
               : `${currency.format(headlineValue)}/${headlineWord} across ${combined.activeGoalsCount} goal${
@@ -73,7 +73,7 @@ export function TotalsSummary({ goals, onCelebrationShown }) {
                 }`}
           </p>
 
-          <p className="text-sm text-stone-500">
+          <p className="text-sm text-emerald-900/55">
             {pace || progressPhrase(combined.percentSaved)}
           </p>
         </>
@@ -83,7 +83,7 @@ export function TotalsSummary({ goals, onCelebrationShown }) {
         <button
           type="button"
           onClick={() => setShowMore((v) => !v)}
-          className="flex items-center gap-1 self-start text-sm font-medium text-cyan-700 hover:text-cyan-800"
+          className="flex items-center gap-1 self-start text-sm font-medium text-emerald-700 hover:text-emerald-800"
         >
           {showMore ? 'Show less' : 'Show more'}
           {showMore ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -91,7 +91,7 @@ export function TotalsSummary({ goals, onCelebrationShown }) {
       )}
 
       {!allMet && hasSupplementaryDetail && showMore && combined.breakdownMode === 'single-line' && (
-        <p className="rounded-lg bg-white/60 p-4 text-sm text-stone-600">
+        <p className="rounded-lg bg-white/60 p-4 text-sm text-emerald-900/70">
           {combined.daysRemaining > 0
             ? `${currency.format(combined.totalAmountRemaining)} left, with ${combined.daysRemaining} day${combined.daysRemaining === 1 ? '' : 's'} to go.`
             : `${currency.format(combined.totalAmountRemaining)} left to save.`}
@@ -102,8 +102,8 @@ export function TotalsSummary({ goals, onCelebrationShown }) {
         <div className="grid grid-cols-2 gap-3 rounded-lg bg-white/60 p-4 text-sm @sm:grid-cols-4">
           {combined.rows.filter((row) => row.visible).map((row) => (
             <div key={row.key}>
-              <p className="text-stone-500">{row.label}</p>
-              <p className="font-semibold text-stone-900">{currency.format(row.value)}</p>
+              <p className="text-emerald-900/55">{row.label}</p>
+              <p className="font-semibold text-emerald-950">{currency.format(row.value)}</p>
             </div>
           ))}
         </div>

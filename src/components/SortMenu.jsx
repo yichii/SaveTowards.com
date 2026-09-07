@@ -24,14 +24,14 @@ export function SortMenu({ sortType, direction, onChange }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-white p-2 text-sm font-semibold text-stone-600 transition-colors hover:bg-stone-50 lg:px-4 lg:py-2"
+        className="flex items-center justify-center gap-1.5 rounded-lg border border-emerald-900/10 bg-white p-2 text-sm font-semibold text-emerald-900/70 transition-colors hover:bg-emerald-50 lg:px-4 lg:py-2"
       >
         <ArrowUpDown size={16} className="shrink-0" />
         <span className="hidden lg:inline">Sort{activeOption ? `: ${activeOption.label}` : ''}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 z-10 mt-2 w-48 overflow-hidden rounded-lg border border-stone-200 bg-white py-1 text-sm shadow-lg">
+        <div className="absolute right-0 z-10 mt-2 w-48 overflow-hidden rounded-lg border border-emerald-900/10 bg-white py-1 text-sm shadow-lg">
           {SORT_OPTIONS.map((option) => {
             const isActive = option.key === sortType
             return (
@@ -39,8 +39,8 @@ export function SortMenu({ sortType, direction, onChange }) {
                 key={option.key}
                 type="button"
                 onClick={() => onChange(option.key)}
-                className={`flex w-full items-center justify-between px-3 py-2 text-left transition-colors hover:bg-stone-50 ${
-                  isActive ? 'font-semibold text-cyan-700' : 'text-stone-600'
+                className={`flex w-full items-center justify-between px-3 py-2 text-left transition-colors hover:bg-emerald-50 ${
+                  isActive ? 'font-semibold text-emerald-700' : 'text-emerald-900/70'
                 }`}
               >
                 {option.label}

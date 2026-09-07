@@ -239,31 +239,20 @@ function App() {
     setShowOrchestration(false)
   }
 
-  // While creating a goal, the page carries the landing page's cream/emerald
-  // theme so the flow feels continuous from the goal hub through to the
-  // form — the dashboard itself stays cyan/stone.
+  // The whole app — landing, goal-creation flow, and dashboard — shares the
+  // cream background and dark-green (emerald) palette, so moving between them
+  // feels continuous.
   return (
-    <div
-      className={`min-h-screen-safe px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-[calc(3.5rem+env(safe-area-inset-top))] ${
-        isCreating ? 'bg-cream' : 'bg-stone-50'
-      }`}
-    >
+    <div className="min-h-screen-safe bg-cream px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] lg:px-8 lg:pt-[calc(3.5rem+env(safe-area-inset-top))]">
       <div className="mx-auto max-w-md lg:max-w-5xl xl:max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-2 lg:mb-10 lg:gap-3">
-          <h1
-            className={`font-heading text-2xl font-bold lg:text-3xl ${
-              isCreating ? 'text-emerald-950' : 'text-stone-900'
-            }`}
-          >
+          <h1 className="font-heading text-2xl font-bold text-emerald-950 lg:text-3xl">
             <button
               type="button"
               onClick={() => setShowLanding(true)}
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <Logo
-                size={22}
-                className={`lg:h-7 lg:w-7 ${isCreating ? 'text-emerald-700' : 'text-cyan-600'}`}
-              />
+              <Logo size={22} className="text-emerald-700 lg:h-7 lg:w-7" />
               SaveTowards
             </button>
           </h1>
@@ -278,9 +267,9 @@ function App() {
                   onClick={() => canPlanAcrossGoals && setShowOrchestration(true)}
                   title={canPlanAcrossGoals ? undefined : 'Add another goal to plan an allocation across them'}
                   aria-label="Plan goals"
-                  className={`flex items-center justify-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 p-2 text-sm font-semibold text-cyan-700 lg:px-4 lg:py-2 ${
+                  className={`flex items-center justify-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 p-2 text-sm font-semibold text-emerald-700 lg:px-4 lg:py-2 ${
                     canPlanAcrossGoals
-                      ? 'transition-colors hover:bg-cyan-100'
+                      ? 'transition-colors hover:bg-emerald-100'
                       : 'cursor-not-allowed opacity-40'
                   }`}
                 >
@@ -292,7 +281,7 @@ function App() {
                 type="button"
                 onClick={() => setEditingId('new')}
                 aria-label="New Goal"
-                className="flex items-center justify-center gap-1.5 rounded-lg bg-cyan-500 p-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 lg:px-4 lg:py-2"
+                className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-700 p-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800 lg:px-4 lg:py-2"
               >
                 <Plus size={16} className="shrink-0" />
                 <span className="hidden lg:inline">New Goal</span>
@@ -340,7 +329,7 @@ function App() {
               <button
                 type="button"
                 onClick={() => setEditingId('new')}
-                className="col-span-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-stone-300 py-3 text-sm font-medium text-stone-500 transition-colors hover:border-cyan-400 hover:text-cyan-700"
+                className="col-span-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-emerald-900/20 py-3 text-sm font-medium text-emerald-900/55 transition-colors hover:border-emerald-700 hover:text-emerald-800"
               >
                 <Plus size={16} />
                 Add another goal

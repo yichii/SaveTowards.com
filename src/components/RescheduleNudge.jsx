@@ -35,7 +35,7 @@ function formatDateLabel(isoDate) {
 // no separate projection to keep in sync.
 export function RescheduleNudge({ goal, onReschedule }) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg bg-stone-100 p-4 text-sm text-stone-600">
+    <div className="flex flex-col gap-3 rounded-lg bg-emerald-100 p-4 text-sm text-emerald-900/70">
       <p>
         Your target date has come and gone — it happens, and it&apos;s an easy fix. Pick a new one that
         fits:
@@ -51,10 +51,10 @@ export function RescheduleNudge({ goal, onReschedule }) {
               key={label}
               type="button"
               onClick={() => onReschedule(targetDate)}
-              className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-lg bg-white px-3 py-2 text-left font-medium text-stone-700 shadow-sm transition-colors hover:bg-stone-50"
+              className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-lg bg-white px-3 py-2 text-left font-medium text-emerald-900 shadow-sm transition-colors hover:bg-emerald-50"
             >
               <span>{label}</span>
-              <span className="text-stone-500">
+              <span className="text-emerald-900/55">
                 about {amount}/{unitWord} · by {formatDateLabel(targetDate)}
               </span>
             </button>

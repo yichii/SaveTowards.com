@@ -15,11 +15,11 @@ import { TradeoffSlider } from './TradeoffSlider'
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
 const CARD_STYLES = {
-  met: 'border-cyan-200 bg-cyan-50/50',
+  met: 'border-emerald-200 bg-emerald-50/50',
   overdue: 'border-amber-200 bg-amber-50/40',
-  'due-today': 'border-stone-200 bg-white',
-  'on-track': 'border-stone-200 bg-white',
-  'deadline-imminent': 'border-stone-200 bg-white',
+  'due-today': 'border-emerald-900/10 bg-white',
+  'on-track': 'border-emerald-900/10 bg-white',
+  'deadline-imminent': 'border-emerald-900/10 bg-white',
 }
 
 function headline(plan, goal) {
@@ -256,7 +256,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       }`}
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2 text-sm text-stone-500">
+        <div className="flex min-w-0 items-center gap-2 text-sm text-emerald-900/55">
           {Icon && <Icon size={16} className="shrink-0" />}
           <span className="truncate">{goal.name || 'Savings goal'}</span>
         </div>
@@ -265,7 +265,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
             type="button"
             onClick={() => onEdit(goal.id)}
             aria-label="Edit goal"
-            className="rounded-md p-1.5 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-700"
+            className="rounded-md p-1.5 text-emerald-900/45 transition-colors hover:bg-emerald-100 hover:text-emerald-900"
           >
             <Pencil size={16} />
           </button>
@@ -273,7 +273,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
             type="button"
             onClick={handleDelete}
             aria-label="Delete goal"
-            className="rounded-md p-1.5 text-stone-400 transition-colors hover:bg-red-50 hover:text-red-600"
+            className="rounded-md p-1.5 text-emerald-900/45 transition-colors hover:bg-red-50 hover:text-red-600"
           >
             <Trash2 size={16} />
           </button>
@@ -283,20 +283,20 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       <div className="relative">
         <p
           className={`flex items-center gap-2 font-heading text-2xl font-semibold transition-opacity duration-500 ${
-            plan.status === 'met' ? 'text-cyan-700' : 'text-stone-900'
+            plan.status === 'met' ? 'text-emerald-700' : 'text-emerald-950'
           } ${introVisible ? 'opacity-0' : 'opacity-100'}`}
         >
-          {plan.status === 'met' && <CheckCircle2 size={24} className="shrink-0 text-cyan-600" />}
+          {plan.status === 'met' && <CheckCircle2 size={24} className="shrink-0 text-emerald-700" />}
           {headline(plan, goal)}
         </p>
         {introVisible && (
-          <p className="absolute inset-0 animate-fade-in-up font-heading text-2xl font-semibold text-cyan-600">
+          <p className="absolute inset-0 animate-fade-in-up font-heading text-2xl font-semibold text-emerald-700">
             Here's your plan
           </p>
         )}
       </div>
 
-      {shareNote && <p className="-mt-2 text-sm text-stone-500">{shareNote}</p>}
+      {shareNote && <p className="-mt-2 text-sm text-emerald-900/55">{shareNote}</p>}
 
       {plan.status === 'overdue' && onUpdateGoal && (
         <RescheduleNudge
@@ -316,7 +316,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
         <div className="relative flex w-full items-center justify-center">
           {celebration && (
             <div
-              className={`absolute left-1/2 top-1/2 z-10 flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-lg bg-cyan-50 px-3 py-2 text-sm font-medium text-cyan-700 shadow-sm ring-1 ring-cyan-100 transition-opacity duration-300 ease-in ${
+              className={`absolute left-1/2 top-1/2 z-10 flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 shadow-sm ring-1 ring-emerald-100 transition-opacity duration-300 ease-in ${
                 celebrationLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
               }`}
             >
@@ -339,7 +339,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
           )}
         </div>
         {goal.visualizationStyle !== 'ring' && (
-          <p className="text-xs text-stone-500">{percentLabel}</p>
+          <p className="text-xs text-emerald-900/55">{percentLabel}</p>
         )}
         {onChangeVisualization && (
           <VisualizationPicker
@@ -349,7 +349,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
         )}
       </div>
 
-      <p className="text-sm text-stone-500">
+      <p className="text-sm text-emerald-900/55">
         {currency.format(Math.min(goal.amountSaved, goal.targetAmount))} of {currency.format(goal.targetAmount)} saved
       </p>
 
@@ -359,7 +359,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
         <button
           type="button"
           onClick={() => setShowMore((v) => !v)}
-          className="flex items-center gap-1 self-start text-sm font-medium text-cyan-700 hover:text-cyan-800"
+          className="flex items-center gap-1 self-start text-sm font-medium text-emerald-700 hover:text-emerald-800"
         >
           {showMore ? 'Show less' : 'Show more'}
           {showMore ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -367,7 +367,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       )}
 
       {showMore && plan.status !== 'met' && plan.breakdownMode === 'single-line' && (
-        <p className="rounded-lg bg-stone-50 p-4 text-sm text-stone-600">
+        <p className="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-900/70">
           {plan.daysRemaining > 0
             ? `${currency.format(plan.amountRemaining)} left, with ${plan.daysRemaining} day${plan.daysRemaining === 1 ? '' : 's'} to go.`
             : `${currency.format(plan.amountRemaining)} left to save.`}
@@ -375,11 +375,11 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       )}
 
       {showMore && plan.status !== 'met' && plan.breakdownMode === 'grid' && (
-        <div className="grid grid-cols-2 gap-3 rounded-lg bg-stone-50 p-4 text-sm @sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50 p-4 text-sm @sm:grid-cols-4">
           {plan.rows.filter((row) => row.visible).map((row) => (
             <div key={row.key}>
-              <p className="text-stone-500">{row.label}</p>
-              <p className="font-semibold text-stone-900">{currency.format(row.value)}</p>
+              <p className="text-emerald-900/55">{row.label}</p>
+              <p className="font-semibold text-emerald-950">{currency.format(row.value)}</p>
             </div>
           ))}
         </div>
@@ -394,13 +394,13 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       )}
 
       {plan.status !== 'met' && (
-        <form onSubmit={handleUpdateSaved} className="flex items-end gap-2 border-t border-stone-100 pt-4">
+        <form onSubmit={handleUpdateSaved} className="flex items-end gap-2 border-t border-emerald-900/10 pt-4">
           <div className="flex flex-1 flex-col gap-1">
-            <label htmlFor="savedAmount" className="text-sm font-medium text-stone-700">
+            <label htmlFor="savedAmount" className="text-sm font-medium text-emerald-900">
               {savingsInputLabel(goal.payFrequency)}
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-900/45">$</span>
               <input
                 id="savedAmount"
                 type="number"
@@ -409,13 +409,13 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
                 value={savedInput}
                 onChange={handleSavedInputChange}
                 placeholder="0"
-                className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="w-full rounded-lg border border-emerald-900/20 py-2 pl-7 pr-3 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
               />
             </div>
           </div>
           <button
             type="submit"
-            className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-stone-700"
+            className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
           >
             Add
           </button>
@@ -424,7 +424,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
 
       {saveAck && (
         <p
-          className={`-mt-2 flex items-center gap-1 text-xs font-medium text-cyan-600 transition-opacity duration-300 ease-in ${
+          className={`-mt-2 flex items-center gap-1 text-xs font-medium text-emerald-700 transition-opacity duration-300 ease-in ${
             saveAckLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
           }`}
         >
@@ -435,7 +435,7 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
 
       {inputNotice && (
         <p
-          className={`-mt-2 text-xs font-medium text-stone-500 transition-opacity duration-300 ease-in ${
+          className={`-mt-2 text-xs font-medium text-emerald-900/55 transition-opacity duration-300 ease-in ${
             inputNoticeLeaving ? 'opacity-0' : 'animate-fade-in-up opacity-100'
           }`}
         >

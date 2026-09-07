@@ -16,7 +16,7 @@ export function ShareGoal({ goal }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1.5 self-center rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100"
+        className="flex items-center gap-1.5 self-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
       >
         <Share2 size={15} />
         Share
@@ -38,20 +38,20 @@ export function ShareGoal({ goal }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-cyan-200 bg-cyan-50/40 p-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-emerald-200 bg-emerald-50/40 p-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-stone-700">Share this goal</p>
+        <p className="text-sm font-semibold text-emerald-900">Share this goal</p>
         <button
           type="button"
           onClick={() => setOpen(false)}
           aria-label="Close"
-          className="rounded-md p-1 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-700"
+          className="rounded-md p-1 text-emerald-900/45 transition-colors hover:bg-emerald-100 hover:text-emerald-900"
         >
           <X size={16} />
         </button>
       </div>
 
-      <p className="text-xs text-stone-500">This is exactly what your recipient will see. Anyone with the link can view it.</p>
+      <p className="text-xs text-emerald-900/55">This is exactly what your recipient will see. Anyone with the link can view it.</p>
 
       <SharedGoalCard
         name={goal.name}
@@ -63,13 +63,13 @@ export function ShareGoal({ goal }) {
         daysToSave={includeAmounts ? computeDaysToSave(goal) : null}
       />
 
-      <label className="flex items-center justify-between gap-2 text-sm text-stone-700">
+      <label className="flex items-center justify-between gap-2 text-sm text-emerald-900">
         <span>Share without dollar amounts</span>
         <input
           type="checkbox"
           checked={!includeAmounts}
           onChange={(e) => setIncludeAmounts(!e.target.checked)}
-          className="h-4 w-4 rounded border-stone-300 text-cyan-600 focus:ring-cyan-500"
+          className="h-4 w-4 rounded border-emerald-900/20 text-emerald-700 focus:ring-emerald-600"
         />
       </label>
 
@@ -79,12 +79,12 @@ export function ShareGoal({ goal }) {
           value={link}
           onFocus={(e) => e.target.select()}
           aria-label="Share link"
-          className="w-0 flex-1 truncate rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-stone-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+          className="w-0 flex-1 truncate rounded-lg border border-emerald-900/20 bg-white px-3 py-2 text-xs text-emerald-900/55 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
         />
         <button
           type="button"
           onClick={handleCopy}
-          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-700"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
         >
           {copied ? <Check size={15} /> : <Copy size={15} />}
           {copied ? 'Copied!' : 'Copy link'}

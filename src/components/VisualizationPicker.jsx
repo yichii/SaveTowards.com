@@ -23,7 +23,7 @@ export function VisualizationPicker({ value, onChange, exclude }) {
             aria-label={`Use ${label} visualization`}
             title={`${label} visualization`}
             className={`rounded-md p-1.5 transition-colors ${
-              selected ? 'bg-cyan-100 text-cyan-700' : 'text-stone-400 hover:bg-stone-100 hover:text-stone-600'
+              selected ? 'bg-emerald-100 text-emerald-700' : 'text-emerald-900/45 hover:bg-emerald-100 hover:text-emerald-900/70'
             }`}
           >
             <Icon size={14} />

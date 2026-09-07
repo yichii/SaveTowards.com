@@ -42,10 +42,10 @@ export function DataPortability({ goals, onImport }) {
   }
 
   return (
-    <div className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 text-center lg:flex-row lg:flex-wrap lg:justify-between lg:gap-4 lg:px-6 lg:text-left">
+    <div className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-emerald-900/10 bg-white px-4 py-4 text-center lg:flex-row lg:flex-wrap lg:justify-between lg:gap-4 lg:px-6 lg:text-left">
       <div>
-        <p className="text-sm font-medium text-stone-700">Your goals, yours to keep</p>
-        <p className="mt-0.5 text-xs text-stone-500">
+        <p className="text-sm font-medium text-emerald-900">Your goals, yours to keep</p>
+        <p className="mt-0.5 text-xs text-emerald-900/55">
           Everything lives on this device only — export a copy or import one to move it.
         </p>
       </div>
@@ -55,7 +55,7 @@ export function DataPortability({ goals, onImport }) {
           type="button"
           onClick={handleExport}
           disabled={goals.length === 0}
-          className="flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-cyan-50"
+          className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-emerald-50"
         >
           <Download size={15} />
           Export
@@ -63,7 +63,7 @@ export function DataPortability({ goals, onImport }) {
         <button
           type="button"
           onClick={handlePickFile}
-          className="flex items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100"
+          className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
         >
           <Upload size={15} />
           Import
@@ -82,7 +82,7 @@ export function DataPortability({ goals, onImport }) {
           role="status"
           className={`flex w-full items-start justify-between gap-2 rounded-lg px-3 py-2 text-xs ${
             message.type === 'success'
-              ? 'bg-cyan-50 text-cyan-800'
+              ? 'bg-emerald-50 text-emerald-800'
               : 'bg-rose-50 text-rose-700'
           }`}
         >

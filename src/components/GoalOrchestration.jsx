@@ -73,10 +73,10 @@ export function GoalOrchestration({ goals, onApply }) {
 
   if (activePlans.length < 2) {
     return (
-      <div className="flex flex-col gap-3 rounded-xl border border-stone-200 bg-white p-6 text-sm text-stone-600 shadow-sm">
+      <div className="flex flex-col gap-3 rounded-xl border border-emerald-900/10 bg-white p-6 text-sm text-emerald-900/70 shadow-sm">
         <p>You need at least two active goals to plan an allocation across them.</p>
         {excluded.length > 0 && (
-          <p className="text-xs text-stone-400">
+          <p className="text-xs text-emerald-900/45">
             Not counted: {excluded.map(({ goal, plan }) => `${goal.name || 'Savings goal'} (${plan.status === 'met' ? 'goal reached' : 'past due'})`).join(', ')}
           </p>
         )}
@@ -129,18 +129,18 @@ export function GoalOrchestration({ goals, onApply }) {
   }
 
   return (
-    <div className="flex flex-col gap-5 rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center gap-2 text-sm font-medium text-cyan-800">
+    <div className="flex flex-col gap-5 rounded-xl border border-emerald-900/10 bg-white p-6 shadow-sm">
+      <div className="flex items-center gap-2 text-sm font-medium text-emerald-800">
         <Layers size={16} />
         Plan across goals
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="totalAvailable" className="text-sm font-medium text-stone-700">
+        <label htmlFor="totalAvailable" className="text-sm font-medium text-emerald-900">
           Total available per month
         </label>
         <div className="relative w-40">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">$</span>
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-900/45">$</span>
           <input
             id="totalAvailable"
             type="number"
@@ -148,7 +148,7 @@ export function GoalOrchestration({ goals, onApply }) {
             min="0"
             value={totalAvailable}
             onChange={(e) => handleTotalChange(e.target.value)}
-            className="w-full rounded-lg border border-stone-300 py-2 pl-7 pr-3 text-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            className="w-full rounded-lg border border-emerald-900/20 py-2 pl-7 pr-3 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
           />
         </div>
       </div>
@@ -158,13 +158,13 @@ export function GoalOrchestration({ goals, onApply }) {
           const category = CATEGORIES.find((c) => c.key === goal.category)
           const Icon = category?.icon
           return (
-            <div key={goal.id} className="flex flex-col gap-2 rounded-lg bg-stone-50 p-4 text-sm">
+            <div key={goal.id} className="flex flex-col gap-2 rounded-lg bg-emerald-50 p-4 text-sm">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex min-w-0 items-center gap-2 text-stone-700">
+                <div className="flex min-w-0 items-center gap-2 text-emerald-900">
                   {Icon && <Icon size={16} className="shrink-0" />}
                   <span className="truncate font-medium">{goal.name || 'Savings goal'}</span>
                 </div>
-                <span className="shrink-0 font-semibold text-stone-900">{currency.format(allocation)}/mo</span>
+                <span className="shrink-0 font-semibold text-emerald-950">{currency.format(allocation)}/mo</span>
               </div>
               <input
                 type="range"
@@ -173,10 +173,10 @@ export function GoalOrchestration({ goals, onApply }) {
                 step={Math.max(1, Math.round(totalAvailable / 200))}
                 value={Math.round(allocation)}
                 onChange={(e) => handleAllocationChange(goal.id, e.target.value)}
-                className="w-full accent-cyan-600"
+                className="w-full accent-emerald-700"
                 aria-label={`Monthly allocation for ${goal.name || 'this goal'}`}
               />
-              <p className="text-stone-600">
+              <p className="text-emerald-900/70">
                 {projection.targetDate
                   ? `Reaches goal by ${formatDateLabel(projection.targetDate)}${deltaLabel ? ` — ${deltaLabel}` : ''}`
                   : "This amount won't get there — allocate more."}
@@ -186,30 +186,30 @@ export function GoalOrchestration({ goals, onApply }) {
         })}
       </div>
 
-      <p className="text-xs text-stone-500">
+      <p className="text-xs text-emerald-900/55">
         {wholeCurrency.format(totalAvailable)} allocated across {activePlans.length} goal
         {activePlans.length === 1 ? '' : 's'} — every dollar assigned.
       </p>
 
       {excluded.length > 0 && (
-        <p className="text-xs text-stone-400">
+        <p className="text-xs text-emerald-900/45">
           Not included: {excluded.map(({ goal, plan }) => `${goal.name || 'Savings goal'} (${plan.status === 'met' ? 'goal reached' : 'past due'})`).join(', ')}
         </p>
       )}
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-stone-100 pt-4">
+      <div className="flex flex-wrap items-center gap-3 border-t border-emerald-900/10 pt-4">
         <button
           type="button"
           onClick={handleApply}
           disabled={!canApply}
-          className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:bg-stone-300"
+          className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-emerald-900/20"
         >
           Apply this plan
         </button>
         <button
           type="button"
           onClick={handleResetSplit}
-          className="text-sm font-medium text-stone-500 hover:text-stone-700"
+          className="text-sm font-medium text-emerald-900/55 hover:text-emerald-900"
         >
           Reset to proportional split
         </button>

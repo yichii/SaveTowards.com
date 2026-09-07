@@ -3,8 +3,8 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  /* Warm off-white that anchors the landing page against dark-green brand
-     accents — deliberately not the stone-50 used by the dashboard. */
+  /* Warm off-white background for the whole app — landing page and
+     dashboard alike — anchoring the dark-green (emerald) brand accents. */
   --color-cream: #f8f5ec;
 }
 
@@ -23,15 +23,15 @@ body {
 
 @keyframes celebrate-glow {
   0% {
-    filter: drop-shadow(0 0 0 rgba(8, 145, 178, 0));
+    filter: drop-shadow(0 0 0 rgba(5, 150, 105, 0));
     transform: scale(1);
   }
   35% {
-    filter: drop-shadow(0 0 10px rgba(8, 145, 178, 0.65));
+    filter: drop-shadow(0 0 10px rgba(5, 150, 105, 0.65));
     transform: scale(1.08);
   }
   100% {
-    filter: drop-shadow(0 0 0 rgba(8, 145, 178, 0));
+    filter: drop-shadow(0 0 0 rgba(5, 150, 105, 0));
     transform: scale(1);
   }
 }

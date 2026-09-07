@@ -4,8 +4,8 @@ import { headlineUnitWord } from '../utils/calculations'
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
 const TONE_STYLES = {
-  steady: 'bg-stone-100 text-stone-600',
-  ahead: 'bg-cyan-50 text-cyan-800',
+  steady: 'bg-emerald-100 text-emerald-900/70',
+  ahead: 'bg-emerald-50 text-emerald-800',
 }
 
 // The compassionate layer over a goal card. It names the moments where a
@@ -60,7 +60,7 @@ function Note({ tone, icon: Icon, children, action, onAction }) {
         <button
           type="button"
           onClick={onAction}
-          className="self-start rounded-lg bg-white px-3 py-1.5 text-sm font-semibold text-stone-700 shadow-sm transition-colors hover:bg-stone-50"
+          className="self-start rounded-lg bg-white px-3 py-1.5 text-sm font-semibold text-emerald-900 shadow-sm transition-colors hover:bg-emerald-50"
         >
           {action}
         </button>

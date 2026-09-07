@@ -16,7 +16,7 @@ const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: '
 
 const CARD_STYLES = {
   met: 'border-emerald-200 bg-emerald-50/50',
-  overdue: 'border-amber-200 bg-amber-50/40',
+  overdue: 'border-amber-200 bg-amber-50/60',
   'due-today': 'border-emerald-900/10 bg-white',
   'on-track': 'border-emerald-900/10 bg-white',
   'deadline-imminent': 'border-emerald-900/10 bg-white',
@@ -283,7 +283,11 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
       <div className="relative">
         <p
           className={`flex items-center gap-2 font-heading text-2xl font-semibold transition-opacity duration-500 ${
-            plan.status === 'met' ? 'text-emerald-700' : 'text-emerald-950'
+            plan.status === 'met'
+              ? 'text-emerald-700'
+              : plan.status === 'overdue'
+                ? 'text-amber-900'
+                : 'text-emerald-950'
           } ${introVisible ? 'opacity-0' : 'opacity-100'}`}
         >
           {plan.status === 'met' && <CheckCircle2 size={24} className="shrink-0 text-emerald-700" />}
@@ -296,7 +300,15 @@ export function GoalCard({ goal, onUpdateSaved, onUpdateGoal, onEdit, onDelete, 
         )}
       </div>
 
-      {shareNote && <p className="-mt-2 text-sm text-emerald-900/55">{shareNote}</p>}
+      {shareNote && (
+        <p
+          className={`-mt-2 text-sm ${
+            plan.status === 'overdue' ? 'text-amber-900/70' : 'text-emerald-900/55'
+          }`}
+        >
+          {shareNote}
+        </p>
+      )}
 
       {plan.status === 'overdue' && onUpdateGoal && (
         <RescheduleNudge
